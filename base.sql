@@ -1,3 +1,5 @@
+--- TSY AZO OVAINA
+
 CREATE DATABASE mahery_vaika;
 
 CREATE TABLE role (
