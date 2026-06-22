@@ -180,3 +180,8 @@ CREATE TABLE entretien (
 
     remarque TEXT
 );
+
+INSERT INTO role (nom_role) VALUES
+('Admin'),
+('Caissier'),
+('Superviseur');
