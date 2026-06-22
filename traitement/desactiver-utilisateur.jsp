@@ -1,13 +1,13 @@
 <%@ page import="backoffice.Utilisateur, java.sql.Date" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
-    if (user == null || user.getId_role() != 1) {
+    if (user == null || !user.voirsiadmin().equals("Admin")) {
         response.sendRedirect("../pages/gestion-utilisateur.jsp");
         return;
     }
 
     int id = Integer.parseInt(request.getParameter("id"));
-    boolean actif = Boolean.parseBoolean(request.getParameter("actif")); // true = réactiver, false = désactiver
+    boolean actif = Boolean.parseBoolean(request.getParameter("actif"));
 
     Utilisateur u = Utilisateur.getById(id);
     if (u == null) {
@@ -17,9 +17,9 @@
 
     u.setActif(actif);
     if (!actif) {
-        u.setDate_retrait(new Date(System.currentTimeMillis())); // date du jour
+        u.setDate_retrait(new Date(System.currentTimeMillis()));
     } else {
-        u.setDate_retrait(null); // réactivation : on efface la date de retrait
+        u.setDate_retrait(null);
     }
 
     Utilisateur.mettreAjour(u);

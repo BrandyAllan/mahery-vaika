@@ -1,7 +1,7 @@
 <%@ page import="backoffice.Utilisateur, java.sql.Date" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
-    if (user == null || user.getId_role() != 1) {
+    if (user == null || !user.voirsiadmin().equals("Admin")) {
         response.sendRedirect("../pages/gestion-utilisateur.jsp");
         return;
     }
@@ -15,10 +15,20 @@
     int role = Integer.parseInt(request.getParameter("role"));
     Date date_embauche = Date.valueOf(request.getParameter("date_embauche"));
 
+    if (Utilisateur.emailExiste(email, 0)) {
+        response.sendRedirect("../pages/ajout-utilisateur.jsp?erreur=email");
+        return;
+    }
+
+    String telComplet = null;
+    if (telephone != null && !telephone.trim().isEmpty()) {
+        telComplet = "+261" + telephone.trim();
+    }
+
     Utilisateur u = new Utilisateur();
     u.setNom(nom);
     u.setPrenom(prenom);
-    u.setTelephone(telephone);
+    u.setTelephone(telComplet);
     u.setEmail(email);
     u.setIdentifiant(identifiant);
     u.setMot_de_passe(mot_de_passe);

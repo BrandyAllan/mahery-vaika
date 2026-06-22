@@ -1,7 +1,7 @@
-<%@ page import="backoffice.Utilisateur" %>
+<%@ page import="java.util.*, backoffice.Utilisateur" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
-    if (user == null || user.getId_role() != 1) {
+    if (user == null || !user.voirsiadmin().equals("Admin")) {
         response.sendRedirect("gestion-utilisateur.jsp");
         return;
     }
@@ -11,6 +11,11 @@
         response.sendRedirect("liste-utilisateur.jsp");
         return;
     }
+    Vector<Utilisateur> roles = Utilisateur.getAllRoles();
+    String telSansPrefix = "";
+    if (u.getTelephone() != null && u.getTelephone().startsWith("+261")) {
+        telSansPrefix = u.getTelephone().substring(4);
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -19,48 +24,64 @@
     <title>Modifier un utilisateur</title>
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
+    <style>
+        .error-message { color: red; font-size: 0.9em; display: none; }
+        .is-invalid { border-color: red; }
+        .is-valid { border-color: green; }
+    </style>
 </head>
 <body>
 <div class="container mt-4">
     <h2>Modifier l'utilisateur</h2>
     <a href="liste-utilisateur.jsp" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
-    <form action="../traitement/modifier-utilisateur.jsp" method="post" class="row g-3">
+    <form action="../traitement/modifier-utilisateur.jsp" method="post" class="row g-3" id="formModif" novalidate>
         <input type="hidden" name="id" value="<%= u.getId_utilisateur() %>">
         <div class="col-md-6">
             <label>Nom *</label>
             <input type="text" name="nom" class="form-control" value="<%= u.getNom() %>" required>
+            <span class="error-message">Ce champ est obligatoire.</span>
         </div>
         <div class="col-md-6">
             <label>Prenom</label>
             <input type="text" name="prenom" class="form-control" value="<%= u.getPrenom() %>">
         </div>
         <div class="col-md-6">
-            <label>Telephone</label>
-            <input type="text" name="telephone" class="form-control" value="<%= u.getTelephone() %>">
+            <label>Telephone (+261)</label>
+            <div class="input-group">
+                <span class="input-group-text">+261</span>
+                <input type="text" name="telephone" class="form-control" placeholder="32 1234567" pattern="[0-9]{9}" maxlength="9" value="<%= telSansPrefix %>">
+            </div>
+            <span class="error-message">9 chiffres : indicatif (32/33/34/37/38) + 7 chiffres.</span>
         </div>
         <div class="col-md-6">
             <label>Email *</label>
             <input type="email" name="email" class="form-control" value="<%= u.getEmail() %>" required>
+            <span class="error-message">Email invalide ou deja utilise.</span>
         </div>
         <div class="col-md-6">
             <label>Identifiant *</label>
             <input type="text" name="identifiant" class="form-control" value="<%= u.getIdentifiant() %>" required>
+            <span class="error-message">Ce champ est obligatoire.</span>
         </div>
         <div class="col-md-6">
-            <label>Mot de passe (laisser vide pour ne pas modifier)</label>
-            <input type="password" name="mot_de_passe" class="form-control" placeholder="Nouveau mot de passe">
+            <label>Mot de passe (laisser vide pour ne pas changer)</label>
+            <input type="password" name="mot_de_passe" class="form-control" minlength="8" placeholder="Nouveau mot de passe">
+            <span class="error-message">Au moins 8 caracteres si rempli.</span>
         </div>
         <div class="col-md-6">
             <label>Role *</label>
             <select name="role" class="form-select" required>
-                <option value="1" <%= u.getId_role()==1 ? "selected" : "" %>>Admin</option>
-                <option value="2" <%= u.getId_role()==2 ? "selected" : "" %>>Caissier</option>
-                <option value="3" <%= u.getId_role()==3 ? "selected" : "" %>>Autre</option>
+                <% for (Utilisateur r : roles) { %>
+                    <option value="<%= r.getId_role() %>" <%= (u.getId_role() == r.getId_role()) ? "selected" : "" %>>
+                        <%= r.getNom_role() %>
+                    </option>
+                <% } %>
             </select>
         </div>
         <div class="col-md-6">
             <label>Date d'embauche *</label>
             <input type="date" name="date_embauche" class="form-control" value="<%= u.getDate_embauche() %>" required>
+            <span class="error-message">Ce champ est obligatoire.</span>
         </div>
         <div class="col-md-6">
             <label>Date de retrait</label>
@@ -74,11 +95,85 @@
             </select>
         </div>
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button type="submit" class="btn btn-primary" id="btnSubmit">Enregistrer</button>
             <a href="liste-utilisateur.jsp" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('formModif');
+    const inputs = form.querySelectorAll('input, select');
+
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() { validateField(this); });
+        input.addEventListener('input', function() {
+            if (this.classList.contains('is-invalid')) validateField(this);
+        });
+    });
+
+    function validateField(field) {
+        const errorSpan = field.parentElement.querySelector('.error-message');
+        let valid = true;
+        let message = '';
+
+        if (field.hasAttribute('required') && !field.value.trim()) {
+            valid = false;
+            message = 'Ce champ est obligatoire.';
+        } else if (field.type === 'email' && field.value.trim()) {
+            const email = field.value.trim();
+            const atIndex = email.indexOf('@');
+            if (atIndex === -1) {
+                valid = false;
+                message = 'Email doit contenir @.';
+            } else if (!email.includes('.', atIndex)) {
+                valid = false;
+                message = 'Email doit contenir un point apres le @.';
+            }
+        } else if (field.name === 'telephone' && field.value.trim()) {
+            const tel = field.value.trim();
+            if (!tel.match(/^[0-9]{9}$/)) {
+                valid = false;
+                message = '9 chiffres attendus.';
+            } else {
+                const indicatif = tel.substring(0, 2);
+                if (!['32', '33', '34', '37', '38'].includes(indicatif)) {
+                    valid = false;
+                    message = 'Indicatif invalide (32,33,34,37,38)';
+                }
+            }
+        } else if (field.type === 'password' && field.value.trim()) {
+            if (field.value.length < 8) {
+                valid = false;
+                message = 'Au moins 8 caracteres.';
+            }
+        }
+
+        if (!valid) {
+            field.classList.add('is-invalid');
+            field.classList.remove('is-valid');
+            errorSpan.textContent = message;
+            errorSpan.style.display = 'block';
+        } else {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            errorSpan.style.display = 'none';
+        }
+        return valid;
+    }
+
+    form.addEventListener('submit', function(e) {
+        let allValid = true;
+        inputs.forEach(input => {
+            if (!validateField(input)) allValid = false;
+        });
+        if (!allValid) {
+            e.preventDefault();
+            alert('Veuillez corriger les erreurs dans le formulaire.');
+        }
+    });
+});
+</script>
 <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

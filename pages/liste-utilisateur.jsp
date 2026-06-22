@@ -5,7 +5,7 @@
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = user.getId_role() == 1;
+    boolean isAdmin = user.voirsiadmin().equals("Admin");
 
     String nom = request.getParameter("nom");
     String roleParam = request.getParameter("role");
@@ -30,6 +30,8 @@
     Vector<Utilisateur> liste = Utilisateur.rechercher(nom, idRole, statut, d1, d2, tri, limit, offset);
     int total = Utilisateur.count(nom, idRole, statut, d1, d2);
     int nbPages = (int) Math.ceil((double) total / limit);
+
+    String selectedRole = (roleParam != null && !roleParam.isEmpty()) ? roleParam : "";
 %>
 <!DOCTYPE html>
 <html>
@@ -53,9 +55,14 @@
             <label>Role</label>
             <select name="role" class="form-select">
                 <option value="">Tous</option>
-                <option value="1" <%= "1".equals(roleParam) ? "selected" : "" %>>Admin</option>
-                <option value="2" <%= "2".equals(roleParam) ? "selected" : "" %>>Caissier</option>
-                <option value="3" <%= "3".equals(roleParam) ? "selected" : "" %>>Autre</option>
+                <%
+                    Vector<Utilisateur> roles = Utilisateur.getAllRoles();
+                    for (Utilisateur r : roles) {
+                %>
+                    <option value="<%= r.getId_role() %>" <%= selectedRole.equals(String.valueOf(r.getId_role())) ? "selected" : "" %>>
+                        <%= r.getNom_role() %>
+                    </option>
+                <% } %>
             </select>
         </div>
         <div class="col-md-2">
@@ -81,8 +88,8 @@
 
     <div class="mb-3">
         <span>Trier par nom : </span>
-        <a href="?tri=ASC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">A - Z</a>
-        <a href="?tri=DESC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">Z - A</a>
+        <a href="?tri=ASC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">A → Z</a>
+        <a href="?tri=DESC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">Z → A</a>
     </div>
 
     <table class="table table-bordered table-hover">
@@ -101,11 +108,12 @@
                     <td><%= u.getId_utilisateur() %></td>
                     <td><%= u.getNom() %></td>
                     <td><%= u.getPrenom() %></td>
-                    <td><%= u.getId_role() == 1 ? "Admin" : u.getId_role() == 2 ? "Caissier" : "Autre" %></td>
+                    <td><%= u.getNom_role() %></td>
                     <td><%= u.getEmail() %></td>
                     <td><span class="badge <%= u.isActif() ? "bg-success" : "bg-danger" %>"><%= u.isActif() ? "Actif" : "Inactif" %></span></td>
                     <% if (isAdmin) { %>
                     <td>
+                        <a href="details-utilisateur.jsp?id=<%= u.getId_utilisateur() %>" class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a>
                         <a href="modifier-utilisateur.jsp?id=<%= u.getId_utilisateur() %>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
                         <a href="../traitement/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la desactivation/reactivation ?')">
                             <i class="bi <%= u.isActif() ? "bi-person-x" : "bi-person-check" %>"></i>

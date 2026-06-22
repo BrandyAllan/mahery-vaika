@@ -5,13 +5,18 @@
         response.sendRedirect("../index.jsp");
         return;
     }
-    int id = Integer.parseInt(request.getParameter("id"));
+    String idParam = request.getParameter("id");
+    if (idParam == null || idParam.isEmpty()) {
+        response.sendRedirect("liste-utilisateur.jsp");
+        return;
+    }
+    int id = Integer.parseInt(idParam);
     Utilisateur u = Utilisateur.getById(id);
     if (u == null) {
         response.sendRedirect("liste-utilisateur.jsp");
         return;
     }
-    boolean isAdmin = user.getId_role() == 1;
+    boolean isAdmin = user.voirsiadmin().equals("Admin");
 %>
 <!DOCTYPE html>
 <html>
@@ -30,10 +35,10 @@
             <p><strong>ID :</strong> <%= u.getId_utilisateur() %></p>
             <p><strong>Nom :</strong> <%= u.getNom() %></p>
             <p><strong>Prenom :</strong> <%= u.getPrenom() %></p>
-            <p><strong>Telephone :</strong> <%= u.getTelephone() %></p>
+            <p><strong>Telephone :</strong> <%= u.getTelephone() != null ? u.getTelephone() : "N/A" %></p>
             <p><strong>Email :</strong> <%= u.getEmail() %></p>
             <p><strong>Identifiant :</strong> <%= u.getIdentifiant() %></p>
-            <p><strong>Rôle :</strong> <%= u.getId_role() == 1 ? "Admin" : u.getId_role() == 2 ? "Caissier" : "Autre" %></p>
+            <p><strong>Role :</strong> <%= u.getNom_role() %></p>
             <p><strong>Date d'embauche :</strong> <%= u.getDate_embauche() %></p>
             <p><strong>Date de retrait :</strong> <%= u.getDate_retrait() != null ? u.getDate_retrait() : "N/A" %></p>
             <p><strong>Statut :</strong> <span class="badge <%= u.isActif() ? "bg-success" : "bg-danger" %>"><%= u.isActif() ? "Actif" : "Inactif" %></span></p>

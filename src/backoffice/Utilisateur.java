@@ -7,6 +7,7 @@ import tools.Database;
 public class Utilisateur {
     private int id_utilisateur;
     private int id_role;
+    private String nom_role;
     private String nom;
     private String prenom;
     private String telephone;
@@ -25,6 +26,9 @@ public class Utilisateur {
 
     public int getId_role() { return id_role; }
     public void setId_role(int id_role) { this.id_role = id_role; }
+
+    public String getNom_role() { return nom_role; }
+    public void setNom_role(String nom_role) { this.nom_role = nom_role; }
 
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
@@ -56,23 +60,51 @@ public class Utilisateur {
     public Timestamp getDate_creation() { return date_creation; }
     public void setDate_creation(Timestamp date_creation) { this.date_creation = date_creation; }
 
-    public static Utilisateur authentifier(String identifiant, String motDePasse) throws Exception {
-        String sql = "SELECT * FROM utilisateur WHERE identifiant = ? AND actif = true";
+    public String voirsiadmin() {
+        return this.nom_role;
+    }
 
+    public static Vector<Utilisateur> getAllRoles() throws Exception {
+        Vector<Utilisateur> roles = new Vector<>();
+        String sql = "SELECT id_role, nom_role FROM role ORDER BY nom_role";
+        try (Connection c = new Database().dbconnect();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Utilisateur r = new Utilisateur();
+                r.setId_role(rs.getInt("id_role"));
+                r.setNom_role(rs.getString("nom_role"));
+                roles.add(r);
+            }
+        }
+        return roles;
+    }
+
+    public static boolean emailExiste(String email, int excludeId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM utilisateur WHERE email ILIKE ? AND id_utilisateur != ?";
         try (Connection c = new Database().dbconnect();
              PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setInt(2, excludeId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+        }
+        return false;
+    }
 
+    public static Utilisateur authentifier(String identifiant, String motDePasse) throws Exception {
+        String sql = "SELECT u.*, r.nom_role FROM utilisateur u JOIN role r ON u.id_role = r.id_role WHERE u.identifiant = ? AND u.actif = true";
+        try (Connection c = new Database().dbconnect();
+             PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setString(1, identifiant);
             ResultSet rs = ps.executeQuery();
-
             if (rs.next()) {
                 String mdpStocke = rs.getString("mot_de_passe");
-
                 if (motDePasse.equals(mdpStocke)) {
                     Utilisateur u = new Utilisateur();
-
                     u.setId_utilisateur(rs.getInt("id_utilisateur"));
                     u.setId_role(rs.getInt("id_role"));
+                    u.setNom_role(rs.getString("nom_role"));
                     u.setNom(rs.getString("nom"));
                     u.setPrenom(rs.getString("prenom"));
                     u.setTelephone(rs.getString("telephone"));
@@ -83,7 +115,6 @@ public class Utilisateur {
                     u.setDate_retrait(rs.getDate("date_retrait"));
                     u.setActif(rs.getBoolean("actif"));
                     u.setDate_creation(rs.getTimestamp("date_creation"));
-
                     return u;
                 }
             }
@@ -91,53 +122,40 @@ public class Utilisateur {
         return null;
     }
 
-    public static Vector<Utilisateur> rechercher(String nom, int idRole, Boolean statut, Date d1, Date d2, String tri, 
-        int lim, int off) throws Exception {
-
+    public static Vector<Utilisateur> rechercher(String nom, int idRole, Boolean statut, Date d1, Date d2, String tri, int lim, int off) throws Exception {
         Vector<Utilisateur> resultat = new Vector<>();
         Vector<Object> parametres = new Vector<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM utilisateur WHERE 1=1 ");
-
+        StringBuilder sql = new StringBuilder("SELECT u.*, r.nom_role FROM utilisateur u JOIN role r ON u.id_role = r.id_role WHERE 1=1 ");
         if (nom != null && !nom.isEmpty()) {
-            sql.append(" AND nom ILIKE ? ");
+            sql.append(" AND u.nom ILIKE ? ");
             parametres.add("%" + nom + "%");
         }
-
         if (idRole > 0) {
-            sql.append(" AND id_role = ? ");
+            sql.append(" AND u.id_role = ? ");
             parametres.add(idRole);
         }
-
         if (statut != null) {
-            sql.append(" AND actif = ? ");
+            sql.append(" AND u.actif = ? ");
             parametres.add(statut);
         }
-
         if (d1 != null && d2 != null) {
-            sql.append(" AND date_embauche BETWEEN ? AND ? ");
+            sql.append(" AND u.date_embauche BETWEEN ? AND ? ");
             parametres.add(d1);
             parametres.add(d2);
         }
-
-        sql.append(" ORDER BY nom ").append(tri.equalsIgnoreCase("DESC") ? "DESC" : "ASC");
+        sql.append(" ORDER BY u.nom ").append(tri.equalsIgnoreCase("DESC") ? "DESC" : "ASC");
         sql.append(" LIMIT ? OFFSET ? ");
         parametres.add(lim);
         parametres.add(off);
-
         try (Connection c = new Database().dbconnect();
              PreparedStatement ps = c.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < parametres.size(); i++) {
-                ps.setObject(i + 1, parametres.get(i));
-            }
-
+            for (int i = 0; i < parametres.size(); i++) ps.setObject(i + 1, parametres.get(i));
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 Utilisateur u = new Utilisateur();
-
                 u.setId_utilisateur(rs.getInt("id_utilisateur"));
                 u.setId_role(rs.getInt("id_role"));
+                u.setNom_role(rs.getString("nom_role"));
                 u.setNom(rs.getString("nom"));
                 u.setPrenom(rs.getString("prenom"));
                 u.setTelephone(rs.getString("telephone"));
@@ -148,7 +166,6 @@ public class Utilisateur {
                 u.setDate_retrait(rs.getDate("date_retrait"));
                 u.setActif(rs.getBoolean("actif"));
                 u.setDate_creation(rs.getTimestamp("date_creation"));
-
                 resultat.add(u);
             }
         }
@@ -157,59 +174,44 @@ public class Utilisateur {
 
     public static int count(String nom, int idRole, Boolean statut, Date d1, Date d2) throws Exception {
         Vector<Object> parametres = new Vector<>();
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM utilisateur WHERE 1=1 ");
-
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM utilisateur u WHERE 1=1 ");
         if (nom != null && !nom.isEmpty()) {
-            sql.append(" AND nom ILIKE ? ");
+            sql.append(" AND u.nom ILIKE ? ");
             parametres.add("%" + nom + "%");
         }
-
         if (idRole > 0) {
-            sql.append(" AND id_role = ? ");
+            sql.append(" AND u.id_role = ? ");
             parametres.add(idRole);
         }
-
         if (statut != null) {
-            sql.append(" AND actif = ? ");
+            sql.append(" AND u.actif = ? ");
             parametres.add(statut);
         }
-
         if (d1 != null && d2 != null) {
-            sql.append(" AND date_embauche BETWEEN ? AND ? ");
+            sql.append(" AND u.date_embauche BETWEEN ? AND ? ");
             parametres.add(d1);
             parametres.add(d2);
         }
-
         try (Connection c = new Database().dbconnect();
              PreparedStatement ps = c.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < parametres.size(); i++) {
-                ps.setObject(i + 1, parametres.get(i));
-            }
-
+            for (int i = 0; i < parametres.size(); i++) ps.setObject(i + 1, parametres.get(i));
             ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            if (rs.next()) return rs.getInt(1);
         }
         return 0;
     }
 
     public static Utilisateur getById(int id) throws Exception {
-        String sql = "SELECT * FROM utilisateur WHERE id_utilisateur = ?";
-
+        String sql = "SELECT u.*, r.nom_role FROM utilisateur u JOIN role r ON u.id_role = r.id_role WHERE u.id_utilisateur = ?";
         try (Connection c = new Database().dbconnect();
              PreparedStatement ps = c.prepareStatement(sql)) {
-
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-
             if (rs.next()) {
                 Utilisateur u = new Utilisateur();
-
                 u.setId_utilisateur(rs.getInt("id_utilisateur"));
                 u.setId_role(rs.getInt("id_role"));
+                u.setNom_role(rs.getString("nom_role"));
                 u.setNom(rs.getString("nom"));
                 u.setPrenom(rs.getString("prenom"));
                 u.setTelephone(rs.getString("telephone"));
@@ -220,7 +222,6 @@ public class Utilisateur {
                 u.setDate_retrait(rs.getDate("date_retrait"));
                 u.setActif(rs.getBoolean("actif"));
                 u.setDate_creation(rs.getTimestamp("date_creation"));
-
                 return u;
             }
         }
@@ -229,10 +230,8 @@ public class Utilisateur {
 
     public static void ajouter(Utilisateur u) throws Exception {
         String sql = "INSERT INTO utilisateur (id_role, nom, prenom, telephone, email, identifiant, mot_de_passe, date_embauche, date_retrait, actif) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         try (Connection c = new Database().dbconnect();
              PreparedStatement ps = c.prepareStatement(sql)) {
-
             ps.setInt(1, u.getId_role());
             ps.setString(2, u.getNom());
             ps.setString(3, u.getPrenom());
@@ -243,17 +242,14 @@ public class Utilisateur {
             ps.setDate(8, u.getDate_embauche());
             ps.setDate(9, u.getDate_retrait());
             ps.setBoolean(10, u.isActif());
-
             ps.executeUpdate();
         }
     }
 
     public static void mettreAjour(Utilisateur u) throws Exception {
         String sql = "UPDATE utilisateur SET id_role=?, nom=?, prenom=?, telephone=?, email=?, identifiant=?, mot_de_passe=?, date_embauche=?, date_retrait=?, actif=? WHERE id_utilisateur=?";
-
         try (Connection c = new Database().dbconnect();
              PreparedStatement ps = c.prepareStatement(sql)) {
-
             ps.setInt(1, u.getId_role());
             ps.setString(2, u.getNom());
             ps.setString(3, u.getPrenom());
@@ -265,7 +261,6 @@ public class Utilisateur {
             ps.setDate(9, u.getDate_retrait());
             ps.setBoolean(10, u.isActif());
             ps.setInt(11, u.getId_utilisateur());
-
             ps.executeUpdate();
         }
     }

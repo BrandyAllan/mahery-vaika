@@ -5,7 +5,7 @@
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = user.getId_role() == 1; // 1 = admin
+    boolean isAdmin = user.voirsiadmin().equals("Admin");
 %>
 <!DOCTYPE html>
 <html lang="fr">

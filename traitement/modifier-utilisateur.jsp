@@ -1,7 +1,7 @@
 <%@ page import="backoffice.Utilisateur, java.sql.Date" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
-    if (user == null || user.getId_role() != 1) {
+    if (user == null || !user.voirsiadmin().equals("Admin")) {
         response.sendRedirect("../pages/gestion-utilisateur.jsp");
         return;
     }
@@ -25,14 +25,22 @@
         return;
     }
 
-    
+    if (Utilisateur.emailExiste(email, id)) {
+        response.sendRedirect("../pages/modifier-utilisateur.jsp?id="+id+"&erreur=email");
+        return;
+    }
+
     u.setNom(nom);
     u.setPrenom(prenom);
-    u.setTelephone(telephone);
+    if (telephone != null && !telephone.trim().isEmpty()) {
+        u.setTelephone("+261" + telephone.trim());
+    } else {
+        u.setTelephone(null);
+    }
     u.setEmail(email);
     u.setIdentifiant(identifiant);
     if (mot_de_passe != null && !mot_de_passe.trim().isEmpty()) {
-        u.setMot_de_passe(mot_de_passe); // Attention : en clair, à hacher plus tard
+        u.setMot_de_passe(mot_de_passe);
     }
     u.setId_role(role);
     u.setDate_embauche(date_embauche);
