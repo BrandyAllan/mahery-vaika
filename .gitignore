@@ -1,4 +1,42 @@
+# Fichiers générés
 *.war
 *.class
 *.sh
-src/tools/*
+*.jar
+*.log
+*.tmp
+*.swp
+*.lock
+
+# Dossiers de compilation
+WEB-INF/classes/
+WEB-INF/lib/
+build/
+target/
+dist/
+out/
+
+# Dossiers IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.prefs
+
+# Dossiers spécifiques
+src/tools/
+src/gestion/
+
+# Fichiers temporaires
+*.log
+*.pid
+*.lock
+*.tmp
+*.swp
+*~
+
+# Dossiers système
+.DS_Store
+Thumbs.db
