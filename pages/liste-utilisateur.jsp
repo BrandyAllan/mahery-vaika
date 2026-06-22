@@ -7,7 +7,7 @@
     }
     boolean isAdmin = user.getId_role() == 1;
 
-    // Récupération des paramètres de recherche et pagination
+    // Recuperation des paramètres de recherche et pagination
     String nom = request.getParameter("nom");
     String roleParam = request.getParameter("role");
     String statutParam = request.getParameter("statut");
@@ -71,7 +71,7 @@
             </select>
         </div>
         <div class="col-md-2">
-            <label>Date début</label>
+            <label>Date debut</label>
             <input type="date" name="dateDebut" class="form-control" value="<%= dateDebut != null ? dateDebut : "" %>">
         </div>
         <div class="col-md-2">
@@ -94,13 +94,13 @@
     <table class="table table-bordered table-hover">
         <thead class="table-light">
             <tr>
-                <th>ID</th><th>Nom</th><th>Prénom</th><th>Rôle</th><th>Email</th><th>Statut</th>
+                <th>ID</th><th>Nom</th><th>Prenom</th><th>Rôle</th><th>Email</th><th>Statut</th>
                 <% if (isAdmin) { %><th>Actions</th><% } %>
             </tr>
         </thead>
         <tbody>
             <% if (liste.isEmpty()) { %>
-                <tr><td colspan="7" class="text-center">Aucun utilisateur trouvé.</td></tr>
+                <tr><td colspan="7" class="text-center">Aucun utilisateur trouve.</td></tr>
             <% } else {
                 for (Utilisateur u : liste) { %>
                 <tr>
@@ -113,7 +113,7 @@
                     <% if (isAdmin) { %>
                     <td>
                         <a href="modifier-utilisateur.jsp?id=<%= u.getId_utilisateur() %>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                        <a href="../traitement/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la désactivation/réactivation ?')">
+                        <a href="../traitement/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la desactivation/reactivation ?')">
                             <i class="bi <%= u.isActif() ? "bi-person-x" : "bi-person-check" %>"></i>
                         </a>
                     </td>

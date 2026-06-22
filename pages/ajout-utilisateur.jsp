@@ -24,11 +24,11 @@
             <input type="text" name="nom" class="form-control" required>
         </div>
         <div class="col-md-6">
-            <label>Prénom</label>
+            <label>Prenom</label>
             <input type="text" name="prenom" class="form-control">
         </div>
         <div class="col-md-6">
-            <label>Téléphone</label>
+            <label>Telephone</label>
             <input type="text" name="telephone" class="form-control">
         </div>
         <div class="col-md-6">
@@ -44,7 +44,7 @@
             <input type="password" name="mot_de_passe" class="form-control" required>
         </div>
         <div class="col-md-6">
-            <label>Rôle *</label>
+            <label>Role *</label>
             <select name="role" class="form-select" required>
                 <option value="1">Admin</option>
                 <option value="2">Caissier</option>

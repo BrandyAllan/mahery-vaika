@@ -24,8 +24,8 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-list-ul"></i> Liste des utilisateurs</h5>
-                    <p class="card-text">Voir tous les utilisateurs enregistrés.</p>
-                    <a href="liste-utilisateur.jsp" class="btn btn-primary">Accéder à la liste</a>
+                    <p class="card-text">Voir tous les utilisateurs enregistres.</p>
+                    <a href="liste-utilisateur.jsp" class="btn btn-primary">Acceder à la liste</a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-person-plus"></i> Ajouter un utilisateur</h5>
-                    <p class="card-text">Créer un nouvel utilisateur.</p>
+                    <p class="card-text">Creer un nouvel utilisateur.</p>
                     <a href="ajout-utilisateur.jsp" class="btn btn-success">Ajouter</a>
                 </div>
             </div>
