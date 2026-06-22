@@ -27,7 +27,7 @@
     try { if (dateDebut != null && !dateDebut.isEmpty()) d1 = java.sql.Date.valueOf(dateDebut); } catch (Exception e) {}
     try { if (dateFin != null && !dateFin.isEmpty()) d2 = java.sql.Date.valueOf(dateFin); } catch (Exception e) {}
 
-    ArrayList<Utilisateur> liste = Utilisateur.rechercher(nom, idRole, statut, d1, d2, tri, limit, offset);
+    Vector<Utilisateur> liste = Utilisateur.rechercher(nom, idRole, statut, d1, d2, tri, limit, offset);
     int total = Utilisateur.count(nom, idRole, statut, d1, d2);
     int nbPages = (int) Math.ceil((double) total / limit);
 %>
