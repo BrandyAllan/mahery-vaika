@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, java.sql.*, backoffice.Utilisateur" %>
+<%@ page import="java.util.*, java.sql.Date, backoffice.Utilisateur" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null) {
@@ -7,7 +7,6 @@
     }
     boolean isAdmin = user.getId_role() == 1;
 
-    // Recuperation des paramètres de recherche et pagination
     String nom = request.getParameter("nom");
     String roleParam = request.getParameter("role");
     String statutParam = request.getParameter("statut");
@@ -20,16 +19,14 @@
     int limit = 5;
     int offset = (pageCourante - 1) * limit;
 
-    // Construction des filtres
     int idRole = 0;
     try { idRole = Integer.parseInt(roleParam); } catch (Exception e) {}
     Boolean statut = null;
     if (statutParam != null && !statutParam.isEmpty()) statut = Boolean.parseBoolean(statutParam);
-    Date d1 = null, d2 = null;
-    try { if (dateDebut != null && !dateDebut.isEmpty()) d1 = Date.valueOf(dateDebut); } catch (Exception e) {}
-    try { if (dateFin != null && !dateFin.isEmpty()) d2 = Date.valueOf(dateFin); } catch (Exception e) {}
+    java.sql.Date d1 = null, d2 = null;
+    try { if (dateDebut != null && !dateDebut.isEmpty()) d1 = java.sql.Date.valueOf(dateDebut); } catch (Exception e) {}
+    try { if (dateFin != null && !dateFin.isEmpty()) d2 = java.sql.Date.valueOf(dateFin); } catch (Exception e) {}
 
-    // Recherche
     ArrayList<Utilisateur> liste = Utilisateur.rechercher(nom, idRole, statut, d1, d2, tri, limit, offset);
     int total = Utilisateur.count(nom, idRole, statut, d1, d2);
     int nbPages = (int) Math.ceil((double) total / limit);
@@ -47,14 +44,13 @@
     <h2>Liste des utilisateurs</h2>
     <a href="gestion-utilisateur.jsp" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
 
-    <!-- Formulaire de recherche -->
     <form method="get" class="row g-3 mb-4">
         <div class="col-md-3">
             <label>Nom</label>
             <input type="text" name="nom" class="form-control" value="<%= nom != null ? nom : "" %>">
         </div>
         <div class="col-md-2">
-            <label>Rôle</label>
+            <label>Role</label>
             <select name="role" class="form-select">
                 <option value="">Tous</option>
                 <option value="1" <%= "1".equals(roleParam) ? "selected" : "" %>>Admin</option>
@@ -83,18 +79,16 @@
         </div>
     </form>
 
-    <!-- Tri -->
     <div class="mb-3">
         <span>Trier par nom : </span>
-        <a href="?tri=ASC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">A → Z</a>
-        <a href="?tri=DESC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">Z → A</a>
+        <a href="?tri=ASC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">A - Z</a>
+        <a href="?tri=DESC&nom=<%= nom != null ? nom : "" %>&role=<%= roleParam != null ? roleParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>" class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">Z - A</a>
     </div>
 
-    <!-- Tableau -->
     <table class="table table-bordered table-hover">
         <thead class="table-light">
             <tr>
-                <th>ID</th><th>Nom</th><th>Prenom</th><th>Rôle</th><th>Email</th><th>Statut</th>
+                <th>ID</th><th>Nom</th><th>Prenom</th><th>Role</th><th>Email</th><th>Statut</th>
                 <% if (isAdmin) { %><th>Actions</th><% } %>
             </tr>
         </thead>
@@ -123,7 +117,6 @@
         </tbody>
     </table>
 
-    <!-- Pagination -->
     <nav>
         <ul class="pagination">
             <% for (int p = 1; p <= nbPages; p++) { %>
