@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-list-ul"></i> Liste des utilisateurs</h5>
                     <p class="card-text">Voir tous les utilisateurs enregistres.</p>
-                    <a href="liste-utilisateur.jsp" class="btn btn-primary">Acceder à la liste</a>
+                    <a href="liste-utilisateur.jsp" class="btn btn-primary">Acceder a la liste</a>
                 </div>
             </div>
         </div>
