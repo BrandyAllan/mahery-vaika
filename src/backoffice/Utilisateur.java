@@ -45,6 +45,35 @@ public class Utilisateur {
     public Timestamp getDate_creation() { return date_creation; }
     public void setDate_creation(Timestamp date_creation) { this.date_creation = date_creation; }
 
+    public static Utilisateur authentifier(String identifiant, String motDePasse) throws Exception {
+        String sql = "SELECT * FROM utilisateur WHERE identifiant = ? AND actif = true";
+        try (Connection c = new Database().dbconnect();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, identifiant);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String mdpStocke = rs.getString("mot_de_passe");
+                if (motDePasse.equals(mdpStocke)) {
+                    Utilisateur u = new Utilisateur();
+                    u.setId_utilisateur(rs.getInt("id_utilisateur"));
+                    u.setId_role(rs.getInt("id_role"));
+                    u.setNom(rs.getString("nom"));
+                    u.setPrenom(rs.getString("prenom"));
+                    u.setTelephone(rs.getString("telephone"));
+                    u.setEmail(rs.getString("email"));
+                    u.setIdentifiant(rs.getString("identifiant"));
+                    u.setMot_de_passe(rs.getString("mot_de_passe"));
+                    u.setDate_embauche(rs.getDate("date_embauche"));
+                    u.setDate_retrait(rs.getDate("date_retrait"));
+                    u.setActif(rs.getBoolean("actif"));
+                    u.setDate_creation(rs.getTimestamp("date_creation"));
+                    return u;
+                }
+            }
+        }
+        return null;
+    }
+
     public static ArrayList<Utilisateur> rechercher(String nom, int idRole, Boolean statut, Date d1, Date d2, String tri, int lim, int off) throws Exception {
         ArrayList<Utilisateur> l = new ArrayList<>();
         ArrayList<Object> p = new ArrayList<>();
