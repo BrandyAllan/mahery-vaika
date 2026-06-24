@@ -2,7 +2,7 @@
 *.war
 *.class
 *.sh
-
+*.jar
 *.log
 *.tmp
 *.swp
@@ -10,9 +10,7 @@
 
 # Dossiers de compilation
 WEB-INF/classes/
-# Ignore tout ce qui est dans WEB-INF/lib/ SAUF les .jar
-WEB-INF/lib/*
-!WEB-INF/lib/*.jar
+WEB-INF/lib/
 build/
 target/
 dist/
