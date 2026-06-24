@@ -2,7 +2,7 @@
 *.war
 *.class
 *.sh
-*.jar
+
 *.log
 *.tmp
 *.swp
