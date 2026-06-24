@@ -10,7 +10,7 @@
 
 # Dossiers de compilation
 WEB-INF/classes/
-WEB-INF/lib/
+
 build/
 target/
 dist/
