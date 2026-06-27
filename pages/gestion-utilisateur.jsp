@@ -40,6 +40,17 @@
             </div>
         </div>
         <% } %>
+
+        <div class="col-md-6 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-list-ul"></i> Gerer les voitures</h5>
+                    <p class="card-text">Voir toutes les options de gestion des voitures.</p>
+                    <a href="gestion-vehicule.jsp" class="btn btn-primary">Acceder a la gestion</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
