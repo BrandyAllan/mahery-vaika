@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-list-ul"></i> Gerer les voitures</h5>
                     <p class="card-text">Voir toutes les options de gestion des voitures.</p>
-                    <a href="gestion-vehicule.jsp" class="btn btn-primary">Acceder a la gestion</a>
+                    <a href="vehicule/gestion-vehicule.jsp" class="btn btn-primary">Acceder a la gestion</a>
                 </div>
             </div>
         </div>

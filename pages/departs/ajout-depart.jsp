@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, backoffice.Utilisateur, backoffice.Depart" %>
+<%@ page import="java.util.*, backoffice.Utilisateur, gestion.Depart" %>
 <%
 
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");

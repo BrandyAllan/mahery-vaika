@@ -6,23 +6,23 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private String url = "jdbc:postgresql://localhost:5432/mahery_vaika";
-    private String user = "postgres";
-    private String password = "root";
+    private static final String URL  = "jdbc:postgresql://localhost:5432/mahery_vaika";
+    private static final String USER = "postgres";
+    private static final String PASS = "root";
 
     public Connection dbconnect() {
-        Connection c = null;
+        return getConnection();
+    }
 
+    public static Connection getConnection() {
         try {
             Class.forName("org.postgresql.Driver");
-            c = DriverManager.getConnection(url, user, password);
-
+            return DriverManager.getConnection(URL, USER, PASS);
         } catch (ClassNotFoundException e) {
-            System.out.println("⚠️ Driver PostgreSQL introuvable !");
+            System.out.println("Driver PostgreSQL introuvable !");
         } catch (SQLException e) {
-            System.out.println("⚠️ Erreur SQL : " + e.getMessage());
+            System.out.println("Erreur SQL : " + e.getMessage());
         }
-
-        return c;
+        return null;
     }
 }
