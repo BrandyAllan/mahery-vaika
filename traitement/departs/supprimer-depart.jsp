@@ -1,4 +1,4 @@
-<%@ page import="backoffice.Utilisateur, backoffice.Depart" %>
+<%@ page import="backoffice.Utilisateur, gestion.Depart" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null) {
