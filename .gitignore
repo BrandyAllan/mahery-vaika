@@ -27,7 +27,7 @@ out/
 
 # Dossiers spécifiques
 src/tools/
-src/gestion/
+# src/gestion/
 
 # Fichiers temporaires
 *.log
