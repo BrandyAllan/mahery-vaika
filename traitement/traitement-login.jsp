@@ -12,7 +12,7 @@
 
     if (utilisateur != null) {
         session.setAttribute("utilisateur", utilisateur);
-        response.sendRedirect("../pages/gestion-utilisateur.jsp");
+        response.sendRedirect("../models/model.jsp");
     } else {
         response.sendRedirect("../index.jsp?erreur=1");
     }
