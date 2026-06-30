@@ -1,5 +1,6 @@
 package gestion;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,19 +8,73 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-import models.Trajet;
-import models.Ville;
 import tools.Database;
-import java.math.BigDecimal;
 
-public class TrajetGestion {
+public class Trajet {
+
+    private int idTrajet;
+    private Ville villeDepart;
+    private Ville villeArrivee;
+    private BigDecimal distanceKm;
+    private String dureeEstimee;
+    private BigDecimal tarifBase;
+    private boolean actif;
 
     private static final int PAGE_SIZE = 5;
 
-    
-    private static final java.util.Set<String> ALLOWED_SORT_FIELDS = new java.util.HashSet<>(
-        java.util.Arrays.asList("depart_nom", "arrivee_nom", "tarif_base", "distance_km", "id_trajet")
-    );
+    private static final java.util.Set<String> ALLOWED_SORT_FIELDS =
+        new java.util.HashSet<>(
+            java.util.Arrays.asList(
+                "depart_nom", "arrivee_nom", "tarif_base", "distance_km", "id_trajet"
+            )
+        );
+
+    public Trajet() {}
+
+    public Trajet(int idTrajet,
+                  Ville villeDepart,
+                  Ville villeArrivee,
+                  BigDecimal distanceKm,
+                  String dureeEstimee,
+                  BigDecimal tarifBase,
+                  boolean actif) {
+        this.idTrajet     = idTrajet;
+        this.villeDepart  = villeDepart;
+        this.villeArrivee = villeArrivee;
+        this.distanceKm   = distanceKm;
+        this.dureeEstimee = dureeEstimee;
+        this.tarifBase    = tarifBase;
+        this.actif        = actif;
+    }
+
+    public int getIdTrajet()                        { return idTrajet; }
+    public void setIdTrajet(int idTrajet)           { this.idTrajet = idTrajet; }
+
+    public Ville getVilleDepart()                   { return villeDepart; }
+    public void setVilleDepart(Ville v)             { this.villeDepart = v; }
+
+    public Ville getVilleArrivee()                  { return villeArrivee; }
+    public void setVilleArrivee(Ville v)            { this.villeArrivee = v; }
+
+    public BigDecimal getDistanceKm()               { return distanceKm; }
+    public void setDistanceKm(BigDecimal distanceKm){ this.distanceKm = distanceKm; }
+
+    public String getDureeEstimee()                 { return dureeEstimee; }
+    public void setDureeEstimee(String dureeEstimee){ this.dureeEstimee = dureeEstimee; }
+
+    public BigDecimal getTarifBase()                { return tarifBase; }
+    public void setTarifBase(BigDecimal tarifBase)  { this.tarifBase = tarifBase; }
+
+    public boolean isActif()                        { return actif; }
+    public void setActif(boolean actif)             { this.actif = actif; }
+
+    public int getPageSize() {
+        return PAGE_SIZE;
+    }
+
+    // =========================================================
+    //  Méthodes de gestion des trajets
+    // =========================================================
 
     public List<Trajet> rechercherTrajets(String searchDepart, String searchArrivee,
             String searchTarif, String searchStatut,
@@ -36,15 +91,14 @@ public class TrajetGestion {
         try {
             conn = db.dbconnect();
             if (conn != null) {
-                StringBuilder sql = buildBaseQuery(searchDepart, searchArrivee,
-                        searchTarif, searchStatut, dateDebut, dateFin);
+                StringBuilder sql = buildBaseQuery(
+                    searchDepart, searchArrivee, searchTarif, searchStatut, dateDebut, dateFin
+                );
 
-                // Tri sécurisé
                 String safeSortField = ALLOWED_SORT_FIELDS.contains(sortField) ? sortField : "id_trajet";
                 String safeSortOrder = "ASC".equalsIgnoreCase(sortOrder) ? "ASC" : "DESC";
                 sql.append(" ORDER BY ").append(safeSortField).append(" ").append(safeSortOrder);
 
-                // Pagination
                 int offset = (page - 1) * PAGE_SIZE;
                 sql.append(" LIMIT ? OFFSET ?");
 
@@ -67,9 +121,6 @@ public class TrajetGestion {
         return trajets;
     }
 
-    /**
-     * Compte le nombre total de trajets correspondant aux filtres (pour la pagination).
-     */
     public int countTrajets(String searchDepart, String searchArrivee,
             String searchTarif, String searchStatut,
             String dateDebut, String dateFin) {
@@ -119,15 +170,11 @@ public class TrajetGestion {
         return count;
     }
 
-    /**
-     * Ancienne méthode conservée pour compatibilité (sans pagination).
-     */
     public List<Trajet> rechercherTrajets(String searchDepart, String searchArrivee,
             String searchTarif, String searchStatut) {
         return rechercherTrajets(searchDepart, searchArrivee, searchTarif, searchStatut,
                 null, null, "id_trajet", "DESC", 1);
     }
-
 
     private StringBuilder buildBaseQuery(String searchDepart, String searchArrivee,
             String searchTarif, String searchStatut,
@@ -203,7 +250,6 @@ public class TrajetGestion {
         return idx;
     }
 
-
     public Trajet getTrajetById(int id) {
         Trajet trajet = null;
         Database db = new Database();
@@ -214,11 +260,12 @@ public class TrajetGestion {
         try {
             conn = db.dbconnect();
             if (conn != null) {
-                String sql = "SELECT t.*, v1.nom_ville AS depart_nom, v2.nom_ville AS arrivee_nom " +
-                             "FROM trajet t " +
-                             "JOIN ville v1 ON t.id_ville_depart = v1.id_ville " +
-                             "JOIN ville v2 ON t.id_ville_arrivee = v2.id_ville " +
-                             "WHERE t.id_trajet = ?";
+                String sql =
+                    "SELECT t.*, v1.nom_ville AS depart_nom, v2.nom_ville AS arrivee_nom " +
+                    "FROM trajet t " +
+                    "JOIN ville v1 ON t.id_ville_depart = v1.id_ville " +
+                    "JOIN ville v2 ON t.id_ville_arrivee = v2.id_ville " +
+                    "WHERE t.id_trajet = ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, id);
                 rs = pstmt.executeQuery();
@@ -244,7 +291,10 @@ public class TrajetGestion {
         try {
             conn = db.dbconnect();
             if (conn != null) {
-                String sql = "INSERT INTO trajet (id_ville_depart, id_ville_arrivee, distance_km, duree_estimee, tarif_base, actif) VALUES (?, ?, ?, ?, ?, ?)";
+                String sql =
+                    "INSERT INTO trajet " +
+                    "(id_ville_depart, id_ville_arrivee, distance_km, duree_estimee, tarif_base, actif) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, t.getVilleDepart().getIdVille());
                 pstmt.setInt(2, t.getVilleArrivee().getIdVille());
@@ -279,7 +329,11 @@ public class TrajetGestion {
         try {
             conn = db.dbconnect();
             if (conn != null) {
-                String sql = "UPDATE trajet SET id_ville_depart = ?, id_ville_arrivee = ?, distance_km = ?, duree_estimee = ?, tarif_base = ? WHERE id_trajet = ?";
+                String sql =
+                    "UPDATE trajet SET " +
+                    "id_ville_depart = ?, id_ville_arrivee = ?, " +
+                    "distance_km = ?, duree_estimee = ?, tarif_base = ? " +
+                    "WHERE id_trajet = ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, t.getVilleDepart().getIdVille());
                 pstmt.setInt(2, t.getVilleArrivee().getIdVille());
@@ -327,33 +381,33 @@ public class TrajetGestion {
         }
         return success;
     }
-    
+
     public boolean supprimerTrajet(int id) {
-    Database db = new Database();
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    boolean success = false;
-    try {
-        conn = db.dbconnect();
-        if (conn != null) {
-            String sql = "DELETE FROM trajet WHERE id_trajet = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-            success = true;
+        Database db = new Database();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
+
+        try {
+            conn = db.dbconnect();
+            if (conn != null) {
+                String sql = "DELETE FROM trajet WHERE id_trajet = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, id);
+                pstmt.executeUpdate();
+                success = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(conn, pstmt, null);
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        closeResources(conn, pstmt, null);
-    }
-    return success;
+        return success;
     }
 
-    public int getPageSize() {
-        return PAGE_SIZE;
-    }
-
+    // =========================================================
+    //  Méthodes privées utilitaires
+    // =========================================================
     private Trajet mapResultSetToTrajet(ResultSet rs) throws SQLException {
         Ville depart = new Ville();
         depart.setIdVille(rs.getInt("id_ville_depart"));
@@ -376,8 +430,8 @@ public class TrajetGestion {
     }
 
     private void closeResources(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-        try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        try { if (rs    != null) rs.close();    } catch (SQLException e) {}
         try { if (pstmt != null) pstmt.close(); } catch (SQLException e) {}
-        try { if (conn != null) conn.close(); } catch (SQLException e) {}
+        try { if (conn  != null) conn.close();  } catch (SQLException e) {}
     }
 }
