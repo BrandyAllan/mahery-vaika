@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.TrajetGestion" %>
+<%@ page import="backoffice.Utilisateur" %>
 <%
-    String role = (String) session.getAttribute("role");
-    if (role == null) {
-        response.sendRedirect("../index.jsp");
+    Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
+    if (userObj == null) {
+        response.sendRedirect("../../index.jsp");
         return;
     }
-    if (!"ADMIN".equals(role)) {
-        response.sendRedirect("../pages/trajet/liste-trajet.jsp");
+    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
+    if (!isAdmin) {
+        response.sendRedirect("../../models/model.jsp?page=trajet/liste-trajet");
         return;
     }
 
@@ -25,12 +27,12 @@
         }
 
         if (success) {
-            response.sendRedirect("../pages/trajet/liste-trajet.jsp?msg=" + action);
+            response.sendRedirect("../../models/model.jsp?page=trajet/liste-trajet&msg=" + action);
         } else {
-            response.sendRedirect("../pages/trajet/liste-trajet.jsp?error=sql");
+            response.sendRedirect("../../models/model.jsp?page=trajet/liste-trajet&error=sql");
         }
         return;
     }
 
-    response.sendRedirect("../pages/trajet/liste-trajet.jsp");
+    response.sendRedirect("../../models/model.jsp?page=trajet/liste-trajet");
 %>

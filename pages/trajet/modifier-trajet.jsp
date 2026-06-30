@@ -1,15 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.TrajetGestion, gestion.VilleGestion, models.Trajet, models.Ville, java.util.List" %>
+<%@ page import="backoffice.Utilisateur" %>
 <%
-    String role = (String) session.getAttribute("role");
-    if (!"ADMIN".equals(role)) {
-        response.sendRedirect("liste-trajet.jsp");
+    Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
+    if (userObj == null) {
+        response.sendRedirect("../index.jsp");
+        return;
+    }
+
+    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
+
+    if (!isAdmin) {
+%>
+    <div class="container mt-5">
+        <div class="alert alert-danger text-center">
+            <i class="fas fa-lock me-2"></i> Accès refusé. Vous devez être administrateur pour modifier un trajet.
+        </div>
+    </div>
+<%
         return;
     }
 
     String idStr = request.getParameter("id");
     if (idStr == null || idStr.isEmpty()) {
-        response.sendRedirect("liste-trajet.jsp");
+%>
+    <div class="container mt-5">
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-exclamation-triangle me-2"></i> Identifiant du trajet manquant.
+        </div>
+    </div>
+<%
         return;
     }
 
@@ -18,7 +38,13 @@
     
     Trajet trajet = trajetGestion.getTrajetById(Integer.parseInt(idStr));
     if (trajet == null) {
-        response.sendRedirect("liste-trajet.jsp");
+%>
+    <div class="container mt-5">
+        <div class="alert alert-danger text-center">
+            <i class="fas fa-exclamation-circle me-2"></i> Le trajet #<%= idStr %> n'existe pas.
+        </div>
+    </div>
+<%
         return;
     }
     
@@ -37,7 +63,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="details-trajet.jsp?id=<%= trajet.getIdTrajet() %>"><i class="fas fa-arrow-left me-2"></i>Annuler</a>
+            <a class="navbar-brand fw-bold" href="?page=trajet/details-trajet&id=<%= trajet.getIdTrajet() %>"><i class="fas fa-arrow-left me-2"></i>Annuler</a>
             <span class="navbar-text text-white fw-bold">
                 <i class="fas fa-bus-alt me-2"></i>Mahery Vaika
             </span>

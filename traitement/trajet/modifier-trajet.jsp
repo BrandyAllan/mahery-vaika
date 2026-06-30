@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.TrajetGestion, models.Trajet, models.Ville, java.math.BigDecimal" %>
+<%@ page import="backoffice.Utilisateur" %>
 <%
-    String role = (String) session.getAttribute("role");
-    if (role == null) {
-        response.sendRedirect("../index.jsp");
+    Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
+    if (userObj == null) {
+        response.sendRedirect("../../index.jsp");
         return;
     }
-    if (!"ADMIN".equals(role)) {
-        response.sendRedirect("../pages/trajet/liste-trajet.jsp");
+    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
+    if (!isAdmin) {
+        response.sendRedirect("../../models/model.jsp?page=trajet/liste-trajet");
         return;
     }
 
@@ -40,17 +42,17 @@
             
             TrajetGestion gestion = new TrajetGestion();
             if (gestion.modifierTrajet(t)) {
-                response.sendRedirect("../pages/trajet/details-trajet.jsp?id=" + idTrajet);
+                response.sendRedirect("../../models/model.jsp?page=trajet/details-trajet&id=" + idTrajet);
                 return;
             } else {
-                response.sendRedirect("../pages/trajet/modifier-trajet.jsp?id=" + idTrajet + "&error=sql");
+                response.sendRedirect("../../models/model.jsp?page=trajet/modifier-trajet&id=" + idTrajet + "&error=sql");
                 return;
             }
         } else {
-            response.sendRedirect("../pages/trajet/modifier-trajet.jsp?id=" + idTrajet + "&error=invalid_data");
+            response.sendRedirect("../../models/model.jsp?page=trajet/modifier-trajet&id=" + idTrajet + "&error=invalid_data");
             return;
         }
     }
     
-    response.sendRedirect("../pages/trajet/liste-trajet.jsp");
+    response.sendRedirect("../../models/model.jsp?page=trajet/liste-trajet");
 %>

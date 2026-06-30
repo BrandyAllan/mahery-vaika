@@ -1,24 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.TrajetGestion, models.Trajet" %>
+<%@ page import="backoffice.Utilisateur" %>
 <%
-    String role = (String) session.getAttribute("role");
-    if (role == null) {
+    Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
+    if (userObj == null) {
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = "ADMIN".equals(role);
-    
+
+    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
+
     String idStr = request.getParameter("id");
     if (idStr == null || idStr.isEmpty()) {
-        response.sendRedirect("liste-trajet.jsp");
+%>
+    <div class="container mt-5">
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-exclamation-triangle me-2"></i> Identifiant du trajet manquant.
+        </div>
+    </div>
+<%
         return;
     }
 
     TrajetGestion trajetGestion = new TrajetGestion();
     Trajet trajet = trajetGestion.getTrajetById(Integer.parseInt(idStr));
-    
+
     if (trajet == null) {
-        response.sendRedirect("liste-trajet.jsp");
+%>
+    <div class="container mt-5">
+        <div class="alert alert-danger text-center">
+            <i class="fas fa-exclamation-circle me-2"></i> Le trajet #<%= idStr %> n'existe pas.
+        </div>
+    </div>
+<%
         return;
     }
 %>
@@ -30,12 +44,15 @@
     <title>Détails du Trajet #<%= trajet.getIdTrajet() %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../assets/css/styles-premium.css">
+    <link rel="stylesheet" href="../assets/css/styles-premium.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="liste-trajet.jsp"><i class="fas fa-arrow-left me-2"></i>Retour à la liste</a>
+            <a class="navbar-brand fw-bold" href="?page=trajet/liste-trajet"><i class="fas fa-arrow-left me-2"></i>Retour à la liste</a>
+            <span class="navbar-text text-white fw-bold">
+                <i class="fas fa-bus-alt me-2"></i>Mahery Vaika
+            </span>
         </div>
     </nav>
 
@@ -54,7 +71,7 @@
                     <div class="card-body p-5">
                         
                         <div class="row mb-5 text-center">
-                            <div class="col-5">
+                    <div class="col-5">
                                 <h5 class="text-muted text-uppercase mb-2">Départ</h5>
                                 <h3 class="fw-bold text-danger"><i class="fas fa-map-marker-alt me-2"></i><%= trajet.getVilleDepart().getNomVille() %></h3>
                             </div>
@@ -94,14 +111,23 @@
                         </div>
 
                         <div class="d-flex justify-content-center mt-5 gap-3">
-                            <a href="../../pages/trajet/modifier-trajet.jsp?id=<%= trajet.getIdTrajet() %>" class="btn btn-warning <%= !isAdmin ? "disabled" : "" %>">
-                                <i class="fas fa-edit me-2"></i>Modifier
-                            </a>
-                            <% if (trajet.isActif() && isAdmin) { %>
-                                <a href="../../traitement/trajet/supprimer-trajet.jsp?id=<%= trajet.getIdTrajet() %>" class="btn btn-danger"
-                                   onclick="return confirm('Désactiver ce trajet ?');">
-                                    <i class="fas fa-ban me-2"></i>Désactiver
+                            <% if (isAdmin) { %>
+                                <a href="?page=trajet/modifier-trajet&id=<%= trajet.getIdTrajet() %>" class="btn btn-warning">
+                                    <i class="fas fa-edit me-2"></i>Modifier
                                 </a>
+                                <% if (trajet.isActif()) { %>
+                                    <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= trajet.getIdTrajet() %>&action=desactiver" class="btn btn-danger"
+                                       onclick="return confirm('Désactiver ce trajet ?');">
+                                        <i class="fas fa-ban me-2"></i>Désactiver
+                                    </a>
+                                <% } %>
+                            <% } else { %>
+                                <button class="btn btn-warning" disabled>
+                                    <i class="fas fa-edit me-2"></i>Modifier
+                                </button>
+                                <button class="btn btn-danger" disabled>
+                                    <i class="fas fa-ban me-2"></i>Désactiver
+                                </button>
                             <% } %>
                         </div>
                         

@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.TrajetGestion, gestion.VilleGestion, models.Trajet, models.Ville, java.util.List" %>
+<%@ page import="backoffice.Utilisateur" %>
 <%
-    String role = (String) session.getAttribute("role");
-    if (role == null) {
+    Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
+    if (userObj == null) {
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = "ADMIN".equals(role);
+    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
 
     // ---- Paramètres de recherche ----
     String searchDepart  = request.getParameter("searchDepart");
@@ -46,7 +47,7 @@
     if (currentPage > totalPages) currentPage = totalPages;
 
     // Helper pour conserver les paramètres dans les liens de tri/pagination
-    String baseQuery = "liste-trajet.jsp?" +
+    String baseQuery = "?page=trajet/liste-trajet&" +
         (searchDepart  != null && !searchDepart.isEmpty()  ? "searchDepart="  + searchDepart  + "&" : "") +
         (searchArrivee != null && !searchArrivee.isEmpty() ? "searchArrivee=" + searchArrivee + "&" : "") +
         (searchTarif   != null && !searchTarif.isEmpty()   ? "searchTarif="   + searchTarif   + "&" : "") +
@@ -63,7 +64,7 @@
     <title>Liste des Trajets - Mahery Vaika</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../assets/css/styles-premium.css">
+    <link rel="stylesheet" href="../assets/css/styles-premium.css">
     <style>
         .sort-link { color: inherit; text-decoration: none; }
         .sort-link:hover { color: #3498db; }
@@ -79,7 +80,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="gestion-trajet.jsp"><i class="fas fa-arrow-left me-2"></i>Retour</a>
+            <a class="navbar-brand fw-bold" href="?page=trajet/gestion-trajet"><i class="fas fa-arrow-left me-2"></i>Retour</a>
             <span class="navbar-text text-white fw-bold">
                 <i class="fas fa-bus-alt me-2"></i>Mahery Vaika
             </span>
@@ -98,12 +99,10 @@
             <div class="alert alert-warning msg-banner d-flex align-items-center mb-4" role="alert">
                 <i class="fas fa-ban me-2 fa-lg"></i> Trajet désactivé avec succès.
             </div>
-
         <% } else if ("supprime".equals(msg)) { %>
             <div class="alert alert-warning msg-banner d-flex align-items-center mb-4" role="alert">
-                <i class="fas fa-ban me-2 fa-lg"></i> Trajet supprimé avec succès.
+                <i class="fas fa-trash me-2 fa-lg"></i> Trajet supprimé avec succès.
             </div>
-
         <% } else if ("sql".equals(err)) { %>
             <div class="alert alert-danger msg-banner d-flex align-items-center mb-4" role="alert">
                 <i class="fas fa-exclamation-triangle me-2 fa-lg"></i> Une erreur est survenue. Veuillez réessayer.
@@ -116,13 +115,14 @@
                 <small class="fs-6 text-muted ms-2">(<%= totalItems %> résultat<%= totalItems > 1 ? "s" : "" %>)</small>
             </h2>
             <% if (isAdmin) { %>
-                <a href="ajout-trajet.jsp" class="btn btn-premium"><i class="fas fa-plus me-2"></i>Nouveau Trajet</a>
+                <a href="?page=trajet/ajout-trajet" class="btn btn-premium"><i class="fas fa-plus me-2"></i>Nouveau Trajet</a>
             <% } %>
         </div>
 
         <%-- Formulaire de recherche --%>
         <div class="search-container mb-4">
-            <form id="searchForm" action="liste-trajet.jsp" method="GET">
+            <form id="searchForm" action="model.jsp" method="GET">
+                <input type="hidden" name="page" value="trajet/liste-trajet">
                 <input type="hidden" name="sortField" value="<%= sortField %>">
                 <input type="hidden" name="sortOrder" value="<%= sortOrder %>">
                 <div class="row g-3 mb-3">
@@ -179,12 +179,21 @@
                                value="<%= dateFin != null ? dateFin : "" %>">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <a href="liste-trajet.jsp" class="btn btn-outline-secondary w-100">
+                        <a href="?page=trajet/liste-trajet" class="btn btn-outline-secondary w-100">
                             <i class="fas fa-times me-2"></i>Réinitialiser
                         </a>
                     </div>
                 </div>
             </form>
+        </div>
+
+        <%-- Tri explicite --%>
+        <div class="mb-3 d-flex gap-2 align-items-center">
+            <span class="text-muted fw-bold small"><i class="fas fa-sort-alpha-down me-1"></i>Trier par Départ :</span>
+            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=ASC&page=1"
+               class="btn btn-sm <%= "depart_nom".equals(sortField) && "ASC".equals(sortOrder) ? "btn-primary" : "btn-outline-secondary" %>">A → Z</a>
+            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=DESC&page=1"
+               class="btn btn-sm <%= "depart_nom".equals(sortField) && "DESC".equals(sortOrder) ? "btn-primary" : "btn-outline-secondary" %>">Z → A</a>
         </div>
 
         <%-- Tableau --%>
@@ -194,7 +203,7 @@
                     <tr>
                         <th>#</th>
                         <th>
-                            <a href="liste-trajet.jsp?searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=<%= "depart_nom".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
+                            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=<%= "depart_nom".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
                                class="sort-link">
                                 Départ
                                 <% if ("depart_nom".equals(sortField)) { %>
@@ -205,7 +214,7 @@
                             </a>
                         </th>
                         <th>
-                            <a href="liste-trajet.jsp?searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=arrivee_nom&sortOrder=<%= "arrivee_nom".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
+                            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=arrivee_nom&sortOrder=<%= "arrivee_nom".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
                                class="sort-link">
                                 Arrivée
                                 <% if ("arrivee_nom".equals(sortField)) { %>
@@ -218,7 +227,7 @@
                         <th>Distance (km)</th>
                         <th>Durée</th>
                         <th>
-                            <a href="liste-trajet.jsp?searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=tarif_base&sortOrder=<%= "tarif_base".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
+                            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=tarif_base&sortOrder=<%= "tarif_base".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
                                class="sort-link">
                                 Tarif (Ar)
                                 <% if ("tarif_base".equals(sortField)) { %>
@@ -257,25 +266,25 @@
                                 <% } %>
                             </td>
                             <td class="text-end">
-                                <a href="details-trajet.jsp?id=<%= t.getIdTrajet() %>"
+                                <a href="?page=trajet/details-trajet&id=<%= t.getIdTrajet() %>"
                                    class="btn btn-sm btn-outline-info rounded-circle me-1" title="Détails">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <% if (isAdmin) { %>
-                                    <a href="modifier-trajet.jsp?id=<%= t.getIdTrajet() %>"
+                                    <a href="?page=trajet/modifier-trajet&id=<%= t.getIdTrajet() %>"
                                        class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                     <a href="../../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=desactiver"
+                                     <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=desactiver"
                                        class="btn btn-sm btn-outline-secondary rounded-circle me-1" title="Désactiver"
                                      onclick="return confirm('Désactiver ce trajet ?');">
                                       <i class="fas fa-ban"></i>
                                      </a>
-                                       <a href="../../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=supprimer"
-                                        class="btn btn-sm btn-outline-danger rounded-circle" title="Supprimer"
-                                        onclick="return confirm('Supprimer définitivement ?');">
-                                         <i class="fas fa-trash"></i>
-                                     </a>
+                                       <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=supprimer"
+                                         class="btn btn-sm btn-outline-danger rounded-circle" title="Supprimer"
+                                         onclick="return confirm('Supprimer définitivement ?');">
+                                          <i class="fas fa-trash"></i>
+                                      </a>
                                 <% } %>
                             </td>
                         </tr>

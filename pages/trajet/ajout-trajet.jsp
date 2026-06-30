@@ -1,15 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.VilleGestion, models.Ville, java.util.List" %>
+<%@ page import="backoffice.Utilisateur" %>
 <%
-    String role = (String) session.getAttribute("role");
-    if (role == null) {
+    Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
+    if (userObj == null) {
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = "ADMIN".equals(role);
+
+    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
 
     if (!isAdmin) {
-        response.sendRedirect("gestion-trajet.jsp");
+%>
+    <div class="container mt-5">
+        <div class="alert alert-danger text-center">
+            <i class="fas fa-lock me-2"></i> Accès refusé. Vous devez être administrateur pour ajouter un trajet.
+        </div>
+    </div>
+<%
         return;
     }
 
@@ -22,14 +30,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Trajet</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../assets/css/styles-premium.css">
+
+    <link rel="stylesheet" href="../assets/css/styles-premium.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="gestion-trajet.jsp"><i class="fas fa-arrow-left me-2"></i>Retour</a>
+            <a class="navbar-brand fw-bold" href="?page=trajet/gestion-trajet"><i class="fas fa-arrow-left me-2"></i>Retour</a>
             <span class="navbar-text text-white fw-bold">
                 <i class="fas fa-bus-alt me-2"></i>Mahery Vaika
             </span>
@@ -58,7 +65,7 @@
                                 Données invalides : les villes doivent être différentes et le tarif est obligatoire.
                             </div>
                         <% } %>
-                        <form action="../../traitement/trajet/ajouter-trajet.jsp" method="POST">
+                        <form action="../traitement/trajet/ajouter-trajet.jsp" method="POST">
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold">Ville de départ</label>
@@ -133,6 +140,6 @@
         
         document.addEventListener('DOMContentLoaded', updateArriveeOptions);
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 </html>
