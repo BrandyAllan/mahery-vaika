@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="backoffice.Utilisateur" %>
 <%@ page import="gestion.Chauffeur" %>
+<%@ page import="gestion.Depart" %>
 <%@ page import="java.util.Vector" %>
 <%
     Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
@@ -66,20 +67,20 @@
                 <%
                 } else {
                     for (int i = 0; i < historique.size(); i++) {
-                        Chauffeur.Trajet t = (Chauffeur.Trajet) historique.get(i);
+                        Depart t = (Depart) historique.get(i);
                         String statBadge = "PLANIFIE".equals(t.getStatut()) ? "bg-primary"
                                          : "EN_COURS".equals(t.getStatut())  ? "bg-warning text-dark"
                                          : "TERMINE".equals(t.getStatut())   ? "bg-success"
                                          : "bg-danger";
                 %>
                     <tr>
-                        <td><%= t.getDateDepart() %></td>
-                        <td><%= t.getHeureDepart() %></td>
-                        <td><%= t.getVilleDepart() %></td>
-                        <td><%= t.getVilleArrivee() %></td>
+                        <td><%= t.getDate_depart() %></td>
+                        <td><%= t.getHeure_depart() %></td>
+                        <td><%= t.getVille_depart() %></td>
+                        <td><%= t.getVille_arrivee() %></td>
                         <td><%= t.getImmatriculation() %></td>
-                        <td><span class="badge <%= statBadge %>"><%= t.getStatutLabel() %></span></td>
-                        <td class="text-center"><%= t.getNbReservations() %></td>
+                        <td><span class="badge <%= statBadge %>"><%= t.getStatut_label() %></span></td>
+                        <td class="text-center"><%= t.getNb_reservations() %></td>
                     </tr>
                 <%
                     }

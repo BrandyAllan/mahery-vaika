@@ -383,17 +383,17 @@ public class Chauffeur {
             ps.setInt(3, offset);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                HistoriqueDepart t = new HistoriqueDepart();
-                t.setIdDepart(rs.getInt("id_depart"));
-                t.setDateDepart(rs.getDate("date_depart"));
-                t.setHeureDepart(rs.getString("heure_depart"));
-                t.setStatut(rs.getString("statut"));
-                t.setStatutLabel(rs.getString("statut_label"));
-                t.setVilleDepart(rs.getString("ville_depart"));
-                t.setVilleArrivee(rs.getString("ville_arrivee"));
-                t.setImmatriculation(rs.getString("immatriculation"));
-                t.setNbReservations(rs.getInt("nb_reservations"));
-                liste.add(t);
+                Depart d = new Depart();
+                d.setId_depart(rs.getInt("id_depart"));
+                d.setDate_depart(rs.getDate("date_depart"));
+                d.setHeure_depart(rs.getTime("heure_depart"));
+                d.setStatut(rs.getString("statut"));
+                d.setStatut_label(rs.getString("statut_label"));
+                d.setVille_depart(rs.getString("ville_depart"));
+                d.setVille_arrivee(rs.getString("ville_arrivee"));
+                d.setImmatriculation(rs.getString("immatriculation"));
+                d.setNb_reservations(rs.getInt("nb_reservations"));
+                liste.add(d);
             }
         }
         return liste;
@@ -427,89 +427,5 @@ public class Chauffeur {
             }
         }
         return liste;
-    }
-
-    public static class HistoriqueDepart {
-        private int idDepart;
-        private Date dateDepart;
-        private String heureDepart;
-        private String statut;
-        private String statutLabel;
-        private String villeDepart;
-        private String villeArrivee;
-        private String immatriculation;
-        private int nbReservations;
-
-        public int getIdDepart() {
-            return idDepart;
-        }
-
-        public void setIdDepart(int idDepart) {
-            this.idDepart = idDepart;
-        }
-
-        public Date getDateDepart() {
-            return dateDepart;
-        }
-
-        public void setDateDepart(Date dateDepart) {
-            this.dateDepart = dateDepart;
-        }
-
-        public String getHeureDepart() {
-            return heureDepart;
-        }
-
-        public void setHeureDepart(String heureDepart) {
-            this.heureDepart = heureDepart;
-        }
-
-        public String getStatut() {
-            return statut;
-        }
-
-        public void setStatut(String statut) {
-            this.statut = statut;
-        }
-
-        public String getStatutLabel() {
-            return statutLabel;
-        }
-
-        public void setStatutLabel(String statutLabel) {
-            this.statutLabel = statutLabel;
-        }
-
-        public String getVilleDepart() {
-            return villeDepart;
-        }
-
-        public void setVilleDepart(String villeDepart) {
-            this.villeDepart = villeDepart;
-        }
-
-        public String getVilleArrivee() {
-            return villeArrivee;
-        }
-
-        public void setVilleArrivee(String villeArrivee) {
-            this.villeArrivee = villeArrivee;
-        }
-
-        public String getImmatriculation() {
-            return immatriculation;
-        }
-
-        public void setImmatriculation(String immatriculation) {
-            this.immatriculation = immatriculation;
-        }
-
-        public int getNbReservations() {
-            return nbReservations;
-        }
-
-        public void setNbReservations(int nbReservations) {
-            this.nbReservations = nbReservations;
-        }
     }
 }
