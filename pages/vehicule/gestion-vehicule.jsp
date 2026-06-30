@@ -17,8 +17,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Véhicules</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/bootstrap/icons/bootstrap-icons.min.css">
+  
 </head>
 <body class="bg-light">
 
@@ -31,7 +30,7 @@
                     <div class="card-body">
                         <h4 class="card-title"><i class="bi bi-list-ul"></i> Liste des Véhicules</h4>
                         <p class="card-text text-muted">Consulter, rechercher et voir les détails des véhicules disponibles.</p>
-                        <a href="liste-vehicule.jsp" class="btn btn-primary">Accéder à la liste</a>
+                        <a href="?page=liste-vehicule" class="btn btn-primary">Accéder à la liste</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +41,7 @@
                         <div class="card-body">
                             <h4 class="card-title"><i class="bi bi-plus-circle"></i> Ajouter un Véhicule</h4>
                             <p class="card-text text-muted">Enregistrer un nouveau véhicule dans la base de données.</p>
-                            <a href="ajout-vehicule.jsp" class="btn btn-success">Ajouter un véhicule</a>
+                            <a href="?page=ajout-vehicule" class="btn btn-success">Ajouter un véhicule</a>
                         </div>
                     </div>
                 <% } else { %>
@@ -58,6 +57,6 @@
         </div>
     </div>
 
-    <script src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}"></script>
 </body>
 </html>

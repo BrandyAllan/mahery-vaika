@@ -36,8 +36,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Liste des Véhicules</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .filter-container { background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 20px; }
@@ -57,10 +55,10 @@
 </head>
 <body>
 
-    <p><a href="gestion-vehicule.jsp" class="btn btn-sm btn-secondary">← Tableau de bord</a></p>
+    <p><a href="?page=gestion-vehicule" class="btn btn-sm btn-secondary">← Tableau de bord</a></p>
 
     <div class="filter-container">
-        <form method="GET" action="liste-vehicule.jsp">
+        <form method="GET" action="?page=liste-vehicule">
             <input type="hidden" name="page" value="1">
             <div class="row g-3 align-items-end">
                 
@@ -120,7 +118,7 @@
             <td colspan="8" style="text-align: center; color: gray;">Aucun véhicule trouvé.</td>
         </tr>
     <% } else { for (Vehicule v : listeVehicules) { %>
-        <tr class="vehicule-row" data-href="details-vehicule.jsp?id=<%= v.getIdVehicule() %>">
+        <tr class="vehicule-row" data-href="?page=details-vehicule?id=<%= v.getIdVehicule() %>">
             <td><%= v.getImmatriculation() %></td>
             <td><%= v.getMarque() %></td>
             <td><%= v.getModele() %></td>
@@ -130,7 +128,7 @@
             <td><%= v.getDateExpirationAssurance() != null ? v.getDateExpirationAssurance() : "N/A" %></td>
             <td>
                 <% if (isAdmin) { %>
-                    <a href="modifier-vehicule.jsp?id=<%= v.getIdVehicule() %>" class="btn-action btn-modifier" onclick="event.stopPropagation();">Modifier</a>
+                    <a href="?page=modifier-vehicule?id=<%= v.getIdVehicule() %>" class="btn-action btn-modifier" onclick="event.stopPropagation();">Modifier</a>
                 <% } %>
             </td>
         </tr>

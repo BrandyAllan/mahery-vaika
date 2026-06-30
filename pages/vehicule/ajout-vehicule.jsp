@@ -12,8 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ajouter un Véhicule</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
+    
     <script>
         function chargerModelesAjout() {
             var marque = document.getElementById("marque").value;
@@ -38,7 +37,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <p><a href="gestion-vehicule.jsp" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a></p>
+                <p><a href="?page=gestion-vehicule" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a></p>
                 
                 <div class="card shadow-sm">
                     <div class="card-header bg-success text-white">
@@ -46,7 +45,7 @@
                     </div>
                     <div class="card-body p-4">
                         
-                        <form action="${pageContext.request.contextPath}/traitement/ajouter-vehicule.jsp" method="POST">
+                        <form action="${pageContext.request.contextPath}?page=/traitement/vehicule/ajouter-vehicule" method="POST">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Immatriculation :</label>

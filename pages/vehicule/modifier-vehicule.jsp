@@ -44,15 +44,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Modifier le Véhicule</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
+    
 </head>
 <body class="bg-light">
 
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <p><a href="liste-vehicule.jsp" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour à la liste</a></p>
+                <p><a href="?page=liste-vehicule" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour à la liste</a></p>
                 
                 <div class="card shadow-sm">
                     <div class="card-header bg-warning text-dark">
@@ -60,7 +59,7 @@
                     </div>
                     <div class="card-body p-4">
                         
-                        <form action="modifier-vehicule.jsp" method="POST">
+                        <form action="?page=modifier-vehicule" method="POST">
                             <input type="hidden" name="id_vehicule" value="<%= v.getIdVehicule() %>">
 
                             <div class="mb-3">

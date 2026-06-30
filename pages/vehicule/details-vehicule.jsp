@@ -30,8 +30,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Fiche Véhicule : <%= v.getImmatriculation() %></title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
+   
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .details-box { background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 6px; margin-top: 15px; max-width: 600px; }
@@ -44,7 +43,7 @@
 <body>
 
     <h2>Détails Importants du Véhicule</h2>
-    <p><a href="liste-vehicule.jsp" class="btn btn-sm btn-secondary">← Retour à la liste du parc</a></p>
+    <p><a href="?page=liste-vehicule" class="btn btn-sm btn-secondary">← Retour à la liste du parc</a></p>
 
     <div class="details-box">
         <div class="info-row">
@@ -76,7 +75,7 @@
 
         <div class="actions-area">
             <% if (isAdmin) { %>
-                <a href="modifier-vehicule.jsp?id=<%= v.getIdVehicule() %>" class="btn btn-primary">Modifier la fiche</a>
+                <a href="?page=modifier-vehicule?id=<%= v.getIdVehicule() %>" class="btn btn-primary">Modifier la fiche</a>
             <% } else { %>
                 <button class="btn btn-secondary" disabled>Modification (Réservé Admin)</button>
             <% } %>
