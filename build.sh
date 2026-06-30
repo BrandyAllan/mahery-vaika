@@ -9,14 +9,19 @@
 echo "🔧 Compilation des classes Java..."
 
 # Compilation des classes tools (si tu en as)
-javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/tools/*.java
+# javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/tools/*.java
+javac -d WEB-INF/classes -cp "lib/*;WEB-INF/classes" src/tools/*.java                           
+
 
 # Compilation des classes LOCATION
-javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/backoffice/*.java
+# javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/backoffice/*.java
+ javac -d WEB-INF/classes -cp "lib/*;WEB-INF/classes" src/backoffice/*.java                      
+ 
+# javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/models/*.java
+ javac -d WEB-INF/classes -cp "lib/*;WEB-INF/classes" src/models/*.java                          
+# javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/gestion/*.java
+ javac -d WEB-INF/classes -cp "lib/*;WEB-INF/classes" src/gestion/*.java                         
 
-javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/models/*.java
-
-javac -d WEB-INF/classes -cp "lib/*:WEB-INF/classes" src/gestion/*.java
 
 echo "✔ Compilation terminée."
 
