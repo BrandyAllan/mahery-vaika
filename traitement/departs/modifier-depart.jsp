@@ -19,7 +19,7 @@
     String statut      = request.getParameter("statut");
 
     if (Depart.vehiculeDejaOccupe(idVehicule, dateDepart, heureDepart, idDepart)) {
-        response.sendRedirect("../pages/modifier-depart.jsp?id=" + idDepart + "&erreur=vehicule");
+        response.sendRedirect("../../models/model.jsp?page=departs/modifier-depart&id=" + idDepart + "&erreur=vehicule");
         return;
     }
 
@@ -39,5 +39,5 @@
 
     Depart.mettreAjour(d);
 
-    response.sendRedirect("../pages/liste-depart.jsp?msg=modif_ok");
+    response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=modif_ok");
 %>

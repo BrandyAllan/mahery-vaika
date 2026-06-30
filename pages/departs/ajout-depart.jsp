@@ -7,7 +7,7 @@
         return;
     }
     if (user.voirsiadmin().equals("Caissier")) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart"); 
         return;
     }
 
@@ -41,7 +41,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="bi bi-plus-circle"></i> Ajouter un départ</h2>
-        <a href="liste-depart.jsp" class="btn btn-secondary btn-sm">
+        <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
@@ -59,7 +59,7 @@
         </div>
     <% } %>
 
-    <form action="../traitement/ajouter-depart.jsp" method="post"
+    <form action="../traitement/departs/ajouter-depart.jsp" method="post"
           class="row g-3" id="formAjout" novalidate>
 
         <!-- liste deroulante trajet -->
@@ -174,7 +174,7 @@
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-check-lg"></i> Enregistrer le départ
             </button>
-            <a href="liste-depart.jsp" class="btn btn-outline-secondary">
+            <a href="?page=departs/liste-depart" class="btn btn-outline-secondary">
                 <i class="bi bi-x-lg"></i> Annuler
             </a>
         </div>

@@ -60,7 +60,7 @@
     <!-- En-tête -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="bi bi-send"></i> Liste des départs</h2>
-        <a href="gestion-depart.jsp" class="btn btn-secondary btn-sm">
+        <a href="?page=departs/gestion-depart" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
@@ -159,7 +159,7 @@
             <button type="submit" class="btn btn-primary btn-sm">
                 <i class="bi bi-search"></i> Rechercher
             </button>
-            <a href="liste-depart.jsp" class="btn btn-outline-secondary btn-sm">
+            <a href="?page=departs/liste-depart" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-x-circle"></i>
             </a>
         </div>
@@ -169,11 +169,11 @@
     <!-- barre de tri -->
     <div class="mb-3 d-flex align-items-center gap-2">
         <span class="text-muted small">Trier par date :</span>
-        <a href="?tri=ASC&id_trajet=<%= trajetParam != null ? trajetParam : "" %>&id_vehicule=<%= vehiculeParam != null ? vehiculeParam : "" %>&id_chauffeur=<%= chauffeurParam != null ? chauffeurParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>"
+        <a href="?page=departs/liste-depart&tri=ASC&id_trajet=<%= trajetParam != null ? trajetParam : "" %>&id_vehicule=<%= vehiculeParam != null ? vehiculeParam : "" %>&id_chauffeur=<%= chauffeurParam != null ? chauffeurParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>"
            class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">
             A → Z
         </a>
-        <a href="?tri=DESC&id_trajet=<%= trajetParam != null ? trajetParam : "" %>&id_vehicule=<%= vehiculeParam != null ? vehiculeParam : "" %>&id_chauffeur=<%= chauffeurParam != null ? chauffeurParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>"
+        <a href="?page=departs/liste-depart&tri=DESC&id_trajet=<%= trajetParam != null ? trajetParam : "" %>&id_vehicule=<%= vehiculeParam != null ? vehiculeParam : "" %>&id_chauffeur=<%= chauffeurParam != null ? chauffeurParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>"
            class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">
             Z → A
         </a>
@@ -230,17 +230,17 @@
                     <% if (!isCaissier) { %>
                     <td>
                         <!-- détails -->
-                        <a href="details-depart.jsp?id=<%= d.getId_depart() %>"
+                        <a href="?page=departs/details-depart?id=<%= d.getId_depart() %>"
                            class="btn btn-sm btn-info" title="Détails">
                             <i class="bi bi-eye"></i>
                         </a>
                         <!-- modifier -->
-                        <a href="modifier-depart.jsp?id=<%= d.getId_depart() %>"
+                        <a href="?page=departs/modifier-depart.jsp?id=<%= d.getId_depart() %>"
                            class="btn btn-sm btn-warning" title="Modifier">
                             <i class="bi bi-pencil"></i>
                         </a>
                         <!-- supprimer avec confirmation -->
-                        <a href="../traitement/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
+                        <a href="../traitement/departs/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
                            class="btn btn-sm btn-danger" title="Supprimer"
                            onclick="return confirm('Confirmer la suppression de ce départ ?')">
                             <i class="bi bi-trash"></i>

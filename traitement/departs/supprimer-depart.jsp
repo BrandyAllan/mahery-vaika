@@ -6,20 +6,20 @@
         return;
     }
     if (user.voirsiadmin().equals("Caissier")) {
-        response.sendRedirect("../pages/liste-depart.jsp");
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart");
         return;
     }
 
     String idParam = request.getParameter("id");
     if (idParam == null || idParam.isEmpty()) {
-        response.sendRedirect("../pages/liste-depart.jsp");
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart");
         return;
     }
 
     int id = 0;
     try { id = Integer.parseInt(idParam); } catch (Exception e) {}
     if (id == 0) {
-        response.sendRedirect("../pages/liste-depart.jsp");
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart");
         return;
     }
 
@@ -31,5 +31,5 @@
 
     Depart.supprimer(id);
 
-    response.sendRedirect("../pages/liste-depart.jsp?msg=supp_ok");
+    response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=supp_ok");
 %>

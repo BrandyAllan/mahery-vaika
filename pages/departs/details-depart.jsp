@@ -8,20 +8,20 @@
 
     String idParam = request.getParameter("id");
     if (idParam == null || idParam.isEmpty()) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
 
     int id = 0;
     try { id = Integer.parseInt(idParam); } catch (Exception e) {}
     if (id == 0) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
 
     Depart d = Depart.getById(id);
     if (d == null) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
 
@@ -57,7 +57,7 @@
             Départ #<%= d.getId_depart() %>
             <span class="badge <%= badgeClass %> fs-6 ms-2"><%= statut %></span>
         </h2>
-        <a href="liste-depart.jsp" class="btn btn-secondary btn-sm">
+        <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Retour à la liste
         </a>
     </div>
@@ -163,11 +163,11 @@
             <!-- bouton d'action -->
             <div class="d-flex gap-2 mt-3">
                 <% if (!isCaissier) { %>
-                    <a href="modifier-depart.jsp?id=<%= d.getId_depart() %>"
+                    <a href="?page=depart/modifier-depart?id=<%= d.getId_depart() %>"
                        class="btn btn-warning">
                         <i class="bi bi-pencil"></i> Modifier
                     </a>
-                    <a href="../traitement/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
+                    <a href="../traitement/departs/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
                        class="btn btn-danger"
                        onclick="return confirm('Confirmer la suppression de ce départ ?')">
                         <i class="bi bi-trash"></i> Supprimer

@@ -6,7 +6,7 @@
         return;
     }
     if (user.voirsiadmin().equals("Caissier")) {
-        response.sendRedirect("../pages/liste-depart.jsp");
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart");
         return;
     }
 
@@ -18,12 +18,12 @@
     String statut      = request.getParameter("statut");
 
     if (Depart.vehiculeDejaOccupe(idVehicule, dateDepart, heureDepart, 0)) {
-        response.sendRedirect("../pages/ajout-depart.jsp?erreur=vehicule");
+        response.sendRedirect("../../models/model.jsp?page=departs/ajout-depart&erreur=vehicule");
         return;
     }
 
     if (Depart.chauffeurDejaOccupe(idChauffeur, dateDepart, heureDepart, 0)) {
-        response.sendRedirect("../pages/ajout-depart.jsp?erreur=chauffeur");
+        response.sendRedirect("../../models/model.jsp?page=departs/ajout-depart&erreur=chauffeur");
         return;
     }
 
@@ -37,5 +37,5 @@
 
     Depart.ajouter(d);
 
-    response.sendRedirect("../pages/liste-depart.jsp?msg=ajout_ok");
+    response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=ajout_ok");
 %>

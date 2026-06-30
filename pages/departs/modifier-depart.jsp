@@ -7,20 +7,20 @@
         return;
     }
     if (user.voirsiadmin().equals("Caissier")) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
 
     int id = 0;
     try { id = Integer.parseInt(request.getParameter("id")); } catch (Exception e) {}
     if (id == 0) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
 
     Depart d = Depart.getById(id);
     if (d == null) {
-        response.sendRedirect("liste-depart.jsp");
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
 
@@ -50,7 +50,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="bi bi-pencil-square"></i> Modifier le départ #<%= d.getId_depart() %></h2>
-        <a href="liste-depart.jsp" class="btn btn-secondary btn-sm">
+        <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
@@ -68,7 +68,7 @@
         </div>
     <% } %>
 
-    <form action="../traitement/modifier-depart.jsp" method="post"
+    <form action="../traitement/departs/modifier-depart.jsp" method="post"
           class="row g-3" id="formModif" novalidate>
 
         <input type="hidden" name="id_depart" value="<%= d.getId_depart() %>">
@@ -191,7 +191,7 @@
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-check-lg"></i> Enregistrer les modifications
             </button>
-            <a href="liste-depart.jsp" class="btn btn-outline-secondary">
+            <a href="?page=departs/liste-depart" class="btn btn-outline-secondary">
                 <i class="bi bi-x-lg"></i> Annuler
             </a>
         </div>
