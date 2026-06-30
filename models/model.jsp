@@ -215,7 +215,7 @@
           href="/"
           class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"
         >
-          <img src="../assets/images/logo-simple.png" alt="Logo" class="bi pe-none me-2" width="30" height="24" aria-hidden="true">
+          <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
           <span class="fs-5 fw-semibold">Mahery Vaika</span>
         </a>
         <ul class="list-unstyled ps-0">
@@ -316,14 +316,14 @@
               <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
                   <a
-                    href="#"
+                    href="?page=reservation/ajout-reservation"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                     >Nouvelle réservations</a
                   >
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="?page=reservation/liste-reservation"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                     >Liste réservations</a
                   >
@@ -379,7 +379,6 @@
         </ul>
       </div>
       <div class="container-fluid py-3">
-        <p class="h2"><%= fileToInclude %></p>
         <jsp:include page="<%= fileToInclude %>" />
       </div>
     </main>
