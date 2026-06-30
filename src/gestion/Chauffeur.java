@@ -27,6 +27,24 @@ public class Chauffeur {
     public Chauffeur() {
     }
 
+    public Chauffeur(int idChauffeur, String nom, String prenom, String telephone,
+            String numeroPermis, Date dateExpirationPermis, int idVehiculeHabituel,
+            boolean actif, String immatriculationVehicule, String marqueModeleVehicule,
+            String statutPermis, int nbTrajets) {
+        this.idChauffeur = idChauffeur;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.telephone = telephone;
+        this.numeroPermis = numeroPermis;
+        this.dateExpirationPermis = dateExpirationPermis;
+        this.idVehiculeHabituel = idVehiculeHabituel;
+        this.actif = actif;
+        this.immatriculationVehicule = immatriculationVehicule;
+        this.marqueModeleVehicule = marqueModeleVehicule;
+        this.statutPermis = statutPermis;
+        this.nbTrajets = nbTrajets;
+    }
+
     public int getIdChauffeur() {
         return idChauffeur;
     }
@@ -365,7 +383,7 @@ public class Chauffeur {
             ps.setInt(3, offset);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Trajet t = new Trajet();
+                HistoriqueDepart t = new HistoriqueDepart();
                 t.setIdDepart(rs.getInt("id_depart"));
                 t.setDateDepart(rs.getDate("date_depart"));
                 t.setHeureDepart(rs.getString("heure_depart"));
@@ -411,7 +429,7 @@ public class Chauffeur {
         return liste;
     }
 
-    public static class Trajet {
+    public static class HistoriqueDepart {
         private int idDepart;
         private Date dateDepart;
         private String heureDepart;
