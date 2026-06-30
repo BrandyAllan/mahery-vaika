@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="gestion.VilleGestion, models.Ville, java.util.List" %>
+<%@ page import="gestion.Ville, java.util.List" %>
 <%@ page import="backoffice.Utilisateur" %>
 <%
     Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
@@ -21,7 +21,7 @@
         return;
     }
 
-    VilleGestion villeGestion = new VilleGestion();
+    Ville villeGestion = new Ville();
     List<Ville> villes = villeGestion.getAllVilles();
 %>
 <!DOCTYPE html>

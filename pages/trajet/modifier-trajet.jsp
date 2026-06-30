@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="gestion.TrajetGestion, gestion.VilleGestion, models.Trajet, models.Ville, java.util.List" %>
+<%@ page import="gestion.Trajet, gestion.Ville, java.util.List" %>
 <%@ page import="backoffice.Utilisateur" %>
 <%
     Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
@@ -33,8 +33,8 @@
         return;
     }
 
-    TrajetGestion trajetGestion = new TrajetGestion();
-    VilleGestion villeGestion = new VilleGestion();
+    Trajet trajetGestion = new Trajet();
+    Ville villeGestion = new Ville();
     
     Trajet trajet = trajetGestion.getTrajetById(Integer.parseInt(idStr));
     if (trajet == null) {
@@ -56,8 +56,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier le Trajet #<%= trajet.getIdTrajet() %></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
     <link rel="stylesheet" href="../assets/css/styles-premium.css">
 </head>
 <body>

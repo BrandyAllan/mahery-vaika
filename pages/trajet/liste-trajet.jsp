@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="gestion.TrajetGestion, gestion.VilleGestion, models.Trajet, models.Ville, java.util.List" %>
+<%@ page import="gestion.Trajet, gestion.Ville, java.util.List" %>
 <%@ page import="backoffice.Utilisateur" %>
 <%
     Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
@@ -31,8 +31,8 @@
     }
     if (currentPage < 1) currentPage = 1;
 
-    TrajetGestion trajetGestion = new TrajetGestion();
-    VilleGestion  villeGestion  = new VilleGestion();
+    Trajet trajetGestion = new Trajet();
+    Ville  villeGestion  = new Ville();
 
     List<Ville>  villes         = villeGestion.getAllVilles();
     List<Trajet> trajetsTrouves = trajetGestion.rechercherTrajets(
@@ -46,7 +46,7 @@
     if (totalPages < 1) totalPages = 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
-    // Helper pour conserver les paramètres dans les liens de tri/pagination
+   
     String baseQuery = "?page=trajet/liste-trajet&" +
         (searchDepart  != null && !searchDepart.isEmpty()  ? "searchDepart="  + searchDepart  + "&" : "") +
         (searchArrivee != null && !searchArrivee.isEmpty() ? "searchArrivee=" + searchArrivee + "&" : "") +
