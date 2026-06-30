@@ -295,7 +295,7 @@
                 </li>
                 <li>
                   <a
-                    href="?page=chauffeur/gestion-chauffeur"
+                    href="?page=chauffeurs/gestion-chauffeur"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                     >Chauffeurs</a
                   >
