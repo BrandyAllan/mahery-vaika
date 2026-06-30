@@ -28,8 +28,7 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-list-ul"></i> Liste des chauffeurs</h5>
-                    <p class="card-text text-muted">Consulter, rechercher et voir les details des chauffeurs enregistres.</p>
-                    <a href="liste-chauffeur.jsp" class="btn btn-primary">Acceder a la liste</a>
+                    <a href="liste-chauffeur.jsp" class="btn btn-primary">voir la liste</a>
                 </div>
             </div>
         </div>
@@ -39,7 +38,6 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-person-plus"></i> Ajouter un chauffeur</h5>
-                    <p class="card-text text-muted">Enregistrer un nouveau chauffeur</p>
                     <a href="ajout-chauffeur.jsp" class="btn btn-success">Ajouter un chauffeur</a>
                 </div>
             </div>
