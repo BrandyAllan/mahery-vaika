@@ -23,6 +23,8 @@ public class Depart {
     private String duree_estimee;
     private double distance_km;
     private int    capacite_vehicule;
+    private String statut_label;
+    private int    nb_reservations;
 
     public Depart() {}
     public int getId_depart() { return id_depart; }
@@ -72,6 +74,12 @@ public class Depart {
 
     public int getCapacite_vehicule() { return capacite_vehicule; }
     public void setCapacite_vehicule(int v) { this.capacite_vehicule = v; }
+
+    public String getStatut_label() { return statut_label; }
+    public void setStatut_label(String v) { this.statut_label = v; }
+
+    public int getNb_reservations() { return nb_reservations; }
+    public void setNb_reservations(int v) { this.nb_reservations = v; }
 
     private static Depart fromResultSet(ResultSet rs) throws SQLException {
         Depart d = new Depart();
