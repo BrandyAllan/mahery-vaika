@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="gestion.TrajetGestion" %>
+<%@ page import="gestion.Trajet" %>
 <%@ page import="backoffice.Utilisateur" %>
 <%
     Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
@@ -17,7 +17,7 @@
     String action   = request.getParameter("action");
 
     if (idTrajet != null && !idTrajet.isEmpty()) {
-        TrajetGestion gestion = new TrajetGestion();
+        Trajet gestion = new Trajet();
         boolean success = false;
 
         if ("supprimer".equals(action)) {
