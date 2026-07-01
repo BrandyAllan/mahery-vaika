@@ -16,7 +16,7 @@
     if (tri == null || (!tri.equals("ASC") && !tri.equals("DESC"))) tri = "DESC";
     String dateDebut = request.getParameter("dateDebut");
     String dateFin = request.getParameter("dateFin");
-    String pageStr = request.getParameter("page");
+    String pageStr = request.getParameter("pageNum");
     int pageCourante = (pageStr == null) ? 1 : Integer.parseInt(pageStr);
     int limit = 10;
     int offset = (pageCourante - 1) * limit;
@@ -42,8 +42,8 @@
 <div class="container mt-4">
     <h2>Gestion des depenses</h2>
     <div class="d-flex flex-wrap gap-2 mb-3">
-        <a href="ajout-depense.jsp" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nouvelle depense</a>
-        <a href="../utilisateur/gestion-utilisateur.jsp" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Retour</a>
+        <a href="?page=depense/ajout-depense" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nouvelle depense</a>
+        <a href="?page=dashboard/dashoard" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Retour</a>
     </div>
 
     <form method="get" class="row g-3 mb-4">
@@ -107,7 +107,7 @@
         <ul class="pagination flex-wrap">
             <% for (int p = 1; p <= nbPages; p++) { %>
                 <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                    <a class="page-link" href="?page=<%= p %>&recherche=<%= recherche != null ? recherche : "" %>&tri=<%= tri %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>">
+                    <a class="page-link" href="?pageNum=<%= p %>&recherche=<%= recherche != null ? recherche : "" %>&tri=<%= tri %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>">
                         <%= p %>
                     </a>
                 </li>

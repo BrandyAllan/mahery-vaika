@@ -36,7 +36,7 @@
         <div class="alert alert-danger">Le montant ne peut pas être negatif.</div>
     <% } %>
 
-    <form action="../../traitement/depense/ajouter-depense.jsp" method="post" class="row g-3" id="formDepense">
+    <form action="../traitement/depense/ajouter-depense.jsp" method="post" class="row g-3" id="formDepense">
         <div class="col-12 col-md-6">
             <label>Type *</label>
             <input type="text" name="type_depense" class="form-control" required>

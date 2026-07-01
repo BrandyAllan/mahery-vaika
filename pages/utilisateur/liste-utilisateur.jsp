@@ -206,17 +206,17 @@
                         <% if (isAdmin) { %>
                             <td>
                                 <div class="d-flex flex-wrap gap-1">
-                                    <a href="model.jsp?page=utilisateur/details-utilisateur&id=<%= u.getId_utilisateur() %>"
+                                    <a href="?page=utilisateur/details-utilisateur&id=<%= u.getId_utilisateur() %>"
                                        class="btn btn-sm btn-info">
                                         <i class="bi bi-eye"></i>
                                     </a>
 
-                                    <a href="model.jsp?page=utilisateur/modifier-utilisateur&id=<%= u.getId_utilisateur() %>"
+                                    <a href="?page=utilisateur/modifier-utilisateur&id=<%= u.getId_utilisateur() %>"
                                        class="btn btn-sm btn-warning">
                                         <i class="bi bi-pencil"></i>
                                     </a>
 
-                                    <a href="traitement/utilisateur/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>"
+                                    <a href="../traitement/utilisateur/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>"
                                        class="btn btn-sm btn-danger"
                                        onclick="return confirm('Confirmer la désactivation/réactivation ?')">
                                         <i class="bi <%= u.isActif() ? "bi-person-x" : "bi-person-check" %>"></i>

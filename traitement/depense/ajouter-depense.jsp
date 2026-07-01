@@ -28,12 +28,12 @@
     try {
         montant = Double.parseDouble(montantStr);
     } catch (NumberFormatException e) {
-        response.sendRedirect("../../pages/depense/ajout-depense.jsp?erreur=montant");
+        response.sendRedirect("../../models/model.jsp?page=depense/ajout-depense&erreur=montant");
         return;
     }
 
     if (montant < 0) {
-        response.sendRedirect("../../pages/depense/ajout-depense.jsp?erreur=negatif");
+        response.sendRedirect("../../models/model.jsp?page=depense/ajout-depense&erreur=negatif");
         return;
     }
 
@@ -52,5 +52,5 @@
     }
 
     Depense.ajouter(d);
-    response.sendRedirect("../../pages/depense/depense.jsp?success=ajout");
+    response.sendRedirect("../../models/model.jsp?page=depense/depense&success=ajout");
 %>

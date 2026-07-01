@@ -4,7 +4,7 @@
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
 
     if (user == null || !user.voirsiadmin().equals("Admin")) {
-        response.sendRedirect("../../pages/utilisateur/gestion-utilisateur.jsp");
+        response.sendRedirect("../../models/model.jsp?page=utilisateur/gestion-utilisateur");
         return;
     }
 
@@ -30,12 +30,12 @@
     Utilisateur u = Utilisateur.getById(id);
 
     if (u == null) {
-        response.sendRedirect("../../pages/utilisateur/liste-utilisateur.jsp?error=notfound");
+        response.sendRedirect("../../models/model.jsp?page=utilisateur/liste-utilisateur&error=notfound");
         return;
     }
 
     if (Utilisateur.emailExiste(email, id)) {
-        response.sendRedirect("../../pages/utilisateur/modifier-utilisateur.jsp?id=" + id + "&erreur=email");
+        response.sendRedirect("../../models/model.jsp?page=utilisateur/modifier-utilisateur&id=" + id + "&erreur=email");
         return;
     }
 
@@ -61,5 +61,5 @@
     u.setActif(actif);
 
     Utilisateur.mettreAjour(u);
-    response.sendRedirect("../../pages/utilisateur/liste-utilisateur.jsp?success=modif");
+    response.sendRedirect("../../models/model.jsp?page=utilisateur/liste-utilisateur&success=modif");
 %>

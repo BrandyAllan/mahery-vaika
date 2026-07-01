@@ -235,13 +235,6 @@
                   <a
                     href="#"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Overview</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                     >Weekly</a
                   >
                 </li>
@@ -257,6 +250,13 @@
                     href="#"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                     >Annually</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="?page=depense/depense"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Dépenses</a
                   >
                 </li>
               </ul>

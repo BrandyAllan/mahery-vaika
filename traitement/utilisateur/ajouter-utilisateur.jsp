@@ -4,7 +4,7 @@
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
 
     if (user == null || !user.voirsiadmin().equals("Admin")) {
-        response.sendRedirect("../../pages/utilisateur/gestion-utilisateur.jsp");
+        response.sendRedirect("../../models/model.jsp?page=utilisateur/gestion-utilisateur");
         return;
     }
 
@@ -18,7 +18,7 @@
     Date date_embauche = Date.valueOf(request.getParameter("date_embauche"));
 
     if (Utilisateur.emailExiste(email, 0)) {
-        response.sendRedirect("../../pages/utilisateur/ajout-utilisateur.jsp?erreur=email");
+        response.sendRedirect("../../models/model.jsp?page=utilisateur/ajout-utilisateur&erreur=email");
         return;
     }
 
@@ -41,5 +41,5 @@
     u.setActif(true);
 
     Utilisateur.ajouter(u);
-    response.sendRedirect("../../pages/utilisateur/liste-utilisateur.jsp?success=ajout");
+    response.sendRedirect("../../models/model.jsp?page=utilisateur/liste-utilisateur&success=ajout");
 %>
