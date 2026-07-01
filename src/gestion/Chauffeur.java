@@ -145,6 +145,18 @@ public class Chauffeur {
         return (prenom != null && !prenom.isEmpty()) ? prenom + " " + nom : nom;
     }
 
+    public static Vector getTousActifs() throws Exception {
+        Vector liste = new Vector();
+        String sql = SELECT_BASE + "WHERE c.actif = true ORDER BY c.nom ASC";
+        try (Connection conn = new Database().dbconnect();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+                liste.add(fromResultSet(rs));
+        }
+        return liste;
+    }
+
     private static final String SELECT_BASE = "SELECT c.id_chauffeur, c.nom, c.prenom, c.telephone, c.numero_permis, " +
             "       c.date_expiration_permis, c.id_vehicule_habituel, c.actif, " +
             "       v.immatriculation, " +
