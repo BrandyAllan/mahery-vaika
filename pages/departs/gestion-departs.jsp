@@ -13,59 +13,46 @@
 %>
 
 <div class="container mt-5">
-    <h2 class="mb-4"><i class="bi bi-send"></i> Gestion des Départs</h2>
-
-    <div class="row">
-
-        <!-- card liste -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <i class="bi bi-list-ul"></i> Liste des départs
-                    </h4>
-                    <p class="card-text text-muted">
-                        Consulter, rechercher et voir les détails des départs planifiés.
-                    </p>
-                    <a href="?page=departs/liste-depart" class="btn btn-primary">
-                        Accéder à la liste
-                    </a>
-                </div>
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="fw-bold" style="color: #2c3e50;">Gestion de départs</h1>
+                <p class="text-muted">Sélectionnez une action ci-dessous</p>
             </div>
         </div>
 
-        <!-- card miajoute -->
-        <div class="col-md-6 mb-4">
-            <% if (isAdmin) { %>
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <i class="bi bi-plus-circle"></i> Ajouter un départ
-                        </h4>
-                        <p class="card-text text-muted">
-                            Planifier un nouveau départ en affectant un trajet, un véhicule et un chauffeur.
-                        </p>
-                        <a href="?page=departs/ajout-depart" class="btn btn-success">
-                            Ajouter un départ
-                        </a>
+        <div class="row g-4">
+            <!-- Carte Liste des trajets -->
+            <div class="col-md-6">
+                <a href="?page=departs/liste-depart" class="text-decoration-none text-dark">
+                    <div class="card premium-card h-100">
+                        <div class="card-body text-center p-5">
+                            <div class="mb-3">
+                                <i class="fas fa-list-ul fa-4x text-primary"></i>
+                            </div>
+                            <h3 class="card-title fw-bold">Liste de départs</h3>
+                            <p class="card-text text-muted">Consultez, recherchez et gérez les départs existants dans le système.</p>
+                        </div>
                     </div>
-                </div>
-            <% } else { %>
-                <div class="card h-100 shadow-sm bg-light text-muted" style="opacity: 0.6;">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <i class="bi bi-plus-circle"></i> Ajouter un départ
-                        </h4>
-                        <p class="card-text text-danger mb-3">
-                            (Réservé aux administrateurs)
-                        </p>
-                        <button class="btn btn-secondary" disabled>
-                            Ajouter un départ
-                        </button>
-                    </div>
-                </div>
-            <% } %>
-        </div>
+                </a>
+            </div>
 
+            <!-- Carte Ajouter un trajet -->
+            <div class="col-md-6">
+                <a href="?page=departs/ajout-depart" class="text-decoration-none text-dark <%= !isAdmin ? "disabled" : "" %>" <%= !isAdmin ? "onclick='return false;'" : "" %>>
+                    <div class="card premium-card h-100 <%= !isAdmin ? "card-disabled" : "" %>">
+                        <div class="card-body text-center p-5">
+                            <div class="mb-3">
+                                <i class="fas fa-plus-circle fa-4x text-success"></i>
+                            </div>
+                            <h3 class="card-title fw-bold">Ajouter un départ</h3>
+                            <p class="card-text text-muted">Créez un nouveau départ (Réservé aux administrateurs).</p>
+                            <% if (!isAdmin) { %>
+                                <span class="badge bg-danger mt-2"><i class="fas fa-lock me-1"></i> Accès restreint</span>
+                            <% } %>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
-</div>
+
