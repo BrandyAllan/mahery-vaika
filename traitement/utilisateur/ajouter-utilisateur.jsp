@@ -1,8 +1,10 @@
 <%@ page import="backoffice.Utilisateur, java.sql.Date" %>
+
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
+
     if (user == null || !user.voirsiadmin().equals("Admin")) {
-        response.sendRedirect("../pages/gestion-utilisateur.jsp");
+        response.sendRedirect("../../pages/utilisateur/gestion-utilisateur.jsp");
         return;
     }
 
@@ -16,11 +18,12 @@
     Date date_embauche = Date.valueOf(request.getParameter("date_embauche"));
 
     if (Utilisateur.emailExiste(email, 0)) {
-        response.sendRedirect("../pages/ajout-utilisateur.jsp?erreur=email");
+        response.sendRedirect("../../pages/utilisateur/ajout-utilisateur.jsp?erreur=email");
         return;
     }
 
     String telComplet = null;
+
     if (telephone != null && !telephone.trim().isEmpty()) {
         telComplet = "+261" + telephone.trim();
     }
@@ -38,5 +41,5 @@
     u.setActif(true);
 
     Utilisateur.ajouter(u);
-    response.sendRedirect("../pages/liste-utilisateur.jsp?success=ajout");
+    response.sendRedirect("../../pages/utilisateur/liste-utilisateur.jsp?success=ajout");
 %>

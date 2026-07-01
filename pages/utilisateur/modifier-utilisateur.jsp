@@ -1,29 +1,45 @@
 <%@ page import="java.util.*, backoffice.Utilisateur" %>
+
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
+
     if (user == null || !user.voirsiadmin().equals("Admin")) {
         response.sendRedirect("gestion-utilisateur.jsp");
         return;
     }
-    int id = Integer.parseInt(request.getParameter("id"));
+
+    String idParam = request.getParameter("id");
+
+    if (idParam == null || idParam.isEmpty()) {
+        response.sendRedirect("liste-utilisateur.jsp");
+        return;
+    }
+
+    int id = Integer.parseInt(idParam);
     Utilisateur u = Utilisateur.getById(id);
+
     if (u == null) {
         response.sendRedirect("liste-utilisateur.jsp");
         return;
     }
+
     Vector<Utilisateur> roles = Utilisateur.getAllRoles();
+
     String telSansPrefix = "";
+
     if (u.getTelephone() != null && u.getTelephone().startsWith("+261")) {
         telSansPrefix = u.getTelephone().substring(4);
     }
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier un utilisateur</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/icons/bootstrap-icons.min.css">
     <style>
         .error-message { color: red; font-size: 0.9em; display: none; }
         .is-invalid { border-color: red; }
@@ -33,19 +49,28 @@
 <body>
 <div class="container mt-4">
     <h2>Modifier l'utilisateur</h2>
-    <a href="liste-utilisateur.jsp" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
-    <form action="../traitement/modifier-utilisateur.jsp" method="post" class="row g-3" id="formModif" novalidate>
+
+    <div class="mb-3">
+        <a href="?page=utilisateur/liste-utilisateur" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+
+    <form action="../../traitement/utilisateur/modifier-utilisateur.jsp" method="post" class="row g-3" id="formModif" novalidate>
         <input type="hidden" name="id" value="<%= u.getId_utilisateur() %>">
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Nom *</label>
             <input type="text" name="nom" class="form-control" value="<%= u.getNom() %>" required>
             <span class="error-message">Ce champ est obligatoire.</span>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Prenom</label>
             <input type="text" name="prenom" class="form-control" value="<%= u.getPrenom() %>">
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Telephone (+261)</label>
             <div class="input-group">
                 <span class="input-group-text">+261</span>
@@ -53,62 +78,77 @@
             </div>
             <span class="error-message">9 chiffres : indicatif (32/33/34/37/38) + 7 chiffres.</span>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Email *</label>
             <input type="email" name="email" class="form-control" value="<%= u.getEmail() %>" required>
             <span class="error-message">Email invalide ou deja utilise.</span>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Identifiant *</label>
             <input type="text" name="identifiant" class="form-control" value="<%= u.getIdentifiant() %>" required>
             <span class="error-message">Ce champ est obligatoire.</span>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Mot de passe (laisser vide pour ne pas changer)</label>
             <input type="password" name="mot_de_passe" class="form-control" minlength="8" placeholder="Nouveau mot de passe">
             <span class="error-message">Au moins 8 caracteres si rempli.</span>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Role *</label>
             <select name="role" class="form-select" required>
-                <% for (Utilisateur r : roles) { %>
+                <%
+                    for (Utilisateur r : roles) {
+                %>
                     <option value="<%= r.getId_role() %>" <%= (u.getId_role() == r.getId_role()) ? "selected" : "" %>>
                         <%= r.getNom_role() %>
                     </option>
                 <% } %>
             </select>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Date d'embauche *</label>
             <input type="date" name="date_embauche" class="form-control" value="<%= u.getDate_embauche() %>" required>
             <span class="error-message">Ce champ est obligatoire.</span>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Date de retrait</label>
             <input type="date" name="date_retrait" class="form-control" value="<%= u.getDate_retrait() != null ? u.getDate_retrait() : "" %>">
         </div>
-        <div class="col-md-6">
+
+        <div class="col-12 col-md-6">
             <label>Statut</label>
             <select name="actif" class="form-select">
                 <option value="true" <%= u.isActif() ? "selected" : "" %>>Actif</option>
                 <option value="false" <%= !u.isActif() ? "selected" : "" %>>Inactif</option>
             </select>
         </div>
+
         <div class="col-12">
-            <button type="submit" class="btn btn-primary" id="btnSubmit">Enregistrer</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
             <a href="liste-utilisateur.jsp" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('formModif');
     const inputs = form.querySelectorAll('input, select');
 
     inputs.forEach(input => {
-        input.addEventListener('blur', function() { validateField(this); });
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
         input.addEventListener('input', function() {
-            if (this.classList.contains('is-invalid')) validateField(this);
+            if (this.classList.contains('is-invalid')) {
+                validateField(this);
+            }
         });
     });
 
@@ -159,14 +199,19 @@ document.addEventListener('DOMContentLoaded', function() {
             field.classList.add('is-valid');
             errorSpan.style.display = 'none';
         }
+
         return valid;
     }
 
     form.addEventListener('submit', function(e) {
         let allValid = true;
+
         inputs.forEach(input => {
-            if (!validateField(input)) allValid = false;
+            if (!validateField(input)) {
+                allValid = false;
+            }
         });
+
         if (!allValid) {
             e.preventDefault();
             alert('Veuillez corriger les erreurs dans le formulaire.');
@@ -174,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

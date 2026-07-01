@@ -36,6 +36,7 @@
     />
     <script src="../assets/js/color-modes.js"></script>
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/icons/bootstrap-icons.min.css" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
     <link href="../assets/css/sidebars.css" rel="stylesheet" />
     <style>
@@ -209,7 +210,7 @@
         </li>
       </ul>
     </div>
-    <main class="d-flex flex-nowrap">
+    <main class="d-flex" style="min-height:100vh;">
     <div class="flex-shrink-0 p-3" style="width: 280px">
         <a
           href="/"
@@ -346,14 +347,14 @@
                 <% if(isAdmin) { %>
                     <li>
                     <a
-                        href="?page=ajout-utilisateur"
+                        href="?page=utilisateur/ajout-utilisateur"
                         class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                         >Nouveau...</a
                     >
                     </li>
                     <li>
                     <a
-                        href="?page=liste-utilisateur"
+                        href="?page=utilisateur/liste-utilisateur"
                         class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                         >Liste des utilisateurs</a
                     >
@@ -361,7 +362,7 @@
                 <% } %>
                 <li>
                   <a
-                    href="#"
+                    href="?page=utilisateur/details-utilisateur&id=<%= user.getId_utilisateur() %>"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
                     >Profil</a
                   >
@@ -378,7 +379,7 @@
           </li>
         </ul>
       </div>
-      <div class="container-fluid py-3">
+      <div class="flex-grow-1 p-4 overflow-auto" style="height:100vh;">
         <jsp:include page="<%= fileToInclude %>" />
       </div>
     </main>
