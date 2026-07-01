@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, backoffice.Utilisateur" %>
+<%@ page import="java.util.*, java.util.List, backoffice.Utilisateur, gestion.Depart, gestion.Vehicule, gestion.Chauffeur, gestion.Trajet" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null || !user.voirsiadmin().equals("Admin")) {

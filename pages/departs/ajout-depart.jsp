@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, java.sql.Date, backoffice.Utilisateur, gestion.Depart, gestion.Trajet, gestion.Vehicule, gestion.Chauffeur" %>
+<%@ page import="java.util.*, java.util.List, backoffice.Utilisateur, gestion.Depart, gestion.Vehicule, gestion.Chauffeur, gestion.Trajet" %>
 <%
 
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
@@ -11,9 +11,10 @@
         return;
     }
 
-    Vector<Depart> lesTrajets    = Depart.getTousLesTrajets();
-    Vector<Depart> lesVehicules  = Depart.getTousLesVehicules();
-    Vector<Depart> lesChauffeurs = Depart.getTousLesChauffeurs();
+    Trajet trajetGestion       = new Trajet();
+    List<Trajet> lesTrajets    = trajetGestion.getTrajetsActifs();
+    Vector lesVehicules        = Chauffeur.getVehiculesDispo();
+    Vector lesChauffeurs       = Chauffeur.getTousActifs();
 
     String erreur = request.getParameter("erreur");
 %>
