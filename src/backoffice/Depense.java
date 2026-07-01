@@ -1,6 +1,9 @@
 package backoffice;
 
 import java.sql.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.Vector;
 import tools.Database;
 
@@ -221,4 +224,46 @@ public class Depense {
 
         return null;
     }
+    public static String formatMontant(double montant) {
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.FRANCE);
+    symbols.setGroupingSeparator(' ');
+    symbols.setDecimalSeparator(',');
+    DecimalFormat df = new DecimalFormat("#,###.00", symbols);
+    return df.format(montant);
+    
+    }
+    public static Vector<Object[]> getVehiculesActifs() throws Exception {
+    Vector<Object[]> liste = new Vector<>();
+    String sql = "SELECT id_vehicule, immatriculation, marque, modele FROM vehicule WHERE etat = 'ACTIF' ORDER BY immatriculation";
+    try (Connection c = new Database().dbconnect();
+         PreparedStatement ps = c.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            Object[] v = new Object[4];
+            v[0] = rs.getInt("id_vehicule");
+            v[1] = rs.getString("immatriculation");
+            v[2] = rs.getString("marque");
+            v[3] = rs.getString("modele");
+            liste.add(v);
+        }
+    }
+    return liste;
+    }
+    public static Vector<Object[]> getUtilisateursActifs() throws Exception {
+    Vector<Object[]> liste = new Vector<>();
+    String sql = "SELECT id_utilisateur, nom, prenom FROM utilisateur WHERE actif = true ORDER BY nom";
+    try (Connection c = new Database().dbconnect();
+         PreparedStatement ps = c.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            Object[] u = new Object[3];
+            u[0] = rs.getInt("id_utilisateur");
+            u[1] = rs.getString("nom");
+            u[2] = rs.getString("prenom");
+            liste.add(u);
+        }
+    }
+    return liste;
+    }
+
 }
