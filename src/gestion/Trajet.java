@@ -72,10 +72,6 @@ public class Trajet {
         return PAGE_SIZE;
     }
 
-    // =========================================================
-    //  Méthodes de gestion des trajets
-    // =========================================================
-
     public List<Trajet> rechercherTrajets(String searchDepart, String searchArrivee,
             String searchTarif, String searchStatut,
             String dateDebut, String dateFin,
@@ -280,6 +276,38 @@ public class Trajet {
             closeResources(conn, pstmt, rs);
         }
         return trajet;
+    }
+
+    public List<Trajet> getTrajetsActifs() {
+        List<Trajet> trajets = new ArrayList<>();
+        Database db = new Database();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = db.dbconnect();
+            if (conn != null) {
+                String sql =
+                    "SELECT t.*, v1.nom_ville AS depart_nom, v2.nom_ville AS arrivee_nom " +
+                    "FROM trajet t " +
+                    "JOIN ville v1 ON t.id_ville_depart = v1.id_ville " +
+                    "JOIN ville v2 ON t.id_ville_arrivee = v2.id_ville " +
+                    "WHERE t.actif = true " +
+                    "ORDER BY v1.nom_ville ASC, v2.nom_ville ASC";
+                pstmt = conn.prepareStatement(sql);
+                rs = pstmt.executeQuery();
+
+                while (rs.next()) {
+                    trajets.add(mapResultSetToTrajet(rs));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(conn, pstmt, rs);
+        }
+        return trajets;
     }
 
     public boolean ajouterTrajet(Trajet t) {
