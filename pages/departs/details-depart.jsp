@@ -1,4 +1,4 @@
-<%@ page import="backoffice.Utilisateur, gestion.Depart" %>
+<%@ page import="java.util.*, java.sql.Date, backoffice.Utilisateur, gestion.Depart, gestion.Trajet, gestion.Vehicule, gestion.Chauffeur" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null) {

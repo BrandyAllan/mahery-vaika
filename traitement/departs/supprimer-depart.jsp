@@ -25,11 +25,14 @@
 
     Depart d = Depart.getById(id);
     if (d == null) {
-        response.sendRedirect("../pages/liste-depart.jsp?msg=not_found");
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=not_found");
         return;
     }
 
-    Depart.supprimer(id);
+    if (!Depart.supprimer(id)) {
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=not_found");
+        return;
+    }
 
     response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=supp_ok");
 %>

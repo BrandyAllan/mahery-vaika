@@ -35,7 +35,10 @@
     d.setHeure_depart(heureDepart);
     d.setStatut(statut != null && !statut.isEmpty() ? statut : "PLANIFIE");
 
-    Depart.ajouter(d);
+    if (!Depart.ajouter(d)) {
+        response.sendRedirect("../../models/model.jsp?page=departs/ajout-depart&erreur=general");
+        return;
+    }
 
     response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=ajout_ok");
 %>

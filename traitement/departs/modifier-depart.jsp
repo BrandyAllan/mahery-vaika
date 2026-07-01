@@ -6,7 +6,7 @@
         return;
     }
     if (user.voirsiadmin().equals("Caissier")) {
-        response.sendRedirect("../pages/liste-depart.jsp");
+        response.sendRedirect("../../models/model.jsp?page=departs/liste-depart");
         return;
     }
 
@@ -24,7 +24,7 @@
     }
 
     if (Depart.chauffeurDejaOccupe(idChauffeur, dateDepart, heureDepart, idDepart)) {
-        response.sendRedirect("../pages/modifier-depart.jsp?id=" + idDepart + "&erreur=chauffeur");
+        response.sendRedirect("../../models/model.jsp?page=departs/modifier-depart&id=" + idDepart + "&erreur=chauffeur");
         return;
     }
 
@@ -37,7 +37,10 @@
     d.setHeure_depart(heureDepart);
     d.setStatut(statut);
 
-    Depart.mettreAjour(d);
+    if (!Depart.mettreAjour(d)) {
+        response.sendRedirect("../../models/model.jsp?page=departs/modifier-depart&id=" + idDepart + "&erreur=general");
+        return;
+    }
 
     response.sendRedirect("../../models/model.jsp?page=departs/liste-depart&msg=modif_ok");
 %>

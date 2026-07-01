@@ -110,7 +110,7 @@ public class Depart {
     public static Vector<Depart> rechercher(
             int idTrajet, int idVehicule, int idChauffeur,
             Date d1, Date d2, String statut,
-            String tri, int lim, int off) throws Exception {
+            String tri, int lim, int off) {
 
         Vector<Depart> resultat = new Vector<>();
         Vector<Object> params   = new Vector<>();
@@ -148,18 +148,25 @@ public class Depart {
            .append(", dp.heure_depart ASC LIMIT ? OFFSET ?");
         params.add(lim); params.add(off);
 
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql.toString())) {
-            for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) resultat.add(fromResultSet(rs));
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return resultat;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql.toString())) {
+                for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) resultat.add(fromResultSet(rs));
+                }
+            }
+        } catch (Exception e) {
+            return resultat;
         }
         return resultat;
     }
 
     public static int count(
             int idTrajet, int idVehicule, int idChauffeur,
-            Date d1, Date d2, String statut) throws Exception {
+            Date d1, Date d2, String statut) {
 
         Vector<Object> params = new Vector<>();
         StringBuilder sql = new StringBuilder(
@@ -177,16 +184,23 @@ public class Depart {
             params.add(d1); params.add(d2);
         }
 
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql.toString())) {
-            for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return 0;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql.toString())) {
+                for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            return 0;
         }
         return 0;
     }
 
-    public static Depart getById(int id) throws Exception {
+    public static Depart getById(int id) {
         String sql =
             "SELECT dp.*, " +
             "  vd.nom_ville AS ville_depart, " +
@@ -202,122 +216,132 @@ public class Depart {
             "JOIN chauffeur c ON dp.id_chauffeur  = c.id_chauffeur " +
             "WHERE dp.id_depart = ?";
 
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return fromResultSet(rs);
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return null;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) return fromResultSet(rs);
+                }
+            }
+        } catch (Exception e) {
+            return null;
         }
         return null;
     }
 
-    public static List<Trajet> getTousLesTrajets() throws Exception {
-        Trajet t = new Trajet();
-        return t.rechercherTrajets(null, null, null, null);
-    }
-
-    public static Vector getTousLesVehicules() throws Exception {
-        return Chauffeur.getVehiculesDispo();
-    }
-
-    public static Vector<Depart> getTousLesChauffeurs() throws Exception {
-        Vector<Depart> liste = new Vector<>();
-        String sql =
-            "SELECT id_chauffeur, nom, prenom " +
-            "FROM chauffeur WHERE actif = true " +
-            "ORDER BY nom ASC";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Depart d = new Depart();
-                d.setId_chauffeur(rs.getInt("id_chauffeur"));
-                d.setNom_chauffeur(rs.getString("nom"));
-                d.setPrenom_chauffeur(rs.getString("prenom"));
-                liste.add(d);
-            }
-        }
-        return liste;
-    }
-
   
-    public static boolean vehiculeDejaOccupe(int idVehicule, Date date, Time heure, int excludeId) throws Exception {
+    public static boolean vehiculeDejaOccupe(int idVehicule, Date date, Time heure, int excludeId) {
         String sql =
             "SELECT COUNT(*) FROM depart " +
             "WHERE id_vehicule = ? AND date_depart = ? " +
             "AND heure_depart = ? AND id_depart != ?";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, idVehicule);
-            ps.setDate(2, date);
-            ps.setTime(3, heure);
-            ps.setInt(4, excludeId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1) > 0;
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return false;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, idVehicule);
+                ps.setDate(2, date);
+                ps.setTime(3, heure);
+                ps.setInt(4, excludeId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
 
   
-    public static boolean chauffeurDejaOccupe(int idChauffeur, Date date, Time heure, int excludeId) throws Exception {
+    public static boolean chauffeurDejaOccupe(int idChauffeur, Date date, Time heure, int excludeId) {
         String sql =
             "SELECT COUNT(*) FROM depart " +
             "WHERE id_chauffeur = ? AND date_depart = ? " +
             "AND heure_depart = ? AND id_depart != ?";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, idChauffeur);
-            ps.setDate(2, date);
-            ps.setTime(3, heure);
-            ps.setInt(4, excludeId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1) > 0;
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return false;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, idChauffeur);
+                ps.setDate(2, date);
+                ps.setTime(3, heure);
+                ps.setInt(4, excludeId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
 
 
-    public static void ajouter(Depart d) throws Exception {
+    public static boolean ajouter(Depart d) {
         String sql =
             "INSERT INTO depart (id_trajet, id_vehicule, id_chauffeur, " +
             "date_depart, heure_depart, statut) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, d.getId_trajet());
-            ps.setInt(2, d.getId_vehicule());
-            ps.setInt(3, d.getId_chauffeur());
-            ps.setDate(4, d.getDate_depart());
-            ps.setTime(5, d.getHeure_depart());
-            ps.setString(6, d.getStatut() != null ? d.getStatut() : "PLANIFIE");
-            ps.executeUpdate();
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return false;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, d.getId_trajet());
+                ps.setInt(2, d.getId_vehicule());
+                ps.setInt(3, d.getId_chauffeur());
+                ps.setDate(4, d.getDate_depart());
+                ps.setTime(5, d.getHeure_depart());
+                ps.setString(6, d.getStatut() != null ? d.getStatut() : "PLANIFIE");
+                return ps.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 
   
-    public static void mettreAjour(Depart d) throws Exception {
+    public static boolean mettreAjour(Depart d) {
         String sql =
             "UPDATE depart SET id_trajet=?, id_vehicule=?, id_chauffeur=?, " +
             "date_depart=?, heure_depart=?, statut=? WHERE id_depart=?";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, d.getId_trajet());
-            ps.setInt(2, d.getId_vehicule());
-            ps.setInt(3, d.getId_chauffeur());
-            ps.setDate(4, d.getDate_depart());
-            ps.setTime(5, d.getHeure_depart());
-            ps.setString(6, d.getStatut());
-            ps.setInt(7, d.getId_depart());
-            ps.executeUpdate();
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return false;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, d.getId_trajet());
+                ps.setInt(2, d.getId_vehicule());
+                ps.setInt(3, d.getId_chauffeur());
+                ps.setDate(4, d.getDate_depart());
+                ps.setTime(5, d.getHeure_depart());
+                ps.setString(6, d.getStatut());
+                ps.setInt(7, d.getId_depart());
+                return ps.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 
 
-    public static void supprimer(int id) throws Exception {
+    public static boolean supprimer(int id) {
         String sql = "DELETE FROM depart WHERE id_depart = ?";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        try (Connection c = new Database().dbconnect()) {
+            if (c == null) {
+                return false;
+            }
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                return ps.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 }
