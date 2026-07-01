@@ -47,6 +47,8 @@
     </div>
 
     <form method="get" class="row g-3 mb-4">
+        <input type="hidden" name="page" value="depense/depense">
+
         <div class="col-12 col-md-4">
             <label>Recherche </label>
             <input type="text" name="recherche" class="form-control" value="<%= recherche != null ? recherche : "" %>">

@@ -115,6 +115,17 @@
     </style>
   </head>
   <body>
+    <div class="mobile-topbar align-items-center justify-content-between px-3 py-2 border-bottom bg-body">
+      <button class="btn btn-outline-secondary"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#mobileSidebar"
+              aria-controls="mobileSidebar">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
+      <span class="fs-5 mahery-vaika">Mahery Vaika</span>
+    </div>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path
@@ -210,16 +221,24 @@
         </li>
       </ul>
     </div>
-    <main class="d-flex" style="min-height:100vh;">
-    <div class="flex-shrink-0 p-3" style="width: 280px">
-        <a
-          href="/"
-          class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"
-        >
-          <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
-          <span class="fs-5 fw-semibold">Mahery Vaika</span>
-        </a>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+      <div class="offcanvas-header d-flex align-items-center">
+          <img src="../assets/images/logo-simple.png"
+              alt="Logo"
+              width="42"
+              class="me-2">
+          <h5 class="offcanvas-title mahery-vaika flex-grow-1 mb-0">
+              Mahery Vaika
+          </h5>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas">
+          </button>
+      </div>
+
+      <div class="offcanvas-body">
         <ul class="list-unstyled ps-0">
+          <% if(isAdmin) { %>
           <li class="mb-1">
             <button
               class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
@@ -262,6 +281,7 @@
               </ul>
             </div>
           </li>
+          <% } %>
           <li class="mb-1">
             <button
               class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
@@ -379,7 +399,179 @@
           </li>
         </ul>
       </div>
-      <div class="flex-grow-1 p-4 overflow-auto" style="height:100vh;">
+    </div>
+    <main class="d-flex app-layout">
+      <div class="flex-shrink-0 p-3 sidebar-desktop">
+        <a
+          href="/"
+          class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"
+        >
+          <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
+          <span class="fs-5 mahery-vaika">Mahery Vaika</span>
+        </a>
+        <ul class="list-unstyled ps-0">
+          <% if(isAdmin) { %>
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#dashboard-collapse"
+              aria-expanded="false"
+            >
+              Dashboard
+            </button>
+            <div class="collapse" id="dashboard-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Weekly</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Monthly</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Annually</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="?page=depense/depense"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Dépenses</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <% } %>
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#home-collapse"
+              aria-expanded="false"
+            >
+              Gestion
+            </button>
+            <div class="collapse show" id="home-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <a
+                    href="?page=departs/gestion-departs"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Départs</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="?page=trajet/gestion-trajet"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Trajets</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="?page=vehicule/gestion-vehicule"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Vehicules</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="?page=chauffeurs/gestion-chauffeur"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Chauffeurs</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#orders-collapse"
+              aria-expanded="false"
+            >
+              Réservations
+            </button>
+            <div class="collapse" id="orders-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <a
+                    href="?page=reservation/ajout-reservation"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Nouvelle réservations</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="?page=reservation/liste-reservation"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Liste réservations</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="border-top my-3"></li>
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#account-collapse"
+              aria-expanded="false"
+            >
+              Compte
+            </button>
+            <div class="collapse" id="account-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <% if(isAdmin) { %>
+                    <li>
+                    <a
+                        href="?page=utilisateur/ajout-utilisateur"
+                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                        >Nouveau...</a
+                    >
+                    </li>
+                    <li>
+                    <a
+                        href="?page=utilisateur/liste-utilisateur"
+                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                        >Liste des utilisateurs</a
+                    >
+                    </li>
+                <% } %>
+                <li>
+                  <a
+                    href="?page=utilisateur/details-utilisateur&id=<%= user.getId_utilisateur() %>"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Profil</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="../traitement/traitement-logout.jsp"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Déconnexion</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="flex-grow-1 p-4 content-area">
         <jsp:include page="<%= fileToInclude %>" />
       </div>
     </main>

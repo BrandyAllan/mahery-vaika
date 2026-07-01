@@ -7,12 +7,47 @@ html {
   height: -webkit-fill-available;
 }
 
+@font-face {
+    font-family: 'Outerion';
+    src: url('../fonts/Outerion/Outerion-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.mahery-vaika {
+    font-family: 'Outerion', sans-serif;
+    font-size: 1.05rem;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    line-height: 1.2;
+}
+
 main {
   height: 100vh;
   height: -webkit-fill-available;
   max-height: 100vh;
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.mobile-topbar {
+  height: 72px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.mobile-topbar .mobile-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mobile-topbar .mobile-brand {
+  margin-left: auto;
+  font-size: 1rem;
 }
 
 .dropdown-toggle { outline: 0; }
@@ -60,4 +95,44 @@ main {
 
 .scrollarea {
   overflow-y: auto;
+}
+
+.app-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar-desktop {
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.content-area {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.mobile-topbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    display: block !important;
+  }
+
+  .sidebar-desktop {
+    display: none;
+  }
+
+  .mobile-topbar {
+    display: flex;
+  }
+
+  .content-area {
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    padding: 1rem !important;
+  }
 }
