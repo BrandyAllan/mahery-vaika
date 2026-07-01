@@ -1,8 +1,12 @@
 package gestion;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Vector;
 import tools.Database;
+import gestion.Vehicule;
+import gestion.Chauffeur;
+import gestion.Trajet;
 
 public class Depart {
 
@@ -207,52 +211,13 @@ public class Depart {
         return null;
     }
 
-    public static Vector<Depart> getTousLesTrajets() throws Exception {
-        Vector<Depart> liste = new Vector<>();
-        String sql =
-            "SELECT t.id_trajet, vd.nom_ville AS ville_depart, " +
-            "  va.nom_ville AS ville_arrivee, t.tarif_base, " +
-            "  t.duree_estimee, t.distance_km " +
-            "FROM trajet t " +
-            "JOIN ville vd ON t.id_ville_depart  = vd.id_ville " +
-            "JOIN ville va ON t.id_ville_arrivee = va.id_ville " +
-            "WHERE t.actif = true " +
-            "ORDER BY vd.nom_ville ASC";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Depart d = new Depart();
-                d.setId_trajet(rs.getInt("id_trajet"));
-                d.setVille_depart(rs.getString("ville_depart"));
-                d.setVille_arrivee(rs.getString("ville_arrivee"));
-                d.setTarif_base(rs.getDouble("tarif_base"));
-                d.setDuree_estimee(rs.getString("duree_estimee"));
-                d.setDistance_km(rs.getDouble("distance_km"));
-                liste.add(d);
-            }
-        }
-        return liste;
+    public static List<Trajet> getTousLesTrajets() throws Exception {
+        Trajet t = new Trajet();
+        return t.rechercherTrajets(null, null, null, null);
     }
 
-    public static Vector<Depart> getTousLesVehicules() throws Exception {
-        Vector<Depart> liste = new Vector<>();
-        String sql =
-            "SELECT id_vehicule, immatriculation, capacite " +
-            "FROM vehicule WHERE etat = 'ACTIF' " +
-            "ORDER BY immatriculation ASC";
-        try (Connection c = new Database().dbconnect();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Depart d = new Depart();
-                d.setId_vehicule(rs.getInt("id_vehicule"));
-                d.setImmatriculation(rs.getString("immatriculation"));
-                d.setCapacite_vehicule(rs.getInt("capacite"));
-                liste.add(d);
-            }
-        }
-        return liste;
+    public static Vector getTousLesVehicules() throws Exception {
+        return Chauffeur.getVehiculesDispo();
     }
 
     public static Vector<Depart> getTousLesChauffeurs() throws Exception {

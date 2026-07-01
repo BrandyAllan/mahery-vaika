@@ -57,14 +57,14 @@
             <label class="form-label fw-semibold">Trajet <span class="text-danger">*</span></label>
             <select name="id_trajet" id="selectTrajet" class="form-select" required>
                 <option value="">-- Sélectionner un trajet --</option>
-                <% for (Depart t : lesTrajets) { %>
-                    <option value="<%= t.getId_trajet() %>"
-                            data-depart="<%= t.getVille_depart() %>"
-                            data-arrivee="<%= t.getVille_arrivee() %>"
-                            data-tarif="<%= t.getTarif_base() %>"
-                            data-duree="<%= t.getDuree_estimee() %>"
-                            data-distance="<%= t.getDistance_km() %>">
-                        <%= t.getVille_depart() %> → <%= t.getVille_arrivee() %>
+                <% for (Trajet t : lesTrajets) { %>
+                    <option value="<%= t.getIdTrajet() %>"
+                            data-depart="<%= t.getVilleDepart().getNomVille() %>"
+                            data-arrivee="<%= t.getVilleArrivee().getNomVille() %>"
+                            data-tarif="<%= t.getTarifBase() %>"
+                            data-duree="<%= t.getDureeEstimee() %>"
+                            data-distance="<%= t.getDistanceKm() %>">
+                        <%= t.getVilleDepart().getNomVille() %> → <%= t.getVilleArrivee().getNomVille() %>
                     </option>
                 <% } %>
             </select>
@@ -109,10 +109,11 @@
             <label class="form-label fw-semibold">Véhicule <span class="text-danger">*</span></label>
             <select name="id_vehicule" class="form-select" required>
                 <option value="">-- Sélectionner un véhicule --</option>
-                <% for (Depart v : lesVehicules) { %>
-                    <option value="<%= v.getId_vehicule() %>">
+                <% for (Object obj : lesVehicules) {
+                    Vehicule v = (Vehicule) obj; %>
+                    <option value="<%= v.getIdVehicule() %>">
                         <%= v.getImmatriculation() %>
-                        (capacité : <%= v.getCapacite_vehicule() %> places)
+                        (capacité : <%= v.getCapacite() %> places)
                     </option>
                 <% } %>
             </select>
