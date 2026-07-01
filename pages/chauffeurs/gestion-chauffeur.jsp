@@ -28,7 +28,7 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-list-ul"></i> Liste des chauffeurs</h5>
-                    <a href="liste-chauffeur.jsp" class="btn btn-primary">voir la liste</a>
+                    <a href="?page=chauffeurs/liste-chauffeur" class="btn btn-primary">voir la liste</a>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-person-plus"></i> Ajouter un chauffeur</h5>
-                    <a href="ajout-chauffeur.jsp" class="btn btn-success">Ajouter un chauffeur</a>
+                    <a href="?page=chauffeurs/ajout-chauffeur" class="btn btn-success">Ajouter un chauffeur</a>
                 </div>
             </div>
             <% } else { %>
