@@ -38,16 +38,7 @@
 
 
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails du départ #<%= d.getId_depart() %> - Mahery Vaika</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
-</head>
-<body>
+
 <div class="container mt-4">
 
     
@@ -190,6 +181,4 @@
     </div>
 
 </div>
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+

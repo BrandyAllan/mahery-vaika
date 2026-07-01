@@ -20,23 +20,13 @@
 
 
 
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un départ - Mahery Vaika</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
     <style>
         .error-message { color: red; font-size: 0.9em; display: none; }
         .is-invalid    { border-color: red; }
         .is-valid      { border-color: green; }
         #infoTrajet    { display: none; }
     </style>
-</head>
-<body>
+
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -240,6 +230,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
