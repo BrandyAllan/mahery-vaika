@@ -47,7 +47,7 @@
 
 
 
-<!-- En-tete -->
+    <!-- En-tete -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="bi bi-send"></i> Liste des depart</h2>
         <a href="?page=departs/gestion-departs" class="btn btn-secondary btn-sm">
