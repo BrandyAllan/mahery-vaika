@@ -1,6 +1,8 @@
+<<<<<<< HEAD
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.*, backoffice.Utilisateur, gestion.Depart, gestion.Trajet, gestion.Vehicule, gestion.Chauffeur" %>
-<%
+=======
+
 
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null) {
@@ -12,6 +14,7 @@
         return;
     }
 
+<<<<<<< HEAD
     Trajet trajetGestion = new Trajet();
     List<Trajet>   lesTrajets    = trajetGestion.getTrajetsActifs();
     List<Vehicule> lesVehicules  = Vehicule.getVehiculesActifs();
