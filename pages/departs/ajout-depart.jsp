@@ -1,4 +1,5 @@
-<%@ page import="java.util.*, java.sql.Date, backoffice.Utilisateur, gestion.Depart, gestion.Trajet, gestion.Vehicule, gestion.Chauffeur" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.*, backoffice.Utilisateur, gestion.Depart, gestion.Trajet, gestion.Vehicule, gestion.Chauffeur" %>
 <%
 
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
@@ -11,15 +12,16 @@
         return;
     }
 
-    Vector<Depart> lesTrajets    = Depart.getTousLesTrajets();
-    Vector<Depart> lesVehicules  = Depart.getTousLesVehicules();
-    Vector<Depart> lesChauffeurs = Depart.getTousLesChauffeurs();
+    Trajet trajetGestion = new Trajet();
+    List<Trajet>   lesTrajets    = trajetGestion.getTrajetsActifs();
+    List<Vehicule> lesVehicules  = Vehicule.getVehiculesActifs();
+    List<Chauffeur> lesChauffeurs = (List<Chauffeur>) Chauffeur.getTousActifs();
 
     String erreur = request.getParameter("erreur");
 %>
 
 
-
+ <meta charset="UTF-8">
     <style>
         .error-message { color: red; font-size: 0.9em; display: none; }
         .is-invalid    { border-color: red; }
@@ -36,7 +38,7 @@
         </a>
     </div>
 
-    <!-- message d'erreur-->
+  
     <% if ("vehicule".equals(erreur)) { %>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-triangle"></i>
@@ -52,7 +54,7 @@
     <form action="../traitement/departs/ajouter-depart.jsp" method="post"
           class="row g-3" id="formAjout" novalidate>
 
-        <!-- liste deroulante trajet -->
+        
         <div class="col-md-6">
             <label class="form-label fw-semibold">Trajet <span class="text-danger">*</span></label>
             <select name="id_trajet" id="selectTrajet" class="form-select" required>
@@ -71,7 +73,7 @@
             <span class="error-message">Veuillez sélectionner un trajet.</span>
         </div>
 
-        <!-- carte info trajet -->
+       
         <div class="col-md-6">
             <div id="infoTrajet" class="card border-primary h-100">
                 <div class="card-body py-2">
@@ -104,13 +106,12 @@
             </div>
         </div>
 
-        <!-- vehicule -->
+       
         <div class="col-md-6">
             <label class="form-label fw-semibold">Véhicule <span class="text-danger">*</span></label>
             <select name="id_vehicule" class="form-select" required>
                 <option value="">-- Sélectionner un véhicule --</option>
-                <% for (Object obj : lesVehicules) {
-                    Vehicule v = (Vehicule) obj; %>
+                <% for (Vehicule v : lesVehicules) { %>
                     <option value="<%= v.getIdVehicule() %>">
                         <%= v.getImmatriculation() %>
                         (capacité : <%= v.getCapacite() %> places)
@@ -120,21 +121,21 @@
             <span class="error-message">Veuillez sélectionner un véhicule.</span>
         </div>
 
-        <!-- chauffeur -->
+       
         <div class="col-md-6">
             <label class="form-label fw-semibold">Chauffeur <span class="text-danger">*</span></label>
             <select name="id_chauffeur" class="form-select" required>
                 <option value="">-- Sélectionner un chauffeur --</option>
-                <% for (Depart c : lesChauffeurs) { %>
-                    <option value="<%= c.getId_chauffeur() %>">
-                        <%= c.getNom_chauffeur() %> <%= c.getPrenom_chauffeur() %>
+                <% for (Chauffeur c : lesChauffeurs) { %>
+                    <option value="<%= c.getIdChauffeur() %>">
+                        <%= c.getNom() %> <%= c.getPrenom() %>
                     </option>
                 <% } %>
             </select>
             <span class="error-message">Veuillez sélectionner un chauffeur.</span>
         </div>
 
-        <!-- date -->
+      
         <div class="col-md-4">
             <label class="form-label fw-semibold">Date de départ <span class="text-danger">*</span></label>
             <input type="date" name="date_depart" class="form-control" required
@@ -149,7 +150,7 @@
             <span class="error-message">Veuillez saisir une heure.</span>
         </div>
 
-        <!-- statut -->
+       
         <div class="col-md-4">
             <label class="form-label fw-semibold">Statut</label>
             <select name="statut" class="form-select">
@@ -160,7 +161,7 @@
             </select>
         </div>
 
-        <!-- boutons -->
+       
         <div class="col-12 d-flex gap-2 mt-2">
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-check-lg"></i> Enregistrer le départ
@@ -174,7 +175,7 @@
 </div>
 
 <script>
-// liste deroulante trajet -> infos du trajet
+
 document.getElementById('selectTrajet').addEventListener('change', function () {
     const selected = this.options[this.selectedIndex];
     const infoBox  = document.getElementById('infoTrajet');

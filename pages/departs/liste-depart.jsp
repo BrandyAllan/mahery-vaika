@@ -37,9 +37,10 @@
     int total   = Depart.count(idTrajet, idVehicule, idChauffeur, d1, d2, statutParam);
     int nbPages = (int) Math.ceil((double) total / limit);
 
-    java.util.List<Trajet> tousLesTrajets = Trajet.getTousLesTrajets();
-    Vector<Depart> tousLesVehicules = Depart.getTousLesVehicules();
-    Vector<Depart> tousLesChauffeurs= Depart.getTousLesChauffeurs();
+    Trajet trajetGestion = new Trajet();
+    java.util.List<Trajet>   tousLesTrajets    = trajetGestion.getTrajetsActifs();
+    List<Vehicule> tousLesVehicules  = Vehicule.getVehiculesActifs();
+    List<Chauffeur> tousLesChauffeurs = (List<Chauffeur>) Chauffeur.getTousActifs();
 
     String msg = request.getParameter("msg");
 %>
