@@ -1,4 +1,5 @@
-<%-- Ajoute ce bloc juste après la vérification de session initiale si tu regroupes le traitement --%>
+<%@ page import="gestion.*, java.sql.Date" %>
+
 <%
     if ("POST".equalsIgnoreCase(request.getMethod())) {
         try {
@@ -9,7 +10,7 @@
             boolean modifie = Vehicule.modifierEtatEtAssurance(idVehicule, nouvelEtat, nouvelleDate);
 
             if (modifie) {
-                response.sendRedirect("liste-vehicule.jsp?success=modification");
+                response.sendRedirect("../../models/model.jsp?page=vehicule/liste-vehicule&success=modification");
                 return;
             } else {
                 out.print("<script>alert('Erreur lors de la mise à jour.');</script>");

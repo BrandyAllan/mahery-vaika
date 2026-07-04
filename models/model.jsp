@@ -405,7 +405,7 @@
     <main class="d-flex app-layout">
       <div class="flex-shrink-0 p-3 sidebar-desktop">
         <a
-          href="/"
+          href="?page=dashboard/jour"
           class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"
         >
           <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
@@ -426,23 +426,23 @@
               <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
                   <a
-                    href="#"
+                    href="?page=dashboard/semaine"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Weekly</a
+                    >Hebdomadaire</a
                   >
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="?page=dashboard/mois"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Monthly</a
+                    >Mensuel</a
                   >
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="?page=dashboard/annee"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Annually</a
+                    >Annuel</a
                   >
                 </li>
                 <li>

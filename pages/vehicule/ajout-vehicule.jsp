@@ -45,7 +45,7 @@
                     </div>
                     <div class="card-body p-4">
                         
-                        <form action="${pageContext.request.contextPath}?page=/traitement/vehicule/ajouter-vehicule" method="POST">
+                        <form action="../traitement/vehicule/ajouter-vehicule.jsp" method="POST">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Immatriculation :</label>

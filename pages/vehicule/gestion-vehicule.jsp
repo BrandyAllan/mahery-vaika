@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <h4 class="card-title"><i class="bi bi-list-ul"></i> Liste des Véhicules</h4>
                         <p class="card-text text-muted">Consulter, rechercher et voir les détails des véhicules disponibles.</p>
-                        <a href="?page=liste-vehicule" class="btn btn-primary">Accéder à la liste</a>
+                        <a href="?page=vehicule/liste-vehicule" class="btn btn-primary">Accéder à la liste</a>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                         <div class="card-body">
                             <h4 class="card-title"><i class="bi bi-plus-circle"></i> Ajouter un Véhicule</h4>
                             <p class="card-text text-muted">Enregistrer un nouveau véhicule dans la base de données.</p>
-                            <a href="?page=ajout-vehicule" class="btn btn-success">Ajouter un véhicule</a>
+                            <a href="?page=vehicule/ajout-vehicule" class="btn btn-success">Ajouter un véhicule</a>
                         </div>
                     </div>
                 <% } else { %>

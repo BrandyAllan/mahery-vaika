@@ -59,7 +59,7 @@
                     </div>
                     <div class="card-body p-4">
                         
-                        <form action="?page=modifier-vehicule" method="POST">
+                        <form action="../traitement/vehicule/modifier-vehicule.jsp" method="POST">
                             <input type="hidden" name="id_vehicule" value="<%= v.getIdVehicule() %>">
 
                             <div class="mb-3">

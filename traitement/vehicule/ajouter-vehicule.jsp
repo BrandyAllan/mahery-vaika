@@ -21,12 +21,12 @@
         boolean insere = Vehicule.ajouterVehicule(immatriculation, marque, modele, capacite, kilometrage, dateAssurance);
 
         if (insere) {
-            response.sendRedirect(request.getContextPath() + "/pages/liste-vehicule.jsp");
+            response.sendRedirect("../../models/model.jsp?page=vehicule/liste-vehicule");
         } else {
-            response.sendRedirect(request.getContextPath() + "/pages/ajout-vehicule.jsp?erreur=echec_insertion");
+            response.sendRedirect("../../models/model.jsp?page=vehicule/ajout-vehicule.&erreur=echec_insertion");
         }
     } catch (Exception e) {
         e.printStackTrace();
-        response.sendRedirect(request.getContextPath() + "/pages/ajout-vehicule.jsp?erreur=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
+        response.sendRedirect("../../models/model.jsp?page=vehicule/ajout-vehicule&erreur=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
     }
 %>
