@@ -1,0 +1,86 @@
+.dashboard-header {
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    color: #071b7a;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.dashboard-header p {
+    color: #64748b;
+}
+
+.filter-card {
+    background: white;
+    border: 1px solid #dbe1ea;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    gap: 18px;
+    align-items: end;
+    margin-bottom: 30px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.filter-group input {
+    height: 42px;
+    width: 200px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    padding: 0 12px;
+}
+
+.btn-filter {
+    height: 42px;
+    padding: 0 25px;
+    border: none;
+    border-radius: 5px;
+    background: #071b7a;
+    color: white;
+    font-weight: 600;
+}
+
+.charts-grid {
+}
+
+.chart-card {
+    background: white;
+    border: 1px solid #dbe1ea;
+    border-radius: 12px;
+    padding: 22px;
+    min-height: 380px;
+}
+
+.chart-card h3 {
+    color: #071b7a;
+    font-size: 18px;
+    margin-bottom: 18px;
+}
+
+canvas {
+    max-height: 280px;
+}
+
+@media(max-width: 1100px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

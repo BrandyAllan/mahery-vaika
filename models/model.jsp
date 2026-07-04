@@ -5,7 +5,7 @@
     String pageContent = request.getParameter("page");
 
     if (pageContent == null || pageContent.trim().equals("")) {
-        pageContent = "dashboard/dashboard";
+        pageContent = "dashboard/jour";
     }
 
     String fileToInclude = "../pages/" + pageContent + ".jsp";
@@ -39,6 +39,8 @@
     <link href="../assets/icons/bootstrap-icons.min.css" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
     <link href="../assets/css/sidebars.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/dashboard-graph.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -252,23 +254,23 @@
               <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
                   <a
-                    href="#"
+                    href="?page=dashboard/semaine"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Weekly</a
+                    >Hebdomadaire</a
                   >
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="?page=dashboard/mois"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Monthly</a
+                    >Mensuel</a
                   >
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="?page=dashboard/annee"
                     class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Annually</a
+                    >Annuel</a
                   >
                 </li>
                 <li>
@@ -580,5 +582,6 @@
       class="astro-vvvwv3sm"
     ></script>
     <script src="../assets/js/sidebars.js" class="astro-vvvwv3sm"></script>
+    <script src="../assets/js/dashboard-graph.js"></script>
   </body>
 </html>
