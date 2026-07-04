@@ -28,7 +28,7 @@
 
     int limit = 10;
     int pageCourante = 1;
-    try { pageCourante = Integer.parseInt(request.getParameter("page")); } catch (Exception e) {}
+    try { pageCourante = Integer.parseInt(request.getParameter("pageNum")); } catch (Exception e) {}
     int offset = (pageCourante - 1) * limit;
 
     Vector listeChauffeurs = Chauffeur.rechercher(nom, vehicule, statut, statutPermis, datePermisDebut, datePermisFin, limit, offset);
@@ -53,15 +53,16 @@
 <body class="bg-light">
 <div class="container mt-4">
 
-    <a href="gestion-chauffeur.jsp" class="btn btn-sm btn-secondary mb-3">
+    <a href="?page=chauffeurs/gestion-chauffeur" class="btn btn-sm btn-secondary mb-3">
         <i class="bi bi-arrow-left"></i> Tableau de bord
     </a>
     <h2 class="mb-3"><i class="bi bi-person-badge"></i> Liste des Chauffeurs</h2>
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <form method="GET" action="liste-chauffeur.jsp">
-                <input type="hidden" name="page" value="1">
+            <form method="GET">
+                <input type="hidden" name="page" value="chauffeurs/liste-chauffeur">
+                <input type="hidden" name="pageNum" value="1">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-3">
                         <label class="form-label">Nom / Prenom</label>
@@ -102,7 +103,7 @@
                         <input type="date" name="datePermisFin" class="form-control" value="<%= dateFinStr != null ? dateFinStr : "" %>">
                     </div>
                     <div class="col-md-2 d-grid">
-                        <a href="liste-chauffeur.jsp" class="btn btn-outline-secondary">Reinitialiser</a>
+                        <a href="?page=chauffeurs/liste-chauffeur" class="btn btn-outline-secondary">Reinitialiser</a>
                     </div>
                 </div>
             </form>
@@ -136,7 +137,7 @@
                         for (int i = 0; i < listeChauffeurs.size(); i++) {
                             Chauffeur ch = (Chauffeur) listeChauffeurs.get(i);
                     %>
-                        <tr onclick="window.location='details-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>'" style="cursor:pointer;">
+                        <tr onclick="window.location='?page=chauffeurs/details-chauffeur&id=<%= ch.getIdChauffeur() %>'" style="cursor:pointer;">
                             <td><%= ch.getNomComplet() %></td>
                             <td><%= ch.getTelephone() != null ? ch.getTelephone() : "-" %></td>
                             <td><%= ch.getNumeroPermis() %></td>
@@ -165,10 +166,10 @@
                             </td>
                             <% if (isAdmin) { %>
                             <td onclick="event.stopPropagation();">
-                                <a href="modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>" class="btn btn-sm btn-warning" title="Modifier">
+                                <a href="modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>" class="btn btn-sm" title="Modifier" style="background-color: #4907ff; color: #ffffff;">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a href="../../pages/chauffeurs/traitement/modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>&actif=<%= !ch.isActif() %>"
+                                <a href="../../traitement/chauffeurs/modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>&actif=<%= !ch.isActif() %>"
                                    class="btn btn-sm <%= ch.isActif() ? "btn-danger" : "btn-success" %>"
                                    onclick="return confirm('Confirmer la <%= ch.isActif() ? "desactivation" : "reactivation" %> ?')"
                                    title="<%= ch.isActif() ? "Desactiver" : "Reactivater" %>">
@@ -191,7 +192,7 @@
         <ul class="pagination justify-content-center">
             <% for (int p = 1; p <= nbPages; p++) { %>
             <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                <a class="page-link" href="liste-chauffeur.jsp?page=<%= p %>&nom=<%= nom != null ? nom : "" %>&vehicule=<%= vehicule != null ? vehicule : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&statutPermis=<%= statutPermis != null ? statutPermis : "" %>&datePermisDebut=<%= dateDebutStr != null ? dateDebutStr : "" %>&datePermisFin=<%= dateFinStr != null ? dateFinStr : "" %>">
+                <a class="page-link" href="?page=chauffeurs/liste-chauffeur&pageNum=<%= p %>&nom=<%= nom != null ? nom : "" %>&vehicule=<%= vehicule != null ? vehicule : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&statutPermis=<%= statutPermis != null ? statutPermis : "" %>&datePermisDebut=<%= dateDebutStr != null ? dateDebutStr : "" %>&datePermisFin=<%= dateFinStr != null ? dateFinStr : "" %>">
                     <%= p %>
                 </a>
             </li>

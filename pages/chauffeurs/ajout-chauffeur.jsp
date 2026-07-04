@@ -10,7 +10,7 @@
         return;
     }
     if (!"Admin".equalsIgnoreCase(userObj.voirsiadmin())) {
-        response.sendRedirect("gestion-chauffeur.jsp");
+        response.sendRedirect("?page=chauffeurs/gestion-chauffeur");
         return;
     }
 
@@ -31,7 +31,7 @@
 <body class="bg-light">
 <div class="container mt-4" style="max-width: 700px;">
 
-    <a href="liste-chauffeur.jsp" class="btn btn-sm btn-secondary mb-3">
+    <a href="?page=chauffeurs/liste-chauffeur" class="btn btn-sm btn-secondary mb-3">
         <i class="bi bi-arrow-left"></i> Retour a la liste
     </a>
     <h2 class="mb-4"><i class="bi bi-person-plus"></i> Ajouter un Chauffeur</h2>
@@ -45,7 +45,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form method="POST" action="traitement/ajouter-chauffeur.jsp">
+            <form method="POST" action="../../traitement/chauffeurs/ajouter-chauffeur.jsp">
 
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -88,7 +88,7 @@
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-lg"></i> Enregistrer
                     </button>
-                    <a href="liste-chauffeur.jsp" class="btn btn-outline-secondary ms-2">Annuler</a>
+                    <a href="?page=chauffeurs/liste-chauffeur" class="btn btn-outline-secondary ms-2">Annuler</a>
                 </div>
 
             </form>
