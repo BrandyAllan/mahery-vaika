@@ -1,179 +1,265 @@
-<%@ page import="java.util.*, backoffice.Utilisateur" %>
+
+<%@ page import="java.util.*, backoffice.Utilisateur, gestion.Depart, gestion.Trajet, gestion.Vehicule, gestion.Chauffeur" %>
+
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
-    if (user == null || !user.voirsiadmin().equals("Admin")) {
-        response.sendRedirect("gestion-utilisateur.jsp");
+    if (user == null) {
+        response.sendRedirect("../index.jsp");
         return;
     }
-    int id = Integer.parseInt(request.getParameter("id"));
-    Utilisateur u = Utilisateur.getById(id);
-    if (u == null) {
-        response.sendRedirect("liste-utilisateur.jsp");
+    if (user.voirsiadmin().equals("Caissier")) {
+        response.sendRedirect("?page=departs/liste-depart");
         return;
     }
-    Vector<Utilisateur> roles = Utilisateur.getAllRoles();
-    String telSansPrefix = "";
-    if (u.getTelephone() != null && u.getTelephone().startsWith("+261")) {
-        telSansPrefix = u.getTelephone().substring(4);
+
+    String idStr = request.getParameter("id");
+    if (idStr == null || idStr.isEmpty()) {
+        response.sendRedirect("?page=departs/liste-depart");
+        return;
     }
+
+    int id = 0;
+    try { id = Integer.parseInt(idStr); } catch (Exception e) {}
+    if (id == 0) {
+        response.sendRedirect("?page=departs/liste-depart");
+        return;
+    }
+
+    Depart d = Depart.getById(id);
+    if (d == null) {
+        response.sendRedirect("?page=departs/liste-depart&msg=not_found");
+        return;
+    }
+
+    Trajet trajetGestion = new Trajet();
+    List<Trajet>    lesTrajets    = trajetGestion.getTrajetsActifs();
+    List<Vehicule>  lesVehicules  = Vehicule.getVehiculesActifs();
+    List<Chauffeur> lesChauffeurs = (List<Chauffeur>) Chauffeur.getTousActifs();
+
+    String erreur = request.getParameter("erreur");
 %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier un utilisateur</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
-    <style>
-        .error-message { color: red; font-size: 0.9em; display: none; }
-        .is-invalid { border-color: red; }
-        .is-valid { border-color: green; }
-    </style>
-</head>
-<body>
+
+<style>
+    .error-message { color: red; font-size: 0.9em; display: none; }
+    .is-invalid    { border-color: red; }
+    .is-valid      { border-color: green; }
+    #infoTrajet    { display: none; }
+</style>
+
 <div class="container mt-4">
-    <h2>Modifier l'utilisateur</h2>
-    <a href="liste-utilisateur.jsp" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
-    <form action="../traitement/modifier-utilisateur.jsp" method="post" class="row g-3" id="formModif" novalidate>
-        <input type="hidden" name="id" value="<%= u.getId_utilisateur() %>">
-        <div class="col-md-6">
-            <label>Nom *</label>
-            <input type="text" name="nom" class="form-control" value="<%= u.getNom() %>" required>
-            <span class="error-message">Ce champ est obligatoire.</span>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-pencil-square"></i> Modifier le départ #<%= d.getId_depart() %></h2>
+        <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+
+    <% if ("vehicule".equals(erreur)) { %>
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i>
+            Ce véhicule est <strong>déjà affecté</strong> à un autre départ à cette date et heure.
         </div>
-        <div class="col-md-6">
-            <label>Prenom</label>
-            <input type="text" name="prenom" class="form-control" value="<%= u.getPrenom() %>">
+    <% } else if ("chauffeur".equals(erreur)) { %>
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i>
+            Ce chauffeur est <strong>déjà affecté</strong> à un autre départ à cette date et heure.
         </div>
-        <div class="col-md-6">
-            <label>Telephone (+261)</label>
-            <div class="input-group">
-                <span class="input-group-text">+261</span>
-                <input type="text" name="telephone" class="form-control" placeholder="32 1234567" pattern="[0-9]{9}" maxlength="9" value="<%= telSansPrefix %>">
-            </div>
-            <span class="error-message">9 chiffres : indicatif (32/33/34/37/38) + 7 chiffres.</span>
+    <% } else if ("general".equals(erreur)) { %>
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i>
+            Une erreur est survenue lors de la modification.
         </div>
+    <% } %>
+
+    <form action="../traitement/departs/modifier-depart.jsp" method="post"
+          class="row g-3" id="formModif" novalidate>
+
+        <input type="hidden" name="id_depart" value="<%= d.getId_depart() %>">
+
+        <!-- trajet -->
         <div class="col-md-6">
-            <label>Email *</label>
-            <input type="email" name="email" class="form-control" value="<%= u.getEmail() %>" required>
-            <span class="error-message">Email invalide ou deja utilise.</span>
-        </div>
-        <div class="col-md-6">
-            <label>Identifiant *</label>
-            <input type="text" name="identifiant" class="form-control" value="<%= u.getIdentifiant() %>" required>
-            <span class="error-message">Ce champ est obligatoire.</span>
-        </div>
-        <div class="col-md-6">
-            <label>Mot de passe (laisser vide pour ne pas changer)</label>
-            <input type="password" name="mot_de_passe" class="form-control" minlength="8" placeholder="Nouveau mot de passe">
-            <span class="error-message">Au moins 8 caracteres si rempli.</span>
-        </div>
-        <div class="col-md-6">
-            <label>Role *</label>
-            <select name="role" class="form-select" required>
-                <% for (Utilisateur r : roles) { %>
-                    <option value="<%= r.getId_role() %>" <%= (u.getId_role() == r.getId_role()) ? "selected" : "" %>>
-                        <%= r.getNom_role() %>
+            <label class="form-label fw-semibold">Trajet <span class="text-danger">*</span></label>
+            <select name="id_trajet" id="selectTrajet" class="form-select" required>
+                <option value="">-- Sélectionner un trajet --</option>
+                <% for (Trajet t : lesTrajets) { %>
+                    <option value="<%= t.getIdTrajet() %>"
+                            data-depart="<%= t.getVilleDepart().getNomVille() %>"
+                            data-arrivee="<%= t.getVilleArrivee().getNomVille() %>"
+                            data-tarif="<%= t.getTarifBase() %>"
+                            data-duree="<%= t.getDureeEstimee() %>"
+                            data-distance="<%= t.getDistanceKm() %>"
+                            <%= t.getIdTrajet() == d.getId_trajet() ? "selected" : "" %>>
+                        <%= t.getVilleDepart().getNomVille() %> → <%= t.getVilleArrivee().getNomVille() %>
                     </option>
                 <% } %>
             </select>
+            <span class="error-message">Veuillez sélectionner un trajet.</span>
         </div>
+
+        <!-- carte info trajet -->
         <div class="col-md-6">
-            <label>Date d'embauche *</label>
-            <input type="date" name="date_embauche" class="form-control" value="<%= u.getDate_embauche() %>" required>
-            <span class="error-message">Ce champ est obligatoire.</span>
+            <div id="infoTrajet" class="card border-primary h-100">
+                <div class="card-body py-2">
+                    <h6 class="card-title text-primary mb-2">
+                        <i class="bi bi-info-circle"></i> Détails du trajet
+                    </h6>
+                    <div class="row g-1 small">
+                        <div class="col-6">
+                            <span class="text-muted">Départ :</span>
+                            <strong id="infoVilleDepart">—</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Arrivée :</span>
+                            <strong id="infoVilleArrivee">—</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Distance :</span>
+                            <strong id="infoDistance">—</strong> km
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Durée :</span>
+                            <strong id="infoDuree">—</strong>
+                        </div>
+                        <div class="col-12">
+                            <span class="text-muted">Tarif de base :</span>
+                            <strong id="infoTarif" class="text-success">—</strong> Ar
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- vehicule -->
         <div class="col-md-6">
-            <label>Date de retrait</label>
-            <input type="date" name="date_retrait" class="form-control" value="<%= u.getDate_retrait() != null ? u.getDate_retrait() : "" %>">
+            <label class="form-label fw-semibold">Véhicule <span class="text-danger">*</span></label>
+            <select name="id_vehicule" class="form-select" required>
+                <option value="">-- Sélectionner un véhicule --</option>
+                <% for (Vehicule v : lesVehicules) { %>
+                    <option value="<%= v.getIdVehicule() %>"
+                            <%= v.getIdVehicule() == d.getId_vehicule() ? "selected" : "" %>>
+                        <%= v.getImmatriculation() %>
+                        (capacité : <%= v.getCapacite() %> places)
+                    </option>
+                <% } %>
+            </select>
+            <span class="error-message">Veuillez sélectionner un véhicule.</span>
         </div>
+
+        <!-- chauffeur -->
         <div class="col-md-6">
-            <label>Statut</label>
-            <select name="actif" class="form-select">
-                <option value="true" <%= u.isActif() ? "selected" : "" %>>Actif</option>
-                <option value="false" <%= !u.isActif() ? "selected" : "" %>>Inactif</option>
+            <label class="form-label fw-semibold">Chauffeur <span class="text-danger">*</span></label>
+            <select name="id_chauffeur" class="form-select" required>
+                <option value="">-- Sélectionner un chauffeur --</option>
+                <% for (Chauffeur c : lesChauffeurs) { %>
+                    <option value="<%= c.getIdChauffeur() %>"
+                            <%= c.getIdChauffeur() == d.getId_chauffeur() ? "selected" : "" %>>
+                        <%= c.getNom() %> <%= c.getPrenom() %>
+                    </option>
+                <% } %>
+            </select>
+            <span class="error-message">Veuillez sélectionner un chauffeur.</span>
+        </div>
+
+        <!-- date -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Date de départ <span class="text-danger">*</span></label>
+            <input type="date" name="date_depart" class="form-control" required
+                   value="<%= d.getDate_depart() %>">
+            <span class="error-message">Veuillez saisir une date.</span>
+        </div>
+
+        <!-- heure -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Heure de départ <span class="text-danger">*</span></label>
+            <input type="time" name="heure_depart" class="form-control" required
+                   value="<%= d.getHeure_depart() != null ? d.getHeure_depart().toString().substring(0, 5) : "" %>">
+            <span class="error-message">Veuillez saisir une heure.</span>
+        </div>
+
+        <!-- statut -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Statut</label>
+            <select name="statut" class="form-select">
+                <option value="PLANIFIE"  <%= "PLANIFIE".equals(d.getStatut())  ? "selected" : "" %>>Planifié</option>
+                <option value="EN_COURS"  <%= "EN_COURS".equals(d.getStatut())  ? "selected" : "" %>>En cours</option>
+                <option value="TERMINE"   <%= "TERMINE".equals(d.getStatut())   ? "selected" : "" %>>Terminé</option>
+                <option value="ANNULE"    <%= "ANNULE".equals(d.getStatut())    ? "selected" : "" %>>Annulé</option>
             </select>
         </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary" id="btnSubmit">Enregistrer</button>
-            <a href="liste-utilisateur.jsp" class="btn btn-secondary">Annuler</a>
+
+        <!-- boutons -->
+        <div class="col-12 d-flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-lg"></i> Enregistrer les modifications
+            </button>
+            <a href="?page=departs/liste-depart" class="btn btn-outline-secondary">
+                <i class="bi bi-x-lg"></i> Annuler
+            </a>
         </div>
+
     </form>
 </div>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('formModif');
-    const inputs = form.querySelectorAll('input, select');
+// Afficher l'info trajet au chargement si déjà sélectionné
+window.addEventListener('DOMContentLoaded', function () {
+    const sel = document.getElementById('selectTrajet');
+    if (sel.value) updateInfoTrajet(sel.options[sel.selectedIndex]);
+
+    sel.addEventListener('change', function () {
+        updateInfoTrajet(this.options[this.selectedIndex]);
+    });
+});
+
+function updateInfoTrajet(opt) {
+    const infoBox = document.getElementById('infoTrajet');
+    if (!opt || !opt.value) {
+        infoBox.style.display = 'none';
+        return;
+    }
+    document.getElementById('infoVilleDepart').textContent  = opt.dataset.depart   || '—';
+    document.getElementById('infoVilleArrivee').textContent = opt.dataset.arrivee  || '—';
+    document.getElementById('infoDistance').textContent     = opt.dataset.distance || '—';
+    document.getElementById('infoDuree').textContent        = opt.dataset.duree    || '—';
+    document.getElementById('infoTarif').textContent        = opt.dataset.tarif    || '—';
+    infoBox.style.display = 'block';
+}
+
+// Validation côté client
+document.addEventListener('DOMContentLoaded', function () {
+    const form   = document.getElementById('formModif');
+    const inputs = form.querySelectorAll('input[required], select[required]');
 
     inputs.forEach(input => {
-        input.addEventListener('blur', function() { validateField(this); });
-        input.addEventListener('input', function() {
+        input.addEventListener('blur',   function () { validateField(this); });
+        input.addEventListener('change', function () {
             if (this.classList.contains('is-invalid')) validateField(this);
         });
     });
 
     function validateField(field) {
         const errorSpan = field.parentElement.querySelector('.error-message');
-        let valid = true;
-        let message = '';
-
-        if (field.hasAttribute('required') && !field.value.trim()) {
-            valid = false;
-            message = 'Ce champ est obligatoire.';
-        } else if (field.type === 'email' && field.value.trim()) {
-            const email = field.value.trim();
-            const atIndex = email.indexOf('@');
-            if (atIndex === -1) {
-                valid = false;
-                message = 'Email doit contenir @.';
-            } else if (!email.includes('.', atIndex)) {
-                valid = false;
-                message = 'Email doit contenir un point apres le @.';
-            }
-        } else if (field.name === 'telephone' && field.value.trim()) {
-            const tel = field.value.trim();
-            if (!tel.match(/^[0-9]{9}$/)) {
-                valid = false;
-                message = '9 chiffres attendus.';
-            } else {
-                const indicatif = tel.substring(0, 2);
-                if (!['32', '33', '34', '37', '38'].includes(indicatif)) {
-                    valid = false;
-                    message = 'Indicatif invalide (32,33,34,37,38)';
-                }
-            }
-        } else if (field.type === 'password' && field.value.trim()) {
-            if (field.value.length < 8) {
-                valid = false;
-                message = 'Au moins 8 caracteres.';
-            }
-        }
-
+        const valid     = field.value.trim() !== '';
         if (!valid) {
             field.classList.add('is-invalid');
             field.classList.remove('is-valid');
-            errorSpan.textContent = message;
-            errorSpan.style.display = 'block';
+            if (errorSpan) errorSpan.style.display = 'block';
         } else {
             field.classList.remove('is-invalid');
             field.classList.add('is-valid');
-            errorSpan.style.display = 'none';
+            if (errorSpan) errorSpan.style.display = 'none';
         }
         return valid;
     }
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
         let allValid = true;
-        inputs.forEach(input => {
-            if (!validateField(input)) allValid = false;
-        });
+        inputs.forEach(input => { if (!validateField(input)) allValid = false; });
         if (!allValid) {
             e.preventDefault();
-            alert('Veuillez corriger les erreurs dans le formulaire.');
+            alert('Veuillez remplir tous les champs obligatoires.');
         }
     });
 });
 </script>
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

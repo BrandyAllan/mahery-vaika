@@ -14,13 +14,13 @@
     try { id = Integer.parseInt(request.getParameter("id")); } catch (Exception e) {}
     Chauffeur ch = Chauffeur.getById(id);
     if (ch == null) {
-        response.sendRedirect("liste-chauffeur.jsp");
+        response.sendRedirect("?page=chauffeurs/liste-chauffeur");
         return;
     }
 
     int limit = 10;
     int pageCourante = 1;
-    try { pageCourante = Integer.parseInt(request.getParameter("page")); } catch (Exception e) {}
+    try { pageCourante = Integer.parseInt(request.getParameter("pageNum")); } catch (Exception e) {}
     int offset = (pageCourante - 1) * limit;
 
     Vector historique = Chauffeur.getHistorique(id, limit, offset);
@@ -38,7 +38,7 @@
 <body class="bg-light">
 <div class="container mt-4">
 
-    <a href="details-chauffeur.jsp?id=<%= id %>" class="btn btn-sm btn-secondary mb-3">
+    <a href="?page=chauffeurs/details-chauffeur&id=<%= id %>" class="btn btn-sm btn-secondary mb-3">
         <i class="bi bi-arrow-left"></i> Retour aux details
     </a>
 
@@ -96,7 +96,7 @@
         <ul class="pagination justify-content-center">
             <% for (int p = 1; p <= nbPages; p++) { %>
             <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                <a class="page-link" href="historique-chauffeur.jsp?id=<%= id %>&page=<%= p %>"><%= p %></a>
+                <a class="page-link" href="?page=chauffeurs/historique-chauffeur&id=<%= id %>&pageNum=<%= p %>"><%= p %></a>
             </li>
             <% } %>
         </ul>

@@ -13,7 +13,7 @@
     try { id = Integer.parseInt(request.getParameter("id")); } catch (Exception e) {}
     Chauffeur ch = Chauffeur.getById(id);
     if (ch == null) {
-        response.sendRedirect("liste-chauffeur.jsp");
+        response.sendRedirect("?page=chauffeurs/liste-chauffeur");
         return;
     }
 
@@ -41,7 +41,7 @@
 <body class="bg-light">
 <div class="container mt-4" style="max-width: 800px;">
 
-    <a href="liste-chauffeur.jsp" class="btn btn-sm btn-secondary mb-3">
+    <a href="?page=chauffeurs/liste-chauffeur" class="btn btn-sm btn-secondary mb-3">
         <i class="bi bi-arrow-left"></i> Retour à la liste
     </a>
 
@@ -98,10 +98,10 @@
         </div>
         <div class="card-footer d-flex gap-2">
             <% if (isAdmin) { %>
-            <a href="modifier-chauffeur.jsp?id=<%= id %>" class="btn btn-warning">
+            <a href="modifier-chauffeur.jsp?id=<%= id %>" class="btn" style="background-color: #0127ff; color: #e0e0e0;">
                 <i class="bi bi-pencil"></i> Modifier
             </a>
-            <a href="traitement/modifier-chauffeur.jsp?id=<%= id %>&actif=<%= !ch.isActif() %>"
+            <a href="../../traitement/chauffeurs/modifier-chauffeur.jsp?id=<%= id %>&actif=<%= !ch.isActif() %>"
                class="btn <%= ch.isActif() ? "btn-danger" : "btn-success" %>"
                onclick="return confirm('Confirmer la <%= ch.isActif() ? "désactivation" : "réactivation" %> ?')">
                 <i class="bi <%= ch.isActif() ? "bi-person-x" : "bi-person-check" %>"></i>
@@ -115,7 +115,7 @@
                 <i class="bi bi-person-x"></i> Désactiver
             </button>
             <% } %>
-            <a href="historique-chauffeur.jsp?id=<%= id %>" class="btn btn-outline-primary ms-auto">
+            <a href="?page=chauffeurs/historique-chauffeur&id=<%= id %>" class="btn btn-outline-primary ms-auto">
                 <i class="bi bi-clock-history"></i> Voir l'historique des trajets
             </a>
         </div>

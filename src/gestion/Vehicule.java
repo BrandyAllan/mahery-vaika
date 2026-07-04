@@ -97,6 +97,31 @@ public class Vehicule {
         }
     }
 
+    public static List<Vehicule> getVehiculesActifs() {
+        List<Vehicule> liste = new java.util.ArrayList<>();
+        String sql = "SELECT id_vehicule, immatriculation, marque, modele, capacite, " +
+                     "kilometrage_actuel, etat, date_expiration_assurance " +
+                     "FROM vehicule WHERE etat = 'ACTIF' ORDER BY immatriculation ASC";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Vehicule v = new Vehicule();
+                v.setIdVehicule(rs.getInt("id_vehicule"));
+                v.setImmatriculation(rs.getString("immatriculation"));
+                v.setMarque(rs.getString("marque"));
+                v.setModele(rs.getString("modele"));
+                v.setCapacite(rs.getInt("capacite"));
+                v.setKilometrageActuel(rs.getInt("kilometrage_actuel"));
+                v.setEtat(rs.getString("etat"));
+                v.setDateExpirationAssurance(rs.getDate("date_expiration_assurance"));
+                liste.add(v);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return liste;
+    }
 
 
     public static Vehicule getVehiculeById(int id) {
