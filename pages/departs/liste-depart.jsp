@@ -92,7 +92,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>
         <i class="bi bi-send"></i>
-        Liste des départs
+        Liste des departs
     </h2>
 
     <a href="?page=departs/gestion-departs" class="btn btn-secondary btn-sm">
@@ -104,25 +104,25 @@
 <% if ("ajout_ok".equals(msg)) { %>
     <div class="alert alert-success alert-dismissible fade show msg-banner">
         <i class="bi bi-check-circle"></i>
-        Départ ajouté avec succès.
+        Depart ajoute avec succès.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <% } else if ("modif_ok".equals(msg)) { %>
     <div class="alert alert-success alert-dismissible fade show msg-banner">
         <i class="bi bi-check-circle"></i>
-        Départ modifié avec succès.
+        Depart modifie avec succès.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <% } else if ("supp_ok".equals(msg)) { %>
     <div class="alert alert-warning alert-dismissible fade show msg-banner">
         <i class="bi bi-trash"></i>
-        Départ supprimé.
+        Depart supprime.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <% } else if ("not_found".equals(msg)) { %>
     <div class="alert alert-danger alert-dismissible fade show msg-banner">
         <i class="bi bi-exclamation-triangle"></i>
-        Départ introuvable ou suppression impossible.
+        Depart introuvable ou suppression impossible.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <% } %>
@@ -155,7 +155,7 @@
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold">Véhicule</label>
+                <label class="form-label fw-semibold">Vehicule</label>
 
                 <select name="id_vehicule" class="form-select form-select-sm">
                     <option value="">Tous</option>
@@ -190,15 +190,15 @@
 
                 <select name="statut" class="form-select form-select-sm">
                     <option value="">Tous</option>
-                    <option value="PLANIFIE" <%= "PLANIFIE".equals(statutParam) ? "selected" : "" %>>Planifié</option>
+                    <option value="PLANIFIE" <%= "PLANIFIE".equals(statutParam) ? "selected" : "" %>>Planifie</option>
                     <option value="EN_COURS" <%= "EN_COURS".equals(statutParam) ? "selected" : "" %>>En cours</option>
-                    <option value="TERMINE" <%= "TERMINE".equals(statutParam) ? "selected" : "" %>>Terminé</option>
-                    <option value="ANNULE" <%= "ANNULE".equals(statutParam) ? "selected" : "" %>>Annulé</option>
+                    <option value="TERMINE" <%= "TERMINE".equals(statutParam) ? "selected" : "" %>>Termine</option>
+                    <option value="ANNULE" <%= "ANNULE".equals(statutParam) ? "selected" : "" %>>Annule</option>
                 </select>
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold">Date début</label>
+                <label class="form-label fw-semibold">Date debut</label>
 
                 <input
                     type="date"
@@ -224,7 +224,7 @@
                 </button>
 
                 <a href="?page=departs/liste-depart" class="btn btn-outline-secondary btn-sm">
-                    Réinitialiser
+                    Reinitialiser
                 </a>
             </div>
 
@@ -250,7 +250,7 @@
     <span class="text-muted small ms-auto">
         Total :
         <strong><%= total %></strong>
-        départ(s) trouvé(s)
+        depart(s) trouve(s)
     </span>
 
 </div>
@@ -263,7 +263,7 @@
                 <tr>
                     <th>#</th>
                     <th>Trajet</th>
-                    <th>Véhicule</th>
+                    <th>Vehicule</th>
                     <th>Chauffeur</th>
                     <th>Date</th>
                     <th>Heure</th>
@@ -281,7 +281,7 @@
                     <tr>
                         <td colspan="<%= isCaissier ? 7 : 8 %>" class="text-center text-muted py-5">
                             <i class="bi bi-inbox d-block fs-1 mb-2"></i>
-                            Aucun départ trouvé.
+                            Aucun depart trouve.
                         </td>
                     </tr>
 
@@ -337,7 +337,7 @@
                                 <td>
                                     <a href="?page=departs/details-depart&id=<%= d.getId_depart() %>"
                                        class="btn btn-sm btn-info"
-                                       title="Détails">
+                                       title="Details">
                                         <i class="bi bi-eye"></i>
                                     </a>
 
@@ -350,7 +350,7 @@
                                     <a href="../traitement/departs/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
                                        class="btn btn-sm btn-danger"
                                        title="Supprimer"
-                                       onclick="return confirm('Confirmer la suppression de ce départ ?')">
+                                       onclick="return confirm('Confirmer la suppression de ce depart ?')">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>

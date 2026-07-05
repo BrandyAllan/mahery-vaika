@@ -45,11 +45,11 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>
             <i class="bi bi-send"></i>
-            Départ #<%= d.getId_depart() %>
+            Depart #<%= d.getId_depart() %>
             <span class="badge <%= badgeClass %> fs-6 ms-2"><%= statut %></span>
         </h2>
         <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
-            <i class="bi bi-arrow-left"></i> Retour à la liste
+            <i class="bi bi-arrow-left"></i> Retour a la liste
         </a>
     </div>
 
@@ -62,7 +62,7 @@
             </h5>
             <div class="row mb-4">
                 <div class="col-md-5 text-center">
-                    <p class="text-muted small mb-1">VILLE DE DÉPART</p>
+                    <p class="text-muted small mb-1">VILLE DE DEPART</p>
                     <h4 class="fw-bold text-danger">
                         <i class="bi bi-geo-alt-fill"></i> <%= d.getVille_depart() %>
                     </h4>
@@ -71,7 +71,7 @@
                     <i class="bi bi-arrow-right fs-2 text-muted"></i>
                 </div>
                 <div class="col-md-5 text-center">
-                    <p class="text-muted small mb-1">VILLE D'ARRIVÉE</p>
+                    <p class="text-muted small mb-1">VILLE D'ARRIVEE</p>
                     <h4 class="fw-bold text-success">
                         <i class="bi bi-flag-fill"></i> <%= d.getVille_arrivee() %>
                     </h4>
@@ -90,7 +90,7 @@
                 <div class="col-md-4">
                     <div class="p-3 border rounded text-center">
                         <i class="bi bi-clock fs-4 text-info"></i>
-                        <p class="text-muted small mb-1 mt-1">DURÉE ESTIMÉE</p>
+                        <p class="text-muted small mb-1 mt-1">DUREE ESTIMEE</p>
                         <strong><%= d.getDuree_estimee() != null ? d.getDuree_estimee() : "N/A" %></strong>
                     </div>
                 </div>
@@ -109,13 +109,13 @@
             </h5>
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <p class="mb-1 text-muted">Date de départ</p>
+                    <p class="mb-1 text-muted">Date de depart</p>
                     <p class="fw-semibold fs-5">
                         <i class="bi bi-calendar3"></i> <%= d.getDate_depart() %>
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <p class="mb-1 text-muted">Heure de départ</p>
+                    <p class="mb-1 text-muted">Heure de depart</p>
                     <p class="fw-semibold fs-5">
                         <i class="bi bi-alarm"></i>
                         <%= d.getHeure_depart() != null ? d.getHeure_depart().toString().substring(0, 5) : "N/A" %>
@@ -130,13 +130,13 @@
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="p-3 border rounded">
-                        <p class="text-muted small mb-1">VÉHICULE</p>
+                        <p class="text-muted small mb-1">VEHICULE</p>
                         <p class="fw-semibold mb-1">
                             <i class="bi bi-car-front"></i> <%= d.getImmatriculation() %>
                         </p>
                         <p class="text-muted small mb-0">
                             <i class="bi bi-people"></i>
-                            Capacité : <%= d.getCapacite_vehicule() %> places
+                            Capacite : <%= d.getCapacite_vehicule() %> places
                         </p>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                     </a>
                     <a href="../traitement/departs/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
                        class="btn btn-danger"
-                       onclick="return confirm('Confirmer la suppression de ce départ ?')">
+                       onclick="return confirm('Confirmer la suppression de ce depart ?')">
                         <i class="bi bi-trash"></i> Supprimer
                     </a>
                 <% } else { %>
@@ -172,7 +172,7 @@
                     </button>
                     <small class="text-muted align-self-center ms-2">
                         <i class="bi bi-info-circle"></i>
-                        Le caissier ne peut pas modifier ni supprimer un départ.
+                        Le caissier ne peut pas modifier ni supprimer un depart.
                     </small>
                 <% } %>
             </div>

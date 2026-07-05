@@ -48,7 +48,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>
             <i class="bi bi-plus-circle"></i>
-            Ajouter un départ
+            Ajouter un depart
         </h2>
 
         <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
@@ -60,12 +60,12 @@
     <% if ("vehicule".equals(erreur)) { %>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-triangle"></i>
-            Ce véhicule est <strong>déjà affecté</strong> à un autre départ à cette date et heure.
+            Ce vehicule est <strong>deja affecte</strong> a un autre depart a cette date et heure.
         </div>
     <% } else if ("chauffeur".equals(erreur)) { %>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-triangle"></i>
-            Ce chauffeur est <strong>déjà affecté</strong> à un autre départ à cette date et heure.
+            Ce chauffeur est <strong>deja affecte</strong> a un autre depart a cette date et heure.
         </div>
     <% } %>
 
@@ -81,7 +81,7 @@
             </label>
 
             <select name="id_trajet" id="selectTrajet" class="form-select" required>
-                <option value="">-- Sélectionner un trajet --</option>
+                <option value="">-- Selectionner un trajet --</option>
 
                 <% for (Trajet t : lesTrajets) { %>
                     <option value="<%= t.getIdTrajet() %>"
@@ -98,7 +98,7 @@
                 <% } %>
             </select>
 
-            <span class="error-message">Veuillez sélectionner un trajet.</span>
+            <span class="error-message">Veuillez selectionner un trajet.</span>
         </div>
 
         <div class="col-md-6">
@@ -106,17 +106,17 @@
                 <div class="card-body py-2">
                     <h6 class="card-title text-primary mb-2">
                         <i class="bi bi-info-circle"></i>
-                        Détails du trajet
+                        Details du trajet
                     </h6>
 
                     <div class="row g-1 small">
                         <div class="col-6">
-                            <span class="text-muted">Départ :</span>
+                            <span class="text-muted">Depart :</span>
                             <strong id="infoVilleDepart">—</strong>
                         </div>
 
                         <div class="col-6">
-                            <span class="text-muted">Arrivée :</span>
+                            <span class="text-muted">Arrivee :</span>
                             <strong id="infoVilleArrivee">—</strong>
                         </div>
 
@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="col-6">
-                            <span class="text-muted">Durée :</span>
+                            <span class="text-muted">Duree :</span>
                             <strong id="infoDuree">—</strong>
                         </div>
 
@@ -141,21 +141,21 @@
 
         <div class="col-md-6">
             <label class="form-label fw-semibold">
-                Véhicule <span class="text-danger">*</span>
+                Vehicule <span class="text-danger">*</span>
             </label>
 
             <select name="id_vehicule" class="form-select" required>
-                <option value="">-- Sélectionner un véhicule --</option>
+                <option value="">-- Selectionner un vehicule --</option>
 
                 <% for (Vehicule v : lesVehicules) { %>
                     <option value="<%= v.getIdVehicule() %>">
                         <%= v.getImmatriculation() %>
-                        (capacité : <%= v.getCapacite() %> places)
+                        (capacite : <%= v.getCapacite() %> places)
                     </option>
                 <% } %>
             </select>
 
-            <span class="error-message">Veuillez sélectionner un véhicule.</span>
+            <span class="error-message">Veuillez selectionner un vehicule.</span>
         </div>
 
         <div class="col-md-6">
@@ -164,7 +164,7 @@
             </label>
 
             <select name="id_chauffeur" class="form-select" required>
-                <option value="">-- Sélectionner un chauffeur --</option>
+                <option value="">-- Selectionner un chauffeur --</option>
 
                 <% for (Chauffeur c : lesChauffeurs) { %>
                     <option value="<%= c.getIdChauffeur() %>">
@@ -174,12 +174,12 @@
                 <% } %>
             </select>
 
-            <span class="error-message">Veuillez sélectionner un chauffeur.</span>
+            <span class="error-message">Veuillez selectionner un chauffeur.</span>
         </div>
 
         <div class="col-md-4">
             <label class="form-label fw-semibold">
-                Date de départ <span class="text-danger">*</span>
+                Date de depart <span class="text-danger">*</span>
             </label>
 
             <input type="date"
@@ -193,7 +193,7 @@
 
         <div class="col-md-4">
             <label class="form-label fw-semibold">
-                Heure de départ <span class="text-danger">*</span>
+                Heure de depart <span class="text-danger">*</span>
             </label>
 
             <input type="time"
@@ -208,17 +208,17 @@
             <label class="form-label fw-semibold">Statut</label>
 
             <select name="statut" class="form-select">
-                <option value="PLANIFIE" selected>Planifié</option>
+                <option value="PLANIFIE" selected>Planifie</option>
                 <option value="EN_COURS">En cours</option>
-                <option value="TERMINE">Terminé</option>
-                <option value="ANNULE">Annulé</option>
+                <option value="TERMINE">Termine</option>
+                <option value="ANNULE">Annule</option>
             </select>
         </div>
 
         <div class="col-12 d-flex gap-2 mt-2">
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-check-lg"></i>
-                Enregistrer le départ
+                Enregistrer le depart
             </button>
 
             <a href="?page=departs/liste-depart" class="btn btn-outline-secondary">

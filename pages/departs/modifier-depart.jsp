@@ -49,7 +49,7 @@
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2><i class="bi bi-pencil-square"></i> Modifier le départ #<%= d.getId_depart() %></h2>
+        <h2><i class="bi bi-pencil-square"></i> Modifier le depart #<%= d.getId_depart() %></h2>
         <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
@@ -58,12 +58,12 @@
     <% if ("vehicule".equals(erreur)) { %>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-triangle"></i>
-            Ce véhicule est <strong>déjà affecté</strong> à un autre départ à cette date et heure.
+            Ce vehicule est <strong>deja affecte</strong> a un autre depart a cette date et heure.
         </div>
     <% } else if ("chauffeur".equals(erreur)) { %>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-triangle"></i>
-            Ce chauffeur est <strong>déjà affecté</strong> à un autre départ à cette date et heure.
+            Ce chauffeur est <strong>deja affecte</strong> a un autre depart a cette date et heure.
         </div>
     <% } else if ("general".equals(erreur)) { %>
         <div class="alert alert-danger">
@@ -81,7 +81,7 @@
         <div class="col-md-6">
             <label class="form-label fw-semibold">Trajet <span class="text-danger">*</span></label>
             <select name="id_trajet" id="selectTrajet" class="form-select" required>
-                <option value="">-- Sélectionner un trajet --</option>
+                <option value="">-- Selectionner un trajet --</option>
                 <% for (Trajet t : lesTrajets) { %>
                     <option value="<%= t.getIdTrajet() %>"
                             data-depart="<%= t.getVilleDepart().getNomVille() %>"
@@ -94,7 +94,7 @@
                     </option>
                 <% } %>
             </select>
-            <span class="error-message">Veuillez sélectionner un trajet.</span>
+            <span class="error-message">Veuillez selectionner un trajet.</span>
         </div>
 
         <!-- carte info trajet -->
@@ -102,15 +102,15 @@
             <div id="infoTrajet" class="card border-primary h-100">
                 <div class="card-body py-2">
                     <h6 class="card-title text-primary mb-2">
-                        <i class="bi bi-info-circle"></i> Détails du trajet
+                        <i class="bi bi-info-circle"></i> Details du trajet
                     </h6>
                     <div class="row g-1 small">
                         <div class="col-6">
-                            <span class="text-muted">Départ :</span>
+                            <span class="text-muted">Depart :</span>
                             <strong id="infoVilleDepart">—</strong>
                         </div>
                         <div class="col-6">
-                            <span class="text-muted">Arrivée :</span>
+                            <span class="text-muted">Arrivee :</span>
                             <strong id="infoVilleArrivee">—</strong>
                         </div>
                         <div class="col-6">
@@ -118,7 +118,7 @@
                             <strong id="infoDistance">—</strong> km
                         </div>
                         <div class="col-6">
-                            <span class="text-muted">Durée :</span>
+                            <span class="text-muted">Duree :</span>
                             <strong id="infoDuree">—</strong>
                         </div>
                         <div class="col-12">
@@ -132,25 +132,25 @@
 
         <!-- vehicule -->
         <div class="col-md-6">
-            <label class="form-label fw-semibold">Véhicule <span class="text-danger">*</span></label>
+            <label class="form-label fw-semibold">Vehicule <span class="text-danger">*</span></label>
             <select name="id_vehicule" class="form-select" required>
-                <option value="">-- Sélectionner un véhicule --</option>
+                <option value="">-- Selectionner un vehicule --</option>
                 <% for (Vehicule v : lesVehicules) { %>
                     <option value="<%= v.getIdVehicule() %>"
                             <%= v.getIdVehicule() == d.getId_vehicule() ? "selected" : "" %>>
                         <%= v.getImmatriculation() %>
-                        (capacité : <%= v.getCapacite() %> places)
+                        (capacite : <%= v.getCapacite() %> places)
                     </option>
                 <% } %>
             </select>
-            <span class="error-message">Veuillez sélectionner un véhicule.</span>
+            <span class="error-message">Veuillez selectionner un vehicule.</span>
         </div>
 
         <!-- chauffeur -->
         <div class="col-md-6">
             <label class="form-label fw-semibold">Chauffeur <span class="text-danger">*</span></label>
             <select name="id_chauffeur" class="form-select" required>
-                <option value="">-- Sélectionner un chauffeur --</option>
+                <option value="">-- Selectionner un chauffeur --</option>
                 <% for (Chauffeur c : lesChauffeurs) { %>
                     <option value="<%= c.getIdChauffeur() %>"
                             <%= c.getIdChauffeur() == d.getId_chauffeur() ? "selected" : "" %>>
@@ -158,12 +158,12 @@
                     </option>
                 <% } %>
             </select>
-            <span class="error-message">Veuillez sélectionner un chauffeur.</span>
+            <span class="error-message">Veuillez selectionner un chauffeur.</span>
         </div>
 
         <!-- date -->
         <div class="col-md-4">
-            <label class="form-label fw-semibold">Date de départ <span class="text-danger">*</span></label>
+            <label class="form-label fw-semibold">Date de depart <span class="text-danger">*</span></label>
             <input type="date" name="date_depart" class="form-control" required
                    value="<%= d.getDate_depart() %>">
             <span class="error-message">Veuillez saisir une date.</span>
@@ -171,7 +171,7 @@
 
         <!-- heure -->
         <div class="col-md-4">
-            <label class="form-label fw-semibold">Heure de départ <span class="text-danger">*</span></label>
+            <label class="form-label fw-semibold">Heure de depart <span class="text-danger">*</span></label>
             <input type="time" name="heure_depart" class="form-control" required
                    value="<%= d.getHeure_depart() != null ? d.getHeure_depart().toString().substring(0, 5) : "" %>">
             <span class="error-message">Veuillez saisir une heure.</span>
@@ -181,10 +181,10 @@
         <div class="col-md-4">
             <label class="form-label fw-semibold">Statut</label>
             <select name="statut" class="form-select">
-                <option value="PLANIFIE"  <%= "PLANIFIE".equals(d.getStatut())  ? "selected" : "" %>>Planifié</option>
+                <option value="PLANIFIE"  <%= "PLANIFIE".equals(d.getStatut())  ? "selected" : "" %>>Planifie</option>
                 <option value="EN_COURS"  <%= "EN_COURS".equals(d.getStatut())  ? "selected" : "" %>>En cours</option>
-                <option value="TERMINE"   <%= "TERMINE".equals(d.getStatut())   ? "selected" : "" %>>Terminé</option>
-                <option value="ANNULE"    <%= "ANNULE".equals(d.getStatut())    ? "selected" : "" %>>Annulé</option>
+                <option value="TERMINE"   <%= "TERMINE".equals(d.getStatut())   ? "selected" : "" %>>Termine</option>
+                <option value="ANNULE"    <%= "ANNULE".equals(d.getStatut())    ? "selected" : "" %>>Annule</option>
             </select>
         </div>
 
@@ -202,7 +202,7 @@
 </div>
 
 <script>
-// Afficher l'info trajet au chargement si déjà sélectionné
+// Afficher l'info trajet au chargement si deja selectionne
 window.addEventListener('DOMContentLoaded', function () {
     const sel = document.getElementById('selectTrajet');
     if (sel.value) updateInfoTrajet(sel.options[sel.selectedIndex]);
@@ -226,7 +226,7 @@ function updateInfoTrajet(opt) {
     infoBox.style.display = 'block';
 }
 
-// Validation côté client
+// Validation côte client
 document.addEventListener('DOMContentLoaded', function () {
     const form   = document.getElementById('formModif');
     const inputs = form.querySelectorAll('input[required], select[required]');
