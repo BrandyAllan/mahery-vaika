@@ -89,26 +89,24 @@
     String msg = request.getParameter("msg");
 %>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>
-        <i class="bi bi-send"></i>
-        Liste des departs
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-send text-primary"></i> Liste des départs
+        <small class="fs-6 text-muted ms-2">(<%= total %> résultat<%= total > 1 ? "s" : "" %>)</small>
     </h2>
-
-    <a href="?page=departs/gestion-departs" class="btn btn-secondary btn-sm">
-        <i class="bi bi-arrow-left"></i>
-        Retour
+    <a href="?page=departs/gestion-departs" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Retour
     </a>
 </div>
 
 <% if ("ajout_ok".equals(msg)) { %>
-    <div class="alert alert-success alert-dismissible fade show msg-banner">
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm">
         <i class="bi bi-check-circle"></i>
         Depart ajoute avec succès.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <% } else if ("modif_ok".equals(msg)) { %>
-    <div class="alert alert-success alert-dismissible fade show msg-banner">
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm">
         <i class="bi bi-check-circle"></i>
         Depart modifie avec succès.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -127,7 +125,7 @@
     </div>
 <% } %>
 
-<div class="card depart-panel mb-4">
+<div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
 
         <form method="get" class="row g-3 align-items-end">
@@ -255,10 +253,10 @@
 
 </div>
 
-<div class="card depart-panel mb-4">
+<div class="card border-0 shadow-sm mb-4">
     <div class="table-responsive">
 
-        <table class="table table-hover align-middle mb-0 depart-table">
+        <table class="table table-hover table-striped align-middle mb-0">
             <thead>
                 <tr>
                     <th>#</th>
@@ -327,7 +325,7 @@
                                     }
                                 %>
 
-                                <span class="badge <%= badgeClass %> depart-badge">
+                                <span class="badge <%= badgeClass %> rounded-pill px-3 py-2">
                                     <%= s %>
                                 </span>
                             </td>
@@ -335,22 +333,13 @@
                             <% if (!isCaissier) { %>
 
                                 <td>
-                                    <a href="?page=departs/details-depart&id=<%= d.getId_depart() %>"
-                                       class="btn btn-sm btn-info"
-                                       title="Details">
+                                    <a href="?page=departs/details-depart&id=<%= d.getId_depart() %>" class="btn btn-sm btn-outline-info rounded-circle me-1" title="Détails">
                                         <i class="bi bi-eye"></i>
                                     </a>
-
-                                    <a href="?page=departs/modifier-depart&id=<%= d.getId_depart() %>"
-                                       class="btn btn-sm btn-warning"
-                                       title="Modifier">
+                                    <a href="?page=departs/modifier-depart&id=<%= d.getId_depart() %>" class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Modifier">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-
-                                    <a href="../traitement/departs/supprimer-depart.jsp?id=<%= d.getId_depart() %>"
-                                       class="btn btn-sm btn-danger"
-                                       title="Supprimer"
-                                       onclick="return confirm('Confirmer la suppression de ce depart ?')">
+                                    <a href="../traitement/departs/supprimer-depart.jsp?id=<%= d.getId_depart() %>" class="btn btn-sm btn-outline-danger rounded-circle" title="Supprimer" onclick="return confirm('Confirmer la suppression de ce départ ?')">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>
