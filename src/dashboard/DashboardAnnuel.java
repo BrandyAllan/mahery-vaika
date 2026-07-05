@@ -108,4 +108,87 @@ public class DashboardAnnuel {
         }
         return new String[]{ "-", "0" };
     }
+
+    public static double[] getCaParMois(int annee) throws Exception {
+        double[] valeurs = new double[12];
+        String sql =
+            "SELECT EXTRACT(MONTH FROM d.date_depart)::INT AS mois, COALESCE(SUM(p.montant), 0) AS total " +
+            "FROM depart d " +
+            "JOIN reservation r ON r.id_depart = d.id_depart AND r.statut != 'ANNULEE' " +
+            "JOIN paiement p ON p.id_reservation = r.id_reservation AND p.statut = 'PAYE' " +
+            "WHERE EXTRACT(YEAR FROM d.date_depart) = ? " +
+            "GROUP BY mois";
+
+        try (Connection c = new Database().dbconnect();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, annee);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                valeurs[rs.getInt("mois") - 1] = rs.getDouble("total");
+            }
+        }
+        return valeurs;
+    }
+
+    public static double[] getBeneficeParMois(int annee) throws Exception {
+        double[] ca = getCaParMois(annee);
+        double[] depenses = new double[12];
+
+        String sql =
+            "SELECT EXTRACT(MONTH FROM date_depense)::INT AS mois, COALESCE(SUM(montant), 0) AS total " +
+            "FROM depense WHERE EXTRACT(YEAR FROM date_depense) = ? GROUP BY mois";
+
+        try (Connection c = new Database().dbconnect();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, annee);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                depenses[rs.getInt("mois") - 1] = rs.getDouble("total");
+            }
+        }
+
+        double[] benefice = new double[12];
+        for (int i = 0; i < 12; i++) {
+            benefice[i] = ca[i] - depenses[i];
+        }
+        return benefice;
+    }
+
+    public static Vector<Object[]> getTopDestinations(int annee, int limite) throws Exception {
+        Vector<Object[]> resultat = new Vector<>();
+
+        try (Connection c = new Database().dbconnect()) {
+            int total = 0;
+            String sqlTotal =
+                "SELECT COUNT(*) FROM reservation r JOIN depart d ON r.id_depart = d.id_depart " +
+                "WHERE r.statut != 'ANNULEE' AND EXTRACT(YEAR FROM d.date_depart) = ?";
+            try (PreparedStatement ps = c.prepareStatement(sqlTotal)) {
+                ps.setInt(1, annee);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) total = rs.getInt(1);
+            }
+
+            String sql =
+                "SELECT va.nom_ville AS destination, COUNT(*) AS nb " +
+                "FROM reservation r " +
+                "JOIN depart d ON r.id_depart = d.id_depart " +
+                "JOIN trajet t ON d.id_trajet = t.id_trajet " +
+                "JOIN ville va ON t.id_ville_arrivee = va.id_ville " +
+                "WHERE r.statut != 'ANNULEE' AND EXTRACT(YEAR FROM d.date_depart) = ? " +
+                "GROUP BY va.nom_ville " +
+                "ORDER BY nb DESC " +
+                "LIMIT ?";
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, annee);
+                ps.setInt(2, limite);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    double pourcentage = total > 0 ? (rs.getInt("nb") * 100.0 / total) : 0;
+                    resultat.add(new Object[]{ rs.getString("destination"), pourcentage });
+                }
+            }
+        }
+        return resultat;
+    }
+
 }

@@ -1,8 +1,37 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.Vector, dashboard.DashboardAnnuel" %>
+<%@ page import="java.util.Vector, java.util.Calendar, java.util.Locale, dashboard.DashboardAnnuel" %>
 
 <%
     Vector<DashboardAnnuel> historique = DashboardAnnuel.getHistorique();
+
+    int anneeCible = historique.isEmpty()
+        ? Calendar.getInstance().get(Calendar.YEAR)
+        : historique.get(0).getAnnee();
+
+    double[] caParMois = DashboardAnnuel.getCaParMois(anneeCible);
+    double[] beneficeParMois = DashboardAnnuel.getBeneficeParMois(anneeCible);
+    Vector<Object[]> topDestinations = DashboardAnnuel.getTopDestinations(anneeCible, 5);
+
+    StringBuilder caJson = new StringBuilder("[");
+    StringBuilder beneficeJson = new StringBuilder("[");
+    for (int i = 0; i < 12; i++) {
+        if (i > 0) { caJson.append(","); beneficeJson.append(","); }
+        caJson.append(String.format(Locale.US, "%.2f", caParMois[i]));
+        beneficeJson.append(String.format(Locale.US, "%.2f", beneficeParMois[i]));
+    }
+    caJson.append("]");
+    beneficeJson.append("]");
+
+    StringBuilder destLabelsJson = new StringBuilder("[");
+    StringBuilder destValuesJson = new StringBuilder("[");
+    for (int i = 0; i < topDestinations.size(); i++) {
+        if (i > 0) { destLabelsJson.append(","); destValuesJson.append(","); }
+        Object[] d = topDestinations.get(i);
+        destLabelsJson.append("\"").append(d[0]).append("\"");
+        destValuesJson.append(String.format(Locale.US, "%.1f", (double) d[1]));
+    }
+    destLabelsJson.append("]");
+    destValuesJson.append("]");
 %>
 
 <div class="dashboard-graph-page">
@@ -61,4 +90,9 @@
     </div>
 </div>
 
+<script>
+    window.caReelParMois = <%= caJson %>;
+    window.beneficeReelParMois = <%= beneficeJson %>;
+    window.destinationsReelles = { labels: <%= destLabelsJson %>, values: <%= destValuesJson %> };
+</script>
 <script src="../assets/js/dashboard-annee.js"></script>
