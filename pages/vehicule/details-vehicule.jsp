@@ -75,9 +75,14 @@
 
         <div class="actions-area">
             <% if (isAdmin) { %>
-                <a href="?page=modifier-vehicule?id=<%= v.getIdVehicule() %>" class="btn btn-primary">Modifier la fiche</a>
-            <% } else { %>
+                <a href="?page=modifier-vehicule&id=<%= v.getIdVehicule() %>" class="btn btn-primary">Modifier la fiche</a>
+                <a href="?page=entretien-vehicule&id=<%= v.getIdVehicule() %>" class="btn btn-dark flex-grow-1 fw-bold py-2" style="background-color: #000066;">
+                <i class="bi bi-tools"></i> Entretien
+                </a>
+                <% } else { %>
                 <button class="btn btn-secondary" disabled>Modification (Réservé Admin)</button>
+
+
             <% } %>
         </div>
     </div>
