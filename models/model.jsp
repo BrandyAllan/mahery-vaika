@@ -582,6 +582,5 @@
       class="astro-vvvwv3sm"
     ></script>
     <script src="../assets/js/sidebars.js" class="astro-vvvwv3sm"></script>
-    <script src="../assets/js/dashboard-graph.js"></script>
   </body>
 </html>

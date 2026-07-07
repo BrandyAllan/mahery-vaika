@@ -197,7 +197,7 @@
             <% } else {
                 for (Vehicule v : listeVehicules) { %>
                     <tr class="vehicule-row"
-                        data-href="model.jsp?page=vehicule/details-vehicule&id=<%= v.getIdVehicule() %>">
+                        data-href="?page=vehicule/details-vehicule&id=<%= v.getIdVehicule() %>">
                         <td><%= v.getImmatriculation() %></td>
                         <td><%= v.getMarque() %></td>
                         <td><%= v.getModele() %></td>
