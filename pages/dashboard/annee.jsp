@@ -49,7 +49,7 @@
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between">
             <h3 class="h6 mb-0 text-body-emphasis">Historique annuel</h3>
-            <span class="badge text-bg-secondary"><%= historique.size() %> année(s)</span>
+            <span class="badge text-bg-secondary"><%= historique.size() %> annee(s)</span>
         </div>
 
         <div class="card-body p-0">
@@ -57,11 +57,11 @@
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead>
                         <tr>
-                            <th class="ps-4">Année</th>
+                            <th class="ps-4">Annee</th>
                             <th>Destination phare</th>
                             <th>Chiffre d'affaires</th>
-                            <th>Bénéfice</th>
-                            <th class="pe-4">Réservations</th>
+                            <th>Benefice</th>
+                            <th class="pe-4">Reservations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,7 @@
 
                         <% if (historique.isEmpty()) { %>
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-4">Aucune donnée disponible.</td>
+                                <td colspan="5" class="text-center text-muted py-4">Aucune donnee disponible.</td>
                             </tr>
                         <% } %>
                     </tbody>
