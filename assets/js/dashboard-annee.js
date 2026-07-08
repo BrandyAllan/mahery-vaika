@@ -1,8 +1,9 @@
-const labelsAnnee = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+const labelsAnnee = window.labelsAnneesReelles || [];
 
 const destinationsAnnee = window.destinationsReelles || { labels: [], values: [] };
-const caAnnee = window.caReelParMois || new Array(12).fill(0);
-const beneficeAnnee = window.beneficeReelParMois || new Array(12).fill(0);
+const caAnnee = window.caReelParAnnee || [];
+const beneficeAnnee = window.beneficeReelParAnnee || [];
+
 function formatAr(value) {
     return value.toLocaleString("fr-FR") + " Ar";
 }
