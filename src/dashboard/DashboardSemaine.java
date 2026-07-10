@@ -72,18 +72,17 @@ public class DashboardSemaine {
     public static Vector<String> getDestinationsLabels(Date dateDebut, Date dateFin) throws Exception {
         Vector<String> labels = new Vector<>();
         
-        String sql = """
-            SELECT va.nom_ville 
-            FROM reservation r
-            JOIN depart d ON r.id_depart = d.id_depart
-            JOIN trajet t ON d.id_trajet = t.id_trajet
-            JOIN ville va ON t.id_ville_arrivee = va.id_ville
-            WHERE d.date_depart BETWEEN ? AND ?
-            AND r.statut != 'ANNULEE'
-            GROUP BY va.nom_ville
-            ORDER BY COUNT(*) DESC
-            LIMIT 5
-            """;
+        String sql = 
+            "SELECT va.nom_ville " + 
+            "FROM reservation r " +
+            "JOIN depart d ON r.id_depart = d.id_depart " +
+            "JOIN trajet t ON d.id_trajet = t.id_trajet " +
+            "JOIN ville va ON t.id_ville_arrivee = va.id_ville " +
+            "WHERE d.date_depart BETWEEN ? AND ? " +
+            "AND r.statut != 'ANNULEE' " +
+            "GROUP BY va.nom_ville " +
+            "ORDER BY COUNT(*) DESC " +
+            "LIMIT 5 ";
         
         try (Connection c = Database.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -101,18 +100,17 @@ public class DashboardSemaine {
     public static Vector<Double> getDestinationsValues(Date dateDebut, Date dateFin) throws Exception {
         Vector<Double> values = new Vector<>();
         
-        String sql = """
-            SELECT COUNT(*) as nombre
-            FROM reservation r
-            JOIN depart d ON r.id_depart = d.id_depart
-            JOIN trajet t ON d.id_trajet = t.id_trajet
-            JOIN ville va ON t.id_ville_arrivee = va.id_ville
-            WHERE d.date_depart BETWEEN ? AND ?
-            AND r.statut != 'ANNULEE'
-            GROUP BY va.nom_ville
-            ORDER BY nombre DESC
-            LIMIT 5
-            """;
+        String sql = 
+            "SELECT COUNT(*) as nombre" +
+            "FROM reservation r" +
+            "JOIN depart d ON r.id_depart = d.id_depart " +
+            "JOIN trajet t ON d.id_trajet = t.id_trajet " +
+            "JOIN ville va ON t.id_ville_arrivee = va.id_ville " +
+            "WHERE d.date_depart BETWEEN ? AND ? " +
+            "AND r.statut != 'ANNULEE' " +
+            "GROUP BY va.nom_ville " +
+            "ORDER BY nombre DESC " +
+            "LIMIT 5 " ;
         
         Vector<Integer> nombres = new Vector<>();
         int total = 0;
@@ -138,14 +136,13 @@ public class DashboardSemaine {
     }
 
     private static double getChiffreAffaires(Date debut, Date fin) throws Exception {
-        String sql = """
-            SELECT COALESCE(SUM(p.montant), 0)
-            FROM paiement p
-            JOIN reservation r ON p.id_reservation = r.id_reservation
-            JOIN depart d ON r.id_depart = d.id_depart
-            WHERE d.date_depart >= ? AND d.date_depart < ?
-            AND p.statut = 'PAYE'
-            """;
+        String sql = 
+            "SELECT COALESCE(SUM(p.montant), 0)" +
+            "FROM paiement p " +
+            "JOIN reservation r ON p.id_reservation = r.id_reservation " +
+            "JOIN depart d ON r.id_depart = d.id_depart " +
+            "WHERE d.date_depart >= ? AND d.date_depart < ? " +
+            "AND p.statut = 'PAYE' " ;
         
         try (Connection c = Database.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -160,11 +157,10 @@ public class DashboardSemaine {
     }
 
     private static double getDepenses(Date debut, Date fin) throws Exception {
-        String sql = """
-            SELECT COALESCE(SUM(montant), 0)
-            FROM depense
-            WHERE date_depense >= ? AND date_depense < ?
-            """;
+        String sql = 
+            "SELECT COALESCE(SUM(montant), 0) " +
+            "FROM depense " +
+            "WHERE date_depense >= ? AND date_depense < ? ";
         
         try (Connection c = Database.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
