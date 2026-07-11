@@ -108,6 +108,122 @@ main {
   overflow-y: auto;
 }
 
+
+.sidebar-flat {
+  --sidebar-bg: #0B1C30;
+  --sidebar-accent: #BA1A1A;
+  --sidebar-accent-soft: #BA1A1A33;
+  --sidebar-text: #E8EDF3;
+  --sidebar-text-muted: #9AA9BD;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  border: none;
+}
+
+.sidebar-flat .sidebar-logo img {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.nav-flat {
+  overflow-y: auto;
+}
+
+.nav-link-flat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  margin-bottom: 0.35rem;
+  border-radius: 0.5rem;
+  color: var(--sidebar-text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-link-flat i {
+  font-size: 1.05rem;
+  width: 1.2rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.nav-link-flat:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--sidebar-text);
+}
+
+.nav-link-flat.active {
+  background-color: var(--sidebar-accent);
+  color: #fff;
+}
+
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-user {
+  color: var(--sidebar-text);
+  gap: 0.6rem;
+}
+
+.sidebar-user i {
+  font-size: 2rem;
+  color: var(--sidebar-text-muted);
+}
+
+.sidebar-user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sidebar-text);
+}
+
+.sidebar-user-role {
+  font-size: 0.75rem;
+  color: var(--sidebar-text-muted);
+}
+
+.sidebar-logout {
+  color: var(--sidebar-text-muted);
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.sidebar-logout:hover {
+  color: var(--sidebar-accent);
+}
+
+.offcanvas.sidebar-flat .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 0.8;
+}
+
+.btn-brand {
+  background-color: #BA1A1A !important;
+  border-color: #BA1A1A !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.btn-brand:hover,
+.btn-brand:focus {
+  background-color: #9c1616 !important;
+  border-color: #9c1616 !important;
+  color: #fff !important;
+}
+
+.sidebar-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(186, 26, 26, 0.4);
+}
+
 .content-area {
   height: 100vh;
   overflow-y: auto;

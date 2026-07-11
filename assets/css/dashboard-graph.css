@@ -84,3 +84,50 @@ canvas {
         align-items: flex-start;
     }
 }
+
+.dashboard-subnav {
+    position: fixed;
+    top: 110px;
+    right: 28px;
+    z-index: 1030;
+    background-color: #0B1C30;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 6px 18px rgba(11, 28, 48, 0.25);
+}
+
+.dashboard-subnav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dashboard-subnav-link:last-child {
+    margin-bottom: 0;
+}
+
+.dashboard-subnav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.dashboard-subnav-link.active {
+    background-color: #BA1A1A;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .dashboard-subnav {
+        top: auto;
+        bottom: 90px;
+        right: 16px;
+    }
+}

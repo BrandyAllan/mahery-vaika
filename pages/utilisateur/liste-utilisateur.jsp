@@ -94,9 +94,14 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">Liste des utilisateurs</h2>
 
-    <a href="model.jsp?page=utilisateur/gestion-utilisateur" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Retour
-    </a>
+    <div class="d-flex gap-2">
+        <a href="model.jsp?page=utilisateur/ajout-utilisateur" class="btn btn-brand">
+            <i class="bi bi-plus-lg"></i> Ajouter un utilisateur
+        </a>
+        <a href="model.jsp?page=utilisateur/gestion-utilisateur" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
 </div>
 
 <form action="model.jsp" method="get" class="row g-3 mb-4 p-3 border rounded bg-light">

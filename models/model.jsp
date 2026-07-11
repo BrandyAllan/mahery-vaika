@@ -16,6 +16,9 @@
         return;
     }
     boolean isAdmin = user.voirsiadmin().equals("Admin");
+
+    // Détermine la section active du menu selon la page affichée
+    String activeSection = pageContent.contains("/") ? pageContent.substring(0, pageContent.indexOf("/")) : pageContent;
 %>
 
 <!doctype html>
@@ -125,7 +128,7 @@
               aria-controls="mobileSidebar">
         <i class="bi bi-list fs-4"></i>
       </button>
-      <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
+      <img src="../assets/images/logo-fond-sombre.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
       <span class="fs-5 mahery-vaika">Mahery Vaika</span>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -223,355 +226,159 @@
         </li>
       </ul>
     </div>
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
-      <div class="offcanvas-header d-flex align-items-center">
-          <img src="../assets/images/logo-simple.png"
-              alt="Logo"
-              width="42"
-              class="me-2">
-          <h5 class="offcanvas-title mahery-vaika flex-grow-1 mb-0">
-              Mahery Vaika
-          </h5>
+    <div class="offcanvas offcanvas-start sidebar-flat" tabindex="-1" id="mobileSidebar">
+      <div class="offcanvas-header d-flex align-items-center justify-content-between">
           <button type="button"
-                  class="btn-close"
+                  class="btn-close btn-close-white ms-auto"
                   data-bs-dismiss="offcanvas">
           </button>
       </div>
 
-      <div class="offcanvas-body">
-        <ul class="list-unstyled ps-0">
+      <div class="offcanvas-body d-flex flex-column p-0">
+        <div class="sidebar-logo text-center py-3">
+          <img src="../assets/images/logo-fond-sombre.png" alt="Logo" width="90">
+        </div>
+
+        <ul class="nav-flat list-unstyled flex-grow-1 px-3 mb-0">
           <% if(isAdmin) { %>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#dashboard-collapse"
-              aria-expanded="false"
-            >
-              Dashboard
-            </button>
-            <div class="collapse" id="dashboard-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="?page=dashboard/semaine"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Hebdomadaire</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=dashboard/mois"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Mensuel</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=dashboard/annee"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Annuel</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=depense/depense"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Dépenses</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=dashboard/jour" class="nav-link-flat<%= "dashboard".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+            </a>
           </li>
           <% } %>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#home-collapse"
-              aria-expanded="false"
-            >
-              Gestion
-            </button>
-            <div class="collapse show" id="home-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="?page=departs/gestion-departs"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Départs</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=trajet/gestion-trajet"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Trajets</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=vehicule/gestion-vehicule"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Vehicules</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=chauffeurs/gestion-chauffeur"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Chauffeurs</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=reservation/liste-reservation" class="nav-link-flat<%= "reservation".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-calendar2-check-fill"></i><span>Réservations</span>
+            </a>
           </li>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#orders-collapse"
-              aria-expanded="false"
-            >
-              Réservations
-            </button>
-            <div class="collapse" id="orders-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="?page=reservation/ajout-reservation"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Nouvelle réservations</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=reservation/liste-reservation"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Liste réservations</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=departs/gestion-departs" class="nav-link-flat<%= "departs".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-signpost-split-fill"></i><span>Départs</span>
+            </a>
           </li>
-          <li class="border-top my-3"></li>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#account-collapse"
-              aria-expanded="false"
-            >
-              Compte
-            </button>
-            <div class="collapse" id="account-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <% if(isAdmin) { %>
-                    <li>
-                    <a
-                        href="?page=utilisateur/ajout-utilisateur"
-                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                        >Nouveau...</a
-                    >
-                    </li>
-                    <li>
-                    <a
-                        href="?page=utilisateur/liste-utilisateur"
-                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                        >Liste des utilisateurs</a
-                    >
-                    </li>
-                <% } %>
-                <li>
-                  <a
-                    href="?page=utilisateur/details-utilisateur&id=<%= user.getId_utilisateur() %>"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Profil</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="../traitement/traitement-logout.jsp"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Déconnexion</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=trajet/gestion-trajet" class="nav-link-flat<%= "trajet".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-signpost-2-fill"></i><span>Trajets</span>
+            </a>
           </li>
+          <li>
+            <a href="?page=vehicule/gestion-vehicule" class="nav-link-flat<%= "vehicule".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-bus-front-fill"></i><span>Véhicules</span>
+            </a>
+          </li>
+          <li>
+            <a href="?page=chauffeurs/gestion-chauffeur" class="nav-link-flat<%= "chauffeurs".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-person-vcard-fill"></i><span>Chauffeurs</span>
+            </a>
+          </li>
+          <% if(isAdmin) { %>
+          <li>
+            <a href="?page=depense/depense" class="nav-link-flat<%= "depense".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-wallet2"></i><span>Finances</span>
+            </a>
+          </li>
+          <li>
+            <a href="?page=utilisateur/liste-utilisateur" class="nav-link-flat<%= "utilisateur".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-people-fill"></i><span>Utilisateurs</span>
+            </a>
+          </li>
+          <% } %>
         </ul>
+
+        <div class="px-3 mb-2">
+          <a href="?page=reservation/ajout-reservation" class="btn btn-brand sidebar-cta w-100">
+            <i class="bi bi-plus-lg"></i> Nouvelle Réservation
+          </a>
+        </div>
+
+        <div class="sidebar-footer d-flex align-items-center justify-content-between px-3 py-3">
+          <a href="?page=utilisateur/details-utilisateur&id=<%= user.getId_utilisateur() %>" class="d-flex align-items-center text-decoration-none sidebar-user">
+            <i class="bi bi-person-circle"></i>
+            <span class="lh-sm">
+              <span class="d-block sidebar-user-name"><%= user.getPrenom() %></span>
+              <span class="d-block sidebar-user-role"><%= user.getNom_role() %></span>
+            </span>
+          </a>
+          <a href="../traitement/traitement-logout.jsp" class="sidebar-logout" title="Déconnexion">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+        </div>
       </div>
     </div>
     <main class="d-flex app-layout">
-      <div class="flex-shrink-0 p-3 sidebar-desktop">
-        <a
-          href="?page=dashboard/jour"
-          class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"
-        >
-          <img src="../assets/images/logo-simple.png" alt="Logo" width="50" class="bi pe-none me-2" aria-hidden="true">
-          <span class="fs-5 mahery-vaika">Mahery Vaika</span>
-        </a>
-        <ul class="list-unstyled ps-0">
+      <div class="flex-shrink-0 sidebar-desktop sidebar-flat d-flex flex-column">
+        <div class="sidebar-logo text-center py-4">
+          <a href="?page=dashboard/jour">
+            <img src="../assets/images/logo-fond-sombre.png" alt="Logo" width="90">
+          </a>
+        </div>
+
+        <ul class="nav-flat list-unstyled flex-grow-1 px-3 mb-0">
           <% if(isAdmin) { %>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#dashboard-collapse"
-              aria-expanded="false"
-            >
-              Dashboard
-            </button>
-            <div class="collapse" id="dashboard-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="?page=dashboard/semaine"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Hebdomadaire</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=dashboard/mois"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Mensuel</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=dashboard/annee"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Annuel</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=depense/depense"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Dépenses</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=dashboard/jour" class="nav-link-flat<%= "dashboard".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+            </a>
           </li>
           <% } %>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#home-collapse"
-              aria-expanded="false"
-            >
-              Gestion
-            </button>
-            <div class="collapse show" id="home-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="?page=departs/gestion-departs"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Départs</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=trajet/gestion-trajet"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Trajets</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=vehicule/gestion-vehicule"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Vehicules</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=chauffeurs/gestion-chauffeur"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Chauffeurs</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=reservation/liste-reservation" class="nav-link-flat<%= "reservation".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-calendar2-check-fill"></i><span>Réservations</span>
+            </a>
           </li>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#orders-collapse"
-              aria-expanded="false"
-            >
-              Réservations
-            </button>
-            <div class="collapse" id="orders-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="?page=reservation/ajout-reservation"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Nouvelle réservations</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="?page=reservation/liste-reservation"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Liste réservations</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=departs/gestion-departs" class="nav-link-flat<%= "departs".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-signpost-split-fill"></i><span>Départs</span>
+            </a>
           </li>
-          <li class="border-top my-3"></li>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#account-collapse"
-              aria-expanded="false"
-            >
-              Compte
-            </button>
-            <div class="collapse" id="account-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <% if(isAdmin) { %>
-                    <li>
-                    <a
-                        href="?page=utilisateur/ajout-utilisateur"
-                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                        >Nouveau...</a
-                    >
-                    </li>
-                    <li>
-                    <a
-                        href="?page=utilisateur/liste-utilisateur"
-                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                        >Liste des utilisateurs</a
-                    >
-                    </li>
-                <% } %>
-                <li>
-                  <a
-                    href="?page=utilisateur/details-utilisateur&id=<%= user.getId_utilisateur() %>"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Profil</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="../traitement/traitement-logout.jsp"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Déconnexion</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <li>
+            <a href="?page=trajet/gestion-trajet" class="nav-link-flat<%= "trajet".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-signpost-2-fill"></i><span>Trajets</span>
+            </a>
           </li>
+          <li>
+            <a href="?page=vehicule/gestion-vehicule" class="nav-link-flat<%= "vehicule".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-bus-front-fill"></i><span>Véhicules</span>
+            </a>
+          </li>
+          <li>
+            <a href="?page=chauffeurs/gestion-chauffeur" class="nav-link-flat<%= "chauffeurs".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-person-vcard-fill"></i><span>Chauffeurs</span>
+            </a>
+          </li>
+          <% if(isAdmin) { %>
+          <li>
+            <a href="?page=depense/depense" class="nav-link-flat<%= "depense".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-wallet2"></i><span>Finances</span>
+            </a>
+          </li>
+          <li>
+            <a href="?page=utilisateur/liste-utilisateur" class="nav-link-flat<%= "utilisateur".equals(activeSection) ? " active" : "" %>">
+              <i class="bi bi-people-fill"></i><span>Utilisateurs</span>
+            </a>
+          </li>
+          <% } %>
         </ul>
+
+        <div class="px-3 mb-2">
+          <a href="?page=reservation/ajout-reservation" class="btn btn-brand sidebar-cta w-100">
+            <i class="bi bi-plus-lg"></i> Nouvelle Réservation
+          </a>
+        </div>
+
+        <div class="sidebar-footer d-flex align-items-center justify-content-between px-3 py-3">
+          <a href="?page=utilisateur/details-utilisateur&id=<%= user.getId_utilisateur() %>" class="d-flex align-items-center text-decoration-none sidebar-user">
+            <i class="bi bi-person-circle"></i>
+            <span class="lh-sm">
+              <span class="d-block sidebar-user-name"><%= user.getPrenom() %></span>
+              <span class="d-block sidebar-user-role"><%= user.getNom_role() %></span>
+            </span>
+          </a>
+          <a href="../traitement/traitement-logout.jsp" class="sidebar-logout" title="Déconnexion">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+        </div>
       </div>
       <div class="flex-grow-1 p-4 content-area">
         <jsp:include page="<%= fileToInclude %>" />
