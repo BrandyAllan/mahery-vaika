@@ -231,7 +231,7 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <a href="traitement/annuler-reservation.jsp?id=<%= r.getId_reservation() %>"
+                                        <a href="../traitement/reservation/annuler-reservation.jsp?id=<%= r.getId_reservation() %>"
                                            class="btn btn-sm btn-danger"
                                            title="Annuler"
                                            onclick="return confirm('Confirmer l\'annulation de la réservation <%= r.getNumero_reservation() %> ?')">

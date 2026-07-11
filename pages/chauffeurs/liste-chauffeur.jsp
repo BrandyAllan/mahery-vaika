@@ -54,7 +54,7 @@
 <div class="container mt-4">
 
     <a href="?page=chauffeurs/gestion-chauffeur" class="btn btn-sm btn-secondary mb-3">
-        <i class="bi bi-arrow-left"></i> Tableau de bord
+        <i class="bi bi-arrow-left"></i> Retour
     </a>
     <h2 class="mb-3"><i class="bi bi-person-badge"></i> Liste des Chauffeurs</h2>
 

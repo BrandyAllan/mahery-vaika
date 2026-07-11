@@ -40,7 +40,7 @@
     <h2>Details de l'utilisateur</h2>
 
     <div class="mb-3">
-        <a href="liste-utilisateur.jsp" class="btn btn-secondary">
+        <a href="?page=dashboard/jour" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
