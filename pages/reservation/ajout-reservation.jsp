@@ -6,9 +6,9 @@
         response.sendRedirect("../index.jsp");
         return;
     }
-    
+
     Vector<Reservation> departs = Reservation.getAllDeparts();
-    
+
     String erreur = request.getParameter("erreur");
 %>
 
@@ -23,17 +23,23 @@
 </div>
 
 <% if ("params".equals(erreur)) { %>
-<div class="alert alert-danger">Paramètres invalides. Merci de recommencer.</div>
+    <div class="alert alert-danger">Paramètres invalides. Merci de recommencer.</div>
 <% } else if ("nom".equals(erreur)) { %>
-<div class="alert alert-danger">Le nom du passager est obligatoire.</div>
+    <div class="alert alert-danger">Le nom du passager est obligatoire.</div>
 <% } else if ("depart".equals(erreur)) { %>
-<div class="alert alert-danger">Le départ sélectionné est introuvable.</div>
+    <div class="alert alert-danger">Le départ sélectionné est introuvable.</div>
 <% } else if ("sieges".equals(erreur)) { %>
-<div class="alert alert-danger">Merci de sélectionner au moins un siège.</div>
+    <div class="alert alert-danger">Merci de sélectionner au moins un siège.</div>
 <% } else if ("siege_pris".equals(erreur)) { %>
-<div class="alert alert-danger">Un ou plusieurs sièges choisis viennent d'être réservés par quelqu'un d'autre. Merci de recommencer la sélection.</div>
+    <div class="alert alert-danger">Un ou plusieurs sièges choisis viennent d'être réservés par quelqu'un d'autre. Merci de recommencer la sélection.</div>
 <% } else if ("db".equals(erreur)) { %>
-<div class="alert alert-danger">Une erreur est survenue lors de l'enregistrement. Merci de réessayer.</div>
+    <div class="alert alert-danger">
+        Une erreur est survenue lors de l'enregistrement. Merci de réessayer.
+        <% String debug = request.getParameter("debug");
+           if (debug != null && !debug.isEmpty()) { %>
+            <br><small class="text-muted">Détail technique (à retirer en prod) : <%= debug %></small>
+        <% } %>
+    </div>
 <% } %>
 
 <ul class="wizard-steps">
@@ -63,16 +69,16 @@
                         <option value="">-- Choisir un départ --</option>
 
                         <% for (Reservation d : departs) { %>
-                        <option value="<%= d.getId_depart() %>"
-                            data-trajet="<%= d.getId_trajet() %>"
-                            data-date="<%= d.getDate_depart() %>"
-                            data-heure="<%= d.getHeure_depart() %>"
-                            data-ville-depart="<%= d.getVille_depart() %>"
-                            data-ville-arrivee="<%= d.getVille_arrivee() %>"
-                            data-tarif="<%= d.getTarif_base() %>">
-                            <%= d.getVille_depart() %> → <%= d.getVille_arrivee() %> |
-                            <%= d.getDate_depart() %> à <%= d.getHeure_depart() %>
-                        </option>
+                            <option value="<%= d.getId_depart() %>"
+                                    data-trajet="<%= d.getId_trajet() %>"
+                                    data-date="<%= d.getDate_depart() %>"
+                                    data-heure="<%= d.getHeure_depart() %>"
+                                    data-ville-depart="<%= d.getVille_depart() %>"
+                                    data-ville-arrivee="<%= d.getVille_arrivee() %>"
+                                    data-tarif="<%= d.getTarif_base() %>">
+                                <%= d.getVille_depart() %> → <%= d.getVille_arrivee() %> |
+                                <%= d.getDate_depart() %> à <%= d.getHeure_depart() %>
+                            </option>
                         <% } %>
                     </select>
                 </div>
@@ -116,12 +122,9 @@
                         <div class="input-group">
                             <span class="input-group-text">+261</span>
                             <input type="text" name="telephonePassager" class="form-control"
-                            placeholder="321234567" pattern="[0-9]{9}" maxlength="9">
+                                   placeholder="321234567" pattern="[0-9]{9}" maxlength="9">
                         </div>
                     </div>
-                </div>
-                <div class="form-text mt-2">
-                    Ces informations seront utilisées pour toutes les places réservées dans ce groupe.
                 </div>
             </div>
         </div>
@@ -148,6 +151,7 @@
                     <p class="text-muted">Chargement des sièges...</p>
                 </div>
 
+
                 <div class="mt-3">
                     <strong>Places choisies :</strong>
                     <span id="siegesChoisis" class="ms-2 text-muted">aucune</span>
@@ -165,7 +169,7 @@
         </div>
     </div>
 
-    <!-- ETAPE 4 : PAIEMENT -->
+     <!-- ETAPE 4 : PAIEMENT -->
     <div class="wizard-step-pane" data-pane="4">
         <div class="card mb-3">
             <div class="card-header">
@@ -212,7 +216,6 @@
                     <div class="col-md-6">
                         <label class="form-label">Montant à payer (Ar) *</label>
                         <input type="number" step="0.01" min="0" class="form-control" id="montantAffiche">
-                        <div class="form-text">Pré-rempli selon le tarif, modifiable si besoin (remise, arrondi...).</div>
                     </div>
                 </div>
             </div>
@@ -230,3 +233,4 @@
 </form>
 
 <script src="../assets/js/reservation-ajout.js"></script>
+<script src="../assets/js/payment-cards.js"></script>

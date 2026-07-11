@@ -172,6 +172,7 @@
         response.sendRedirect("../../models/model.jsp?page=reservation/facture&ids=" + idsCsv);
     } catch (Exception e) {
         e.printStackTrace();
-        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=db");
+        String msgDebug = java.net.URLEncoder.encode(e.getClass().getSimpleName() + " : " + e.getMessage(), "UTF-8");
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=db&debug=" + msgDebug);
     }
 %>
