@@ -30,7 +30,7 @@
     <h2>Ajouter un utilisateur</h2>
 
     <div class="mb-3">
-        <a href="gestion-utilisateur.jsp" class="btn btn-secondary">
+        <a href="?page=utilisateur/liste-utilisateur" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>

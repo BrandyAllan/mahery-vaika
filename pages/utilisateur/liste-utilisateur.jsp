@@ -92,68 +92,75 @@
 %>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Liste des utilisateurs</h2>
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-people text-primary"></i> Liste des Utilisateurs
+        <small class="fs-6 text-muted ms-2">(<%= total %> résultat<%= total > 1 ? "s" : "" %>)</small>
+    </h2>
 
     <div class="d-flex gap-2">
-        <a href="model.jsp?page=utilisateur/ajout-utilisateur" class="btn btn-brand">
+        <a href="model.jsp?page=utilisateur/ajout-utilisateur" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-lg"></i> Ajouter un utilisateur
         </a>
-        <a href="model.jsp?page=utilisateur/gestion-utilisateur" class="btn btn-secondary">
+        <a href="model.jsp?page=utilisateur/gestion-utilisateur" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
 </div>
 
-<form action="model.jsp" method="get" class="row g-3 mb-4 p-3 border rounded bg-light">
-    <input type="hidden" name="page" value="utilisateur/liste-utilisateur">
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form action="model.jsp" method="get" class="row g-3 align-items-end">
+            <input type="hidden" name="page" value="utilisateur/liste-utilisateur">
 
-    <div class="col-12 col-sm-6 col-md-3">
-        <label class="form-label">Nom</label>
-        <input type="text" name="nom" class="form-control" value="<%= nom != null ? nom : "" %>">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Nom</label>
+                <input type="text" name="nom" class="form-control form-control-sm" value="<%= nom != null ? nom : "" %>">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Rôle</label>
+                <select name="role" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+
+                    <% for (Utilisateur r : roles) { %>
+                        <option value="<%= r.getId_role() %>"
+                            <%= selectedRole.equals(String.valueOf(r.getId_role())) ? "selected" : "" %>>
+                            <%= r.getNom_role() %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Statut</label>
+                <select name="statut" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <option value="true" <%= "true".equals(statutParam) ? "selected" : "" %>>Actif</option>
+                    <option value="false" <%= "false".equals(statutParam) ? "selected" : "" %>>Inactif</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Date début</label>
+                <input type="date" name="dateDebut" class="form-control form-control-sm" value="<%= dateDebut != null ? dateDebut : "" %>">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Date fin</label>
+                <input type="date" name="dateFin" class="form-control form-control-sm" value="<%= dateFin != null ? dateFin : "" %>">
+            </div>
+
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div class="col-12 col-sm-6 col-md-2">
-        <label class="form-label">Rôle</label>
-        <select name="role" class="form-select">
-            <option value="">Tous</option>
-
-            <% for (Utilisateur r : roles) { %>
-                <option value="<%= r.getId_role() %>"
-                    <%= selectedRole.equals(String.valueOf(r.getId_role())) ? "selected" : "" %>>
-                    <%= r.getNom_role() %>
-                </option>
-            <% } %>
-        </select>
-    </div>
-
-    <div class="col-12 col-sm-6 col-md-2">
-        <label class="form-label">Statut</label>
-        <select name="statut" class="form-select">
-            <option value="">Tous</option>
-            <option value="true" <%= "true".equals(statutParam) ? "selected" : "" %>>Actif</option>
-            <option value="false" <%= "false".equals(statutParam) ? "selected" : "" %>>Inactif</option>
-        </select>
-    </div>
-
-    <div class="col-12 col-sm-6 col-md-2">
-        <label class="form-label">Date début</label>
-        <input type="date" name="dateDebut" class="form-control" value="<%= dateDebut != null ? dateDebut : "" %>">
-    </div>
-
-    <div class="col-12 col-sm-6 col-md-2">
-        <label class="form-label">Date fin</label>
-        <input type="date" name="dateFin" class="form-control" value="<%= dateFin != null ? dateFin : "" %>">
-    </div>
-
-    <div class="col-12 col-md-1 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-search"></i>
-        </button>
-    </div>
-</form>
-
-<div class="mb-3">
-    <span>Trier par nom : </span>
+<div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <span class="text-muted small fw-semibold">Trier par nom :</span>
 
     <a href="<%= baseUrl.replace("&tri=" + tri, "&tri=ASC") %>"
        class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">
@@ -165,79 +172,85 @@
         Z → A
     </a>
 
-    <a href="model.jsp?page=utilisateur/liste-utilisateur" class="btn btn-sm btn-outline-danger">
+    <a href="model.jsp?page=utilisateur/liste-utilisateur" class="btn btn-sm btn-outline-danger ms-auto">
         Réinitialiser
     </a>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Rôle</th>
-                <th>Email</th>
-                <th>Statut</th>
-                <% if (isAdmin) { %>
-                    <th>Actions</th>
-                <% } %>
-            </tr>
-        </thead>
-
-        <tbody>
-            <% if (liste.isEmpty()) { %>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="table-light">
                 <tr>
-                    <td colspan="<%= isAdmin ? 7 : 6 %>" class="text-center py-4">
-                        Aucun utilisateur trouvé.
-                    </td>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Rôle</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <% if (isAdmin) { %>
+                        <th class="text-end">Actions</th>
+                    <% } %>
                 </tr>
-            <% } else {
-                for (Utilisateur u : liste) { %>
+            </thead>
+
+            <tbody>
+                <% if (liste.isEmpty()) { %>
                     <tr>
-                        <td><%= u.getId_utilisateur() %></td>
-                        <td><%= u.getNom() %></td>
-                        <td><%= u.getPrenom() != null ? u.getPrenom() : "" %></td>
-                        <td><%= u.getNom_role() %></td>
-                        <td><%= u.getEmail() != null ? u.getEmail() : "" %></td>
-
-                        <td>
-                            <span class="badge <%= u.isActif() ? "bg-success" : "bg-danger" %>">
-                                <%= u.isActif() ? "Actif" : "Inactif" %>
-                            </span>
+                        <td colspan="<%= isAdmin ? 7 : 6 %>" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox d-block fs-1 mb-2"></i>
+                            Aucun utilisateur trouvé.
                         </td>
-
-                        <% if (isAdmin) { %>
-                            <td>
-                                <div class="d-flex flex-wrap gap-1">
-                                    <a href="?page=utilisateur/details-utilisateur&id=<%= u.getId_utilisateur() %>"
-                                       class="btn btn-sm btn-info">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-
-                                    <a href="?page=utilisateur/modifier-utilisateur&id=<%= u.getId_utilisateur() %>"
-                                       class="btn btn-sm btn-warning">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-
-                                    <a href="../traitement/utilisateur/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>"
-                                       class="btn btn-sm btn-danger"
-                                       onclick="return confirm('Confirmer la désactivation/réactivation ?')">
-                                        <i class="bi <%= u.isActif() ? "bi-person-x" : "bi-person-check" %>"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        <% } %>
                     </tr>
-            <% }} %>
-        </tbody>
-    </table>
+                <% } else {
+                    for (Utilisateur u : liste) { %>
+                        <tr>
+                            <td class="fw-semibold text-muted">#<%= u.getId_utilisateur() %></td>
+                            <td class="fw-bold"><%= u.getNom() %></td>
+                            <td><%= u.getPrenom() != null ? u.getPrenom() : "" %></td>
+                            <td>
+                                <span class="badge bg-info text-dark rounded-pill px-3 py-1"><%= u.getNom_role() %></span>
+                            </td>
+                            <td><a href="mailto:<%= u.getEmail() != null ? u.getEmail() : "" %>" class="text-decoration-none"><%= u.getEmail() != null ? u.getEmail() : "" %></a></td>
+
+                            <td>
+                                <span class="badge <%= u.isActif() ? "bg-success" : "bg-danger" %> rounded-pill px-3 py-2">
+                                    <%= u.isActif() ? "Actif" : "Inactif" %>
+                                </span>
+                            </td>
+
+                            <% if (isAdmin) { %>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a href="?page=utilisateur/details-utilisateur&id=<%= u.getId_utilisateur() %>"
+                                           class="btn btn-sm btn-outline-info rounded-circle" title="Détails">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a href="?page=utilisateur/modifier-utilisateur&id=<%= u.getId_utilisateur() %>"
+                                           class="btn btn-sm btn-outline-warning rounded-circle" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <a href="../traitement/utilisateur/desactiver-utilisateur.jsp?id=<%= u.getId_utilisateur() %>&actif=<%= !u.isActif() %>"
+                                           class="btn btn-sm <%= u.isActif() ? "btn-outline-danger" : "btn-outline-success" %> rounded-circle"
+                                           title="<%= u.isActif() ? "Désactiver" : "Réactiver" %>"
+                                           onclick="return confirm('Confirmer la <%= u.isActif() ? "désactivation" : "réactivation" %> ?')">
+                                            <i class="bi <%= u.isActif() ? "bi-person-x" : "bi-person-check" %>"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            <% } %>
+                        </tr>
+                <% }} %>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <% if (nbPages > 1) { %>
     <nav>
-        <ul class="pagination flex-wrap">
+        <ul class="pagination pagination-sm">
             <% for (int p = 1; p <= nbPages; p++) { %>
                 <li class="page-item <%= p == pageCourante ? "active" : "" %>">
                     <a class="page-link" href="<%= baseUrl %>&pageNum=<%= p %>">

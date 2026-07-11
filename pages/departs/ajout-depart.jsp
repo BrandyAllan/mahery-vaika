@@ -43,191 +43,115 @@
     }
 </style>
 
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>
-            <i class="bi bi-plus-circle"></i>
-            Ajouter un depart
-        </h2>
-
-        <a href="?page=departs/liste-depart" class="btn btn-secondary btn-sm">
-            <i class="bi bi-arrow-left"></i>
-            Retour
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <a href="?page=departs/liste-depart" class="btn btn-sm btn-light text-muted border-0 shadow-sm mb-2 hover-shadow">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
         </a>
+        <h2 class="fw-bold mb-0" style="color: #2c3e50;">
+            <i class="bi bi-plus-circle text-primary me-2"></i> Ajouter un départ
+        </h2>
     </div>
+</div>
 
-    <% if ("vehicule".equals(erreur)) { %>
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-triangle"></i>
-            Ce vehicule est <strong>deja affecte</strong> a un autre depart a cette date et heure.
-        </div>
-    <% } else if ("chauffeur".equals(erreur)) { %>
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-triangle"></i>
-            Ce chauffeur est <strong>deja affecte</strong> a un autre depart a cette date et heure.
-        </div>
-    <% } %>
+<% if ("vehicule".equals(erreur)) { %>
+    <div class="alert alert-danger border-0 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-2"></i>Ce véhicule est <strong>déjà affecté</strong> à un autre départ à cette date et heure.</div>
+<% } else if ("chauffeur".equals(erreur)) { %>
+    <div class="alert alert-danger border-0 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-2"></i>Ce chauffeur est <strong>déjà affecté</strong> à un autre départ à cette date et heure.</div>
+<% } %>
 
-    <form action="../traitement/departs/ajouter-depart.jsp"
-          method="post"
-          class="row g-3"
-          id="formAjout"
-          novalidate>
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-5">
+        <form action="../traitement/departs/ajouter-depart.jsp" method="post" class="row g-4" id="formAjout" novalidate>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Trajet <span class="text-danger">*</span></label>
+                <select name="id_trajet" id="selectTrajet" class="form-select form-select-lg bg-light border-0" required>
+                    <option value="">-- Sélectionner un trajet --</option>
+                    <% for (Trajet t : lesTrajets) { %>
+                        <option value="<%= t.getIdTrajet() %>"
+                                data-depart="<%= t.getVilleDepart() != null ? t.getVilleDepart().getNomVille() : "" %>"
+                                data-arrivee="<%= t.getVilleArrivee() != null ? t.getVilleArrivee().getNomVille() : "" %>"
+                                data-tarif="<%= t.getTarifBase() %>"
+                                data-duree="<%= t.getDureeEstimee() %>"
+                                data-distance="<%= t.getDistanceKm() %>">
+                            <%= t.getVilleDepart() != null ? t.getVilleDepart().getNomVille() : "" %> → <%= t.getVilleArrivee() != null ? t.getVilleArrivee().getNomVille() : "" %>
+                        </option>
+                    <% } %>
+                </select>
+                <span class="error-message">Veuillez sélectionner un trajet.</span>
+            </div>
 
-        <div class="col-md-6">
-            <label class="form-label fw-semibold">
-                Trajet <span class="text-danger">*</span>
-            </label>
-
-            <select name="id_trajet" id="selectTrajet" class="form-select" required>
-                <option value="">-- Selectionner un trajet --</option>
-
-                <% for (Trajet t : lesTrajets) { %>
-                    <option value="<%= t.getIdTrajet() %>"
-                            data-depart="<%= t.getVilleDepart() != null ? t.getVilleDepart().getNomVille() : "" %>"
-                            data-arrivee="<%= t.getVilleArrivee() != null ? t.getVilleArrivee().getNomVille() : "" %>"
-                            data-tarif="<%= t.getTarifBase() %>"
-                            data-duree="<%= t.getDureeEstimee() %>"
-                            data-distance="<%= t.getDistanceKm() %>">
-
-                        <%= t.getVilleDepart() != null ? t.getVilleDepart().getNomVille() : "" %>
-                        →
-                        <%= t.getVilleArrivee() != null ? t.getVilleArrivee().getNomVille() : "" %>
-                    </option>
-                <% } %>
-            </select>
-
-            <span class="error-message">Veuillez selectionner un trajet.</span>
-        </div>
-
-        <div class="col-md-6">
-            <div id="infoTrajet" class="card border-primary h-100">
-                <div class="card-body py-2">
-                    <h6 class="card-title text-primary mb-2">
-                        <i class="bi bi-info-circle"></i>
-                        Details du trajet
-                    </h6>
-
-                    <div class="row g-1 small">
-                        <div class="col-6">
-                            <span class="text-muted">Depart :</span>
-                            <strong id="infoVilleDepart">—</strong>
-                        </div>
-
-                        <div class="col-6">
-                            <span class="text-muted">Arrivee :</span>
-                            <strong id="infoVilleArrivee">—</strong>
-                        </div>
-
-                        <div class="col-6">
-                            <span class="text-muted">Distance :</span>
-                            <strong id="infoDistance">—</strong> km
-                        </div>
-
-                        <div class="col-6">
-                            <span class="text-muted">Duree :</span>
-                            <strong id="infoDuree">—</strong>
-                        </div>
-
-                        <div class="col-12">
-                            <span class="text-muted">Tarif de base :</span>
-                            <strong id="infoTarif" class="text-success">—</strong> Ar
+            <div class="col-md-6">
+                <div id="infoTrajet" class="card border-0 bg-light rounded-4 h-100">
+                    <div class="card-body p-4">
+                        <h6 class="card-title text-primary fw-bold mb-3"><i class="bi bi-info-circle-fill me-2"></i>Détails du trajet</h6>
+                        <div class="row g-2 small">
+                            <div class="col-6"><span class="text-muted">Départ :</span> <strong id="infoVilleDepart" class="text-dark">—</strong></div>
+                            <div class="col-6"><span class="text-muted">Arrivée :</span> <strong id="infoVilleArrivee" class="text-dark">—</strong></div>
+                            <div class="col-6"><span class="text-muted">Distance :</span> <strong id="infoDistance" class="text-dark">—</strong> km</div>
+                            <div class="col-6"><span class="text-muted">Durée :</span> <strong id="infoDuree" class="text-dark">—</strong></div>
+                            <div class="col-12 mt-2"><span class="text-muted">Tarif de base :</span> <strong id="infoTarif" class="text-success fs-5">—</strong> Ar</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <label class="form-label fw-semibold">
-                Vehicule <span class="text-danger">*</span>
-            </label>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Véhicule <span class="text-danger">*</span></label>
+                <select name="id_vehicule" class="form-select form-select-lg bg-light border-0" required>
+                    <option value="">-- Sélectionner un véhicule --</option>
+                    <% for (Vehicule v : lesVehicules) { %>
+                        <option value="<%= v.getIdVehicule() %>">
+                            <%= v.getImmatriculation() %> (capacité : <%= v.getCapacite() %> places)
+                        </option>
+                    <% } %>
+                </select>
+                <span class="error-message">Veuillez sélectionner un véhicule.</span>
+            </div>
 
-            <select name="id_vehicule" class="form-select" required>
-                <option value="">-- Selectionner un vehicule --</option>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Chauffeur <span class="text-danger">*</span></label>
+                <select name="id_chauffeur" class="form-select form-select-lg bg-light border-0" required>
+                    <option value="">-- Sélectionner un chauffeur --</option>
+                    <% for (Chauffeur c : lesChauffeurs) { %>
+                        <option value="<%= c.getIdChauffeur() %>">
+                            <%= c.getNom() %> <%= c.getPrenom() != null ? c.getPrenom() : "" %>
+                        </option>
+                    <% } %>
+                </select>
+                <span class="error-message">Veuillez sélectionner un chauffeur.</span>
+            </div>
 
-                <% for (Vehicule v : lesVehicules) { %>
-                    <option value="<%= v.getIdVehicule() %>">
-                        <%= v.getImmatriculation() %>
-                        (capacite : <%= v.getCapacite() %> places)
-                    </option>
-                <% } %>
-            </select>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary">Date de départ <span class="text-danger">*</span></label>
+                <input type="date" name="date_depart" class="form-control form-control-lg bg-light border-0" required min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                <span class="error-message">Veuillez saisir une date.</span>
+            </div>
 
-            <span class="error-message">Veuillez selectionner un vehicule.</span>
-        </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary">Heure de départ <span class="text-danger">*</span></label>
+                <input type="time" name="heure_depart" class="form-control form-control-lg bg-light border-0" required>
+                <span class="error-message">Veuillez saisir une heure.</span>
+            </div>
 
-        <div class="col-md-6">
-            <label class="form-label fw-semibold">
-                Chauffeur <span class="text-danger">*</span>
-            </label>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary">Statut</label>
+                <select name="statut" class="form-select form-select-lg bg-light border-0">
+                    <option value="PLANIFIE" selected>Planifié</option>
+                    <option value="EN_COURS">En cours</option>
+                    <option value="TERMINE">Terminé</option>
+                    <option value="ANNULE">Annulé</option>
+                </select>
+            </div>
 
-            <select name="id_chauffeur" class="form-select" required>
-                <option value="">-- Selectionner un chauffeur --</option>
-
-                <% for (Chauffeur c : lesChauffeurs) { %>
-                    <option value="<%= c.getIdChauffeur() %>">
-                        <%= c.getNom() %>
-                        <%= c.getPrenom() != null ? c.getPrenom() : "" %>
-                    </option>
-                <% } %>
-            </select>
-
-            <span class="error-message">Veuillez selectionner un chauffeur.</span>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label fw-semibold">
-                Date de depart <span class="text-danger">*</span>
-            </label>
-
-            <input type="date"
-                   name="date_depart"
-                   class="form-control"
-                   required
-                   min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
-
-            <span class="error-message">Veuillez saisir une date.</span>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label fw-semibold">
-                Heure de depart <span class="text-danger">*</span>
-            </label>
-
-            <input type="time"
-                   name="heure_depart"
-                   class="form-control"
-                   required>
-
-            <span class="error-message">Veuillez saisir une heure.</span>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label fw-semibold">Statut</label>
-
-            <select name="statut" class="form-select">
-                <option value="PLANIFIE" selected>Planifie</option>
-                <option value="EN_COURS">En cours</option>
-                <option value="TERMINE">Termine</option>
-                <option value="ANNULE">Annule</option>
-            </select>
-        </div>
-
-        <div class="col-12 d-flex gap-2 mt-2">
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-check-lg"></i>
-                Enregistrer le depart
-            </button>
-
-            <a href="?page=departs/liste-depart" class="btn btn-outline-secondary">
-                <i class="bi bi-x-lg"></i>
-                Annuler
-            </a>
-        </div>
-
-    </form>
+            <div class="col-12 mt-5 d-flex gap-3">
+                <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm hover-shadow">
+                    <i class="bi bi-check-lg me-2"></i> Enregistrer le départ
+                </button>
+                <a href="?page=departs/liste-depart" class="btn btn-light btn-lg px-4 text-secondary shadow-sm hover-shadow">Annuler</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>

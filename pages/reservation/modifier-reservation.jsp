@@ -85,7 +85,7 @@
 <body>
 <div class="container mt-4">
     <h2>Modifier la reservation <%= r.getNumero_reservation() %></h2>
-    <a href="details-reservation.jsp?id=<%= reservationId %>" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
+    <a href="?page=reservation/details-reservation&id=<%= reservationId %>" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
 
     <form action="../traitement/modifier-reservation.jsp" method="post" id="formModif" novalidate>
         <input type="hidden" name="id" value="<%= reservationId %>">
@@ -160,7 +160,7 @@
         <button type="submit" class="btn btn-warning" id="btnSubmit">
             <i class="bi bi-check-circle"></i> Enregistrer les modifications
         </button>
-        <a href="details-reservation.jsp?id=<%= reservationId %>" class="btn btn-secondary">Annuler</a>
+        <a href="?page=reservation/details-reservation&id=<%= reservationId %>" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 
