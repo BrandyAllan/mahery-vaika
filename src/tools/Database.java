@@ -19,10 +19,9 @@ public class Database {
             Class.forName("org.postgresql.Driver");
             return DriverManager.getConnection(URL, USER, PASS);
         } catch (ClassNotFoundException e) {
-            System.out.println("Driver PostgreSQL introuvable !");
+            throw new RuntimeException("Driver PostgreSQL introuvable ! Verifiez que le .jar postgresql-x.x.x.jar est bien dans WEB-INF/lib", e);
         } catch (SQLException e) {
-            System.out.println("Erreur SQL : " + e.getMessage());
+            throw new RuntimeException("Erreur de connexion a la base de donnees : " + e.getMessage(), e);
         }
-        return null;
     }
 }

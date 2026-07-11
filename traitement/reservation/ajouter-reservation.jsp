@@ -1,19 +1,18 @@
-<%@ page import="backoffice.Reservation, backoffice.Utilisateur, java.sql.Date, java.util.Vector" %>
+<%@ page import="backoffice.Reservation, backoffice.Paiement, backoffice.Utilisateur, java.sql.Date, java.util.Vector" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null) {
-        response.sendRedirect("../index.jsp");
+        response.sendRedirect("../../index.jsp");
         return;
     }
 
-    // Requete AJAX pour recuperer les sieges disponibles
     String action = request.getParameter("action");
     if ("sieges".equals(action)) {
         String idDepartStr = request.getParameter("idDepart");
         int idDepart = 0;
         int capacite = 0;
         java.util.Vector<Integer> siegesReserves = new java.util.Vector<>();
-        
+
         try {
             if (idDepartStr != null && !idDepartStr.isEmpty()) {
                 idDepart = Integer.parseInt(idDepartStr);
@@ -38,71 +37,141 @@
         return;
     }
 
-    // Traitement du formulaire d'ajout
     String nomPassager = request.getParameter("nomPassager");
     String prenomPassager = request.getParameter("prenomPassager");
     String telephonePassager = request.getParameter("telephonePassager");
+    String siegesStr = request.getParameter("sieges");
+    String modePaiement = request.getParameter("modePaiement");
+    String montantStr = request.getParameter("montant");
 
     int idDepart;
-    int numeroSiege;
     try {
         idDepart = Integer.parseInt(request.getParameter("idDepart"));
-        numeroSiege = Integer.parseInt(request.getParameter("numeroSiege"));
     } catch (Exception e) {
-        response.sendRedirect("../pages/ajout-reservation.jsp?erreur=params");
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=params");
         return;
     }
 
     if (nomPassager == null || nomPassager.trim().isEmpty()) {
-        response.sendRedirect("../pages/ajout-reservation.jsp?erreur=nom");
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=nom");
         return;
     }
 
-    // Verifier que le depart existe et est planifie
-    Reservation departInfo = null;
-    for (Reservation d : Reservation.getAllDeparts()) {
-        if (d.getId_depart() == idDepart) {
-            departInfo = d;
-            break;
+    Vector<Integer> siegesChoisis = new Vector<>();
+    if (siegesStr != null && !siegesStr.trim().isEmpty()) {
+        for (String s : siegesStr.split(",")) {
+            try {
+                if (!s.trim().isEmpty()) {
+                    siegesChoisis.add(Integer.parseInt(s.trim()));
+                }
+            } catch (Exception e) {
+            }
         }
     }
+
+    if (siegesChoisis.isEmpty()) {
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=sieges");
+        return;
+    }
+
+    Reservation departInfo = null;
+    Vector<Integer> siegesDejaReserves;
+    try {
+        for (Reservation d : Reservation.getAllDeparts()) {
+            if (d.getId_depart() == idDepart) {
+                departInfo = d;
+                break;
+            }
+        }
+
+        siegesDejaReserves = Reservation.getSiegesReserves(idDepart);
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=db");
+        return;
+    }
+
     if (departInfo == null) {
-        response.sendRedirect("../pages/ajout-reservation.jsp?erreur=depart");
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=depart");
         return;
     }
 
-    // Verifier que le siege n'est pas deja reserve
-    Vector<Integer> siegesReserves = Reservation.getSiegesReserves(idDepart);
-    if (siegesReserves.contains(numeroSiege)) {
-        response.sendRedirect("../pages/ajout-reservation.jsp?erreur=siege");
-        return;
+    for (Integer numSiege : siegesChoisis) {
+        if (siegesDejaReserves.contains(numSiege)) {
+            response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=siege_pris");
+            return;
+        }
     }
 
-    // Formater le telephone avec +261 si present
     String telComplet = null;
     if (telephonePassager != null && !telephonePassager.trim().isEmpty()) {
         telComplet = "+261" + telephonePassager.trim();
     }
 
-    // Generer le numero de reservation
-    String numeroReservation = Reservation.genererNumeroReservation();
+    double montantTotal;
+    try {
+        montantTotal = Double.parseDouble(montantStr);
+    } catch (Exception e) {
+        montantTotal = departInfo.getTarif_base() * siegesChoisis.size();
+    }
+    if (montantTotal < 0) {
+        montantTotal = departInfo.getTarif_base() * siegesChoisis.size();
+    }
 
-    // Creer la reservation
-    Reservation r = new Reservation();
-    r.setNumero_reservation(numeroReservation);
-    r.setId_depart(idDepart);
-    r.setNom_passager(nomPassager);
-    r.setPrenom_passager(prenomPassager);
-    r.setTelephone_passager(telComplet);
-    r.setNumero_siege(numeroSiege);
-    r.setStatut("CONFIRMEE");
-    r.setId_caissier(user.getId_utilisateur());
+    if (modePaiement == null || modePaiement.trim().isEmpty()) {
+        modePaiement = "Especes";
+    }
+
+    int nbSieges = siegesChoisis.size();
+    double montantParSiege = Math.round((montantTotal / nbSieges) * 100.0) / 100.0;
+
+    Vector<Integer> idsReservationCreees = new Vector<>();
 
     try {
-        Reservation.ajouter(r);
-        response.sendRedirect("../pages/liste-reservation.jsp?success=ajout");
+        double montantCumule = 0;
+        for (int i = 0; i < nbSieges; i++) {
+            int numeroSiege = siegesChoisis.get(i);
+
+            String numeroReservation = Reservation.genererNumeroReservation();
+
+            Reservation r = new Reservation();
+            r.setNumero_reservation(numeroReservation);
+            r.setId_depart(idDepart);
+            r.setNom_passager(nomPassager);
+            r.setPrenom_passager(prenomPassager);
+            r.setTelephone_passager(telComplet);
+            r.setNumero_siege(numeroSiege);
+            r.setStatut("CONFIRMEE");
+            r.setId_caissier(user.getId_utilisateur());
+
+            int idReservation = Reservation.ajouter(r);
+            idsReservationCreees.add(idReservation);
+
+            double montantCeSiege;
+            if (i == nbSieges - 1) {
+                montantCeSiege = Math.round((montantTotal - montantCumule) * 100.0) / 100.0;
+            } else {
+                montantCeSiege = montantParSiege;
+                montantCumule += montantCeSiege;
+            }
+
+            Paiement p = new Paiement();
+            p.setId_reservation(idReservation);
+            p.setMontant(montantCeSiege);
+            p.setMode_paiement(modePaiement);
+            p.setStatut("PAYE");
+            Paiement.ajouter(p);
+        }
+
+        StringBuilder idsCsv = new StringBuilder();
+        for (int i = 0; i < idsReservationCreees.size(); i++) {
+            if (i > 0) idsCsv.append(",");
+            idsCsv.append(idsReservationCreees.get(i));
+        }
+
+        response.sendRedirect("../../models/model.jsp?page=reservation/facture&ids=" + idsCsv);
     } catch (Exception e) {
         e.printStackTrace();
-        response.sendRedirect("../pages/ajout-reservation.jsp?erreur=db");
+        response.sendRedirect("../../models/model.jsp?page=reservation/ajout-reservation&erreur=db");
     }
 %>

@@ -1,0 +1,31 @@
+.facture-box {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+.facture-entete {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #198754;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.facture-badge-paye {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    .facture-box {
+        border: none;
+    }
+}
