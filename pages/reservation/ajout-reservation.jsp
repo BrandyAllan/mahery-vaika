@@ -149,12 +149,6 @@
                 </div>
 
                 <div class="mt-3">
-                    <span class="badge bg-success">Disponible</span>
-                    <span class="badge bg-danger ms-2">Réservé</span>
-                    <span class="badge bg-primary ms-2">Sélectionné</span>
-                </div>
-
-                <div class="mt-3">
                     <strong>Places choisies :</strong>
                     <span id="siegesChoisis" class="ms-2 text-muted">aucune</span>
                 </div>
