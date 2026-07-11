@@ -45,3 +45,28 @@
 .navbar .form-control {
   padding: .75rem 1rem;
 }
+
+.chart-canvas-wrapper{
+    position:relative;
+    width:100%;
+    height:340px;
+}
+
+.btn-filter-jour{
+    background:#071b7a;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:10px 22px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.btn-filter-jour:hover{
+    background:#0b2ca3;
+}
+
+.btn-filter-jour:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
