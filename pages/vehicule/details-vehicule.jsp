@@ -3,120 +3,155 @@
 <%@ page import="backoffice.Utilisateur" %>
 <%
     Utilisateur userObj = (Utilisateur) session.getAttribute("utilisateur");
-    if (userObj == null) { 
-        response.sendRedirect("login.jsp"); 
-        return; 
+    if (userObj == null) {
+        response.sendRedirect("../../index.jsp");
+        return;
     }
-    
+
     String userRole = userObj.voirsiadmin();
     boolean isAdmin = "Admin".equalsIgnoreCase(userRole);
 
     String idStr = request.getParameter("id");
     if (idStr == null || idStr.isEmpty()) {
-        response.sendRedirect("liste-vehicule.jsp");
+        response.sendRedirect("?page=vehicule/liste-vehicule");
         return;
     }
 
     int id = Integer.parseInt(idStr);
     Vehicule v = Vehicule.getVehiculeById(id);
 
-    if (v == null) { 
-        response.sendRedirect("liste-vehicule.jsp"); 
-        return; 
+    if (v == null) {
+        response.sendRedirect("?page=vehicule/liste-vehicule");
+        return;
     }
 %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Fiche Véhicule : <%= v.getImmatriculation() %></title>
-   
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .details-box { background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 6px; margin-top: 15px; max-width: 600px; }
-        .info-row { padding: 10px 0; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; }
-        .info-row:last-child { border-bottom: none; }
-        .info-label { font-weight: bold; color: #495057; }
-        .actions-area { margin-top: 20px; }
-    </style>
-</head>
-<body>
 
-    <h2>Détails Importants du Véhicule</h2>
-    <p><a href="?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary">← Retour à la liste du parc</a></p>
+<%-- En-tête de page --%>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <a href="?page=vehicule/liste-vehicule"
+           class="btn btn-sm btn-light text-muted border-0 shadow-sm mb-2 hover-shadow">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
+        <h2 class="fw-bold mb-0" style="color: #2c3e50;">
+            <i class="bi bi-car-front-fill text-primary me-2"></i>
+            <%= v.getImmatriculation() %>
+            <span class="badge <%= "ACTIF".equals(v.getEtat()) ? "bg-success" : "bg-danger" %> fs-6 ms-2 rounded-pill">
+                <%= v.getEtat() %>
+            </span>
+        </h2>
+    </div>
+    <% if (isAdmin) { %>
+    <a href="?page=vehicule/modifier-vehicule&id=<%= v.getIdVehicule() %>"
+       class="btn btn-outline-primary shadow-sm">
+        <i class="bi bi-pencil me-1"></i> Modifier la fiche
+    </a>
+    <% } %>
+</div>
 
-    <div class="card shadow-sm mb-3">
-    <div class="card-body text-center p-4">
-
-        <div class="d-flex  gap-3 flex-wrap">
-
+<%-- Entretiens rapides --%>
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body p-4">
+        <h5 class="card-title text-primary fw-bold mb-4">
+            <i class="bi bi-tools me-2"></i>Actions d'entretien
+        </h5>
+        <div class="d-flex gap-3 flex-wrap">
             <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=VIDANGE"
-            class="btn btn-primary btn-lg px-4">
-                <i class="bi bi-droplet-half"></i> Vidange
+               class="btn btn-primary px-4 shadow-sm hover-shadow">
+                <i class="bi bi-droplet-half me-2"></i>Vidange
             </a>
-
             <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=PNEU"
-            class="btn btn-secondary btn-lg px-4">
-                <i class="bi bi-disc"></i> Pneu
+               class="btn btn-outline-secondary px-4 shadow-sm hover-shadow">
+                <i class="bi bi-disc me-2"></i>Pneu
             </a>
-
             <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=LAVAGE"
-            class="btn btn-info btn-lg px-4 text-white">
-                <i class="bi bi-moisture"></i> Lavage
+               class="btn btn-outline-info px-4 shadow-sm hover-shadow">
+                <i class="bi bi-moisture me-2"></i>Lavage
             </a>
-
             <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=AUTRES"
-            class="btn btn-warning btn-lg px-4">
-                <i class="bi bi-gear"></i> Autres
+               class="btn btn-outline-warning px-4 shadow-sm hover-shadow">
+                <i class="bi bi-gear me-2"></i>Autres
             </a>
-
         </div>
-
     </div>
 </div>
 
-    <div class="details-box">
+<div class="row g-4">
 
-
-        <div class="info-row">
-            <span class="info-label">Numéro d'Immatriculation :</span>
-            <span class="info-value"><strong><%= v.getImmatriculation() %></strong></span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">Constructeur / Modèle :</span>
-            <span class="info-value"><%= v.getMarque() %> <%= v.getModele() %></span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">Capacité d'accueil :</span>
-            <span class="info-value"><%= v.getCapacite() %> Personnes</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">Kilométrage Compteur :</span>
-            <span class="info-value"><%= v.getKilometrageActuel() %> km</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">Statut Opérationnel :</span>
-            <span class="info-value" style="font-weight: bold; color: <%= "ACTIF".equals(v.getEtat()) ? "green" : "red" %>;">
-                <%= v.getEtat() %>
-            </span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">Date Limite d'Assurance :</span>
-            <span class="info-value"><%= v.getDateExpirationAssurance() != null ? v.getDateExpirationAssurance() : "N/A" %></span>
-        </div>
-
-        <div class="actions-area">
-            <% if (isAdmin) { %>
-                <a href="?page=vehicule/modifier-vehicule&id=<%= v.getIdVehicule() %>" class="btn btn-primary">Modifier la fiche</a>
-                <% } else { %>
-                <button class="btn btn-secondary" disabled>Modification (Réservé Admin)</button>
-
-
-            <% } %>
+    <%-- Identification --%>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+                <h5 class="card-title text-primary fw-bold mb-4">
+                    <i class="bi bi-info-circle-fill me-2"></i>Identification
+                </h5>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Immatriculation</p>
+                        <span class="badge bg-light text-dark border fs-5 px-3 py-2 font-monospace">
+                            <%= v.getImmatriculation() %>
+                        </span>
+                    </div>
+                    <div class="col-12"><hr class="my-2 opacity-25"></div>
+                    <div class="col-6">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Constructeur</p>
+                        <p class="fw-bold mb-0"><%= v.getMarque() %></p>
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Modèle</p>
+                        <p class="fw-semibold mb-0"><%= v.getModele() %></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    
+    <%-- État opérationnel --%>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+                <h5 class="card-title text-primary fw-bold mb-4">
+                    <i class="bi bi-speedometer2 me-2"></i>État opérationnel
+                </h5>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Capacité</p>
+                        <p class="fw-bold mb-0 fs-5">
+                            <i class="bi bi-people-fill text-primary me-1"></i>
+                            <%= v.getCapacite() %> <span class="text-muted fw-normal fs-6">places</span>
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Kilométrage compteur</p>
+                        <p class="fw-bold mb-0 fs-5">
+                            <i class="bi bi-speedometer2 text-info me-1"></i>
+                            <%= v.getKilometrageActuel() %> <span class="text-muted fw-normal fs-6">km</span>
+                        </p>
+                    </div>
+                    <div class="col-12"><hr class="my-2 opacity-25"></div>
+                    <div class="col-6">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Statut</p>
+                        <span class="badge <%= "ACTIF".equals(v.getEtat()) ? "bg-success" : "bg-danger" %> rounded-pill px-3 py-2">
+                            <%= v.getEtat() %>
+                        </span>
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-1 text-muted small fw-semibold text-uppercase" style="font-size:.72rem;">Date limite assurance</p>
+                        <p class="fw-semibold mb-0">
+                            <i class="bi bi-shield-check text-warning me-1"></i>
+                            <%= v.getDateExpirationAssurance() != null ? v.getDateExpirationAssurance() : "N/A" %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
+</div>
+
+<% if (!isAdmin) { %>
+<div class="alert alert-info border-0 shadow-sm rounded-4 mt-4 d-flex align-items-center" role="alert">
+    <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+    La modification est réservée aux administrateurs.
+</div>
+<% } %>
