@@ -131,7 +131,7 @@
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="liste-utilisateur.jsp" class="btn btn-secondary">Annuler</a>
+            <a href="?page=utilisateur/liste-utilisateur" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>
