@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gestion.Vehicule" %>
 <%
+String typeEntretien = request.getParameter("type");
+%>
+<%
     String idParam = request.getParameter("id");
     if (idParam == null || idParam.isEmpty()) {
         out.println("<div class='alert alert-danger'>ID du véhicule manquant.</div>");
@@ -24,19 +27,11 @@
 %>
 
 <div class="container mt-4">
-    <p><a href="?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-left"></i> Retour à la liste</a></p>
+    <p><a href="model.jsp?page=vehicule/details-vehicule&id=<%= idVehicule %>" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-left"></i> Retour à la liste</a></p>
     
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-dark text-white">
-            <h4 class="mb-0">Options d'entretien pour : <%= v.getMarque() %> <%= v.getModele() %> (<%= v.getImmatriculation() %>)</h4>
-        </div>
-        <div class="card-body text-center p-4">
-            <div class="d-flex justify-content-center gap-3">
-                <button type="button" class="btn btn-primary btn-lg px-4" onclick="ouvrirFormulaire('VIDANGE')"><i class="bi bi-droplet-half"></i> Vidange</button>
-                <button type="button" class="btn btn-secondary btn-lg px-4" onclick="ouvrirFormulaire('PNEU')"><i class="bi bi-disc"></i> Pneu</button>
-                <button type="button" class="btn btn-info btn-lg px-4 text-white" onclick="ouvrirFormulaire('LAVAGE')"><i class="bi bi-moisture"></i> Lavage</button>
-                <button type="button" class="btn btn-warning btn-lg px-4" onclick="ouvrirFormulaire('AUTRES')"><i class="bi bi-gear"></i> Autres</button>
-            </div>
+            <h4 class="mb-0">Entretien pour : <%= v.getMarque() %> <%= v.getModele() %> (<%= v.getImmatriculation() %>)</h4>
         </div>
     </div>
 
@@ -107,6 +102,16 @@
 </div>
 
 <script>
+window.onload = function(){
+
+    let type = "<%= typeEntretien != null ? typeEntretien : "" %>";
+
+    if(type !== ""){
+        ouvrirFormulaire(type);
+    }
+
+};
+
 function ouvrirFormulaire(type) {
     document.getElementById('card-entretien-general').classList.add('d-none');
     document.getElementById('card-lavage').classList.add('d-none');

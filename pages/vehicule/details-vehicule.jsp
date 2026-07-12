@@ -45,7 +45,39 @@
     <h2>Détails Importants du Véhicule</h2>
     <p><a href="?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary">← Retour à la liste du parc</a></p>
 
+    <div class="card shadow-sm mb-3">
+    <div class="card-body text-center p-4">
+
+        <div class="d-flex  gap-3 flex-wrap">
+
+            <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=VIDANGE"
+            class="btn btn-primary btn-lg px-4">
+                <i class="bi bi-droplet-half"></i> Vidange
+            </a>
+
+            <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=PNEU"
+            class="btn btn-secondary btn-lg px-4">
+                <i class="bi bi-disc"></i> Pneu
+            </a>
+
+            <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=LAVAGE"
+            class="btn btn-info btn-lg px-4 text-white">
+                <i class="bi bi-moisture"></i> Lavage
+            </a>
+
+            <a href="model.jsp?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>&type=AUTRES"
+            class="btn btn-warning btn-lg px-4">
+                <i class="bi bi-gear"></i> Autres
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
     <div class="details-box">
+
+
         <div class="info-row">
             <span class="info-label">Numéro d'Immatriculation :</span>
             <span class="info-value"><strong><%= v.getImmatriculation() %></strong></span>
@@ -76,9 +108,6 @@
         <div class="actions-area">
             <% if (isAdmin) { %>
                 <a href="?page=vehicule/modifier-vehicule&id=<%= v.getIdVehicule() %>" class="btn btn-primary">Modifier la fiche</a>
-                <a href="?page=vehicule/entretien-vehicule&id=<%= v.getIdVehicule() %>" class="btn btn-dark flex-grow-1 fw-bold py-2" style="background-color: #000066;">
-                <i class="bi bi-tools"></i> Entretien
-                </a>
                 <% } else { %>
                 <button class="btn btn-secondary" disabled>Modification (Réservé Admin)</button>
 
@@ -86,6 +115,8 @@
             <% } %>
         </div>
     </div>
+
+    
 
 </body>
 </html>
