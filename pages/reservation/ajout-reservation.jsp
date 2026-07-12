@@ -10,6 +10,7 @@
     Vector<Reservation> departs = Reservation.getAllDeparts();
     
     String erreur = request.getParameter("erreur");
+    String debug = request.getParameter("debug");
 %>
 
 <link rel="stylesheet" href="../assets/css/reservation.css">
@@ -36,7 +37,11 @@
 <% } else if ("siege_pris".equals(erreur)) { %>
 <div class="alert alert-danger border-0 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-2"></i>Un ou plusieurs sièges choisis viennent d'être réservés par quelqu'un d'autre. Merci de recommencer la sélection.</div>
 <% } else if ("db".equals(erreur)) { %>
-<div class="alert alert-danger border-0 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-2"></i>Une erreur est survenue lors de l'enregistrement. Merci de réessayer.</div>
+<div class="alert alert-danger border-0 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-2"></i>Une erreur est survenue lors de l'enregistrement. Merci de réessayer.
+<% if (debug != null && !debug.trim().isEmpty()) { %>
+    <br><small class="text-muted">Détail technique : <%= debug %></small>
+<% } %>
+</div>
 <% } %>
 
 <ul class="wizard-steps mb-4">
@@ -136,11 +141,6 @@
                 
                 <div id="siegesContainer" class="text-center p-4 bg-light rounded-4 mb-4">
                     <p class="text-muted mb-0">Chargement des sièges...</p>
-                </div>
-                <div class="d-flex justify-content-center gap-3 mb-4">
-                    <span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-check-circle me-1"></i> Disponible</span>
-                    <span class="badge bg-danger px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i> Réservé</span>
-                    <span class="badge bg-primary px-3 py-2 rounded-pill"><i class="bi bi-check2-square me-1"></i> Sélectionné</span>
                 </div>
                 <div class="alert alert-light border text-center">
                     <strong class="text-secondary">Places choisies :</strong> <span id="siegesChoisis" class="fs-5 text-primary fw-bold ms-2">aucune</span>
