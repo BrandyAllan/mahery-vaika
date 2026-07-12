@@ -118,9 +118,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-text text-muted mt-3">
-                    <i class="bi bi-info-circle me-1"></i> Ces informations seront utilisées pour toutes les places réservées dans ce groupe.
-                </div>
             </div>
         </div>
         <div class="d-flex justify-content-between">
@@ -199,7 +196,6 @@
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-secondary">Montant à payer (Ar) <span class="text-danger">*</span></label>
                         <input type="number" step="0.01" min="0" class="form-control form-control-lg bg-light border-0" id="montantAffiche">
-                        <div class="form-text text-muted mt-2"><i class="bi bi-info-circle me-1"></i>Pré-rempli selon le tarif, modifiable si besoin.</div>
                     </div>
                 </div>
             </div>
