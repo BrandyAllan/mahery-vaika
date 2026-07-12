@@ -67,10 +67,6 @@
                                 Mot de passe
                             </label>
 
-                            <a href="#" class="forgot-password">
-                                Mot de passe oublié ?
-                            </a>
-
                         </div>
 
                         <div class="input-group">
