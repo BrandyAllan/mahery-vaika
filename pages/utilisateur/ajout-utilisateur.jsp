@@ -30,7 +30,7 @@
     <h2>Ajouter un utilisateur</h2>
 
     <div class="mb-3">
-        <a href="gestion-utilisateur.jsp" class="btn btn-secondary">
+        <a href="model.jsp?page=utilisateur/gestion-utilisateur" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
@@ -95,7 +95,7 @@
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Ajouter</button>
-            <a href="gestion-utilisateur.jsp" class="btn btn-secondary">Annuler</a>
+            <a href="model.jsp?page=utilisateur/gestion-utilisateur" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>

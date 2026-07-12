@@ -56,310 +56,231 @@
         (dateFin       != null && !dateFin.isEmpty()       ? "dateFin="       + dateFin       + "&" : "") +
         "sortField=" + sortField + "&sortOrder=" + sortOrder + "&";
 %>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Trajets - Mahery Vaika</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/styles-premium.css">
-    <style>
-        .sort-link { color: inherit; text-decoration: none; }
-        .sort-link:hover { color: #3498db; }
-        .sort-icon { font-size: 0.75rem; margin-left: 4px; color: #3498db; }
-        .pagination .page-link { border-radius: 8px; margin: 0 2px; }
-        .pagination .page-item.active .page-link {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            border-color: transparent;
-        }
-        .msg-banner { border-radius: 12px; }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="?page=trajet/gestion-trajet"><i class="fas fa-arrow-left me-2"></i>Retour</a>
-            <span class="navbar-text text-white fw-bold">
-                <i class="fas fa-bus-alt me-2"></i>Mahery Vaika
-            </span>
-        </div>
-    </nav>
-
-    <div class="container mt-5">
-
-        <%-- Messages de succès / erreur --%>
-        <% String msg = request.getParameter("msg"); String err = request.getParameter("error"); %>
-        <% if ("success".equals(msg)) { %>
-            <div class="alert alert-success msg-banner d-flex align-items-center mb-4" role="alert">
-                <i class="fas fa-check-circle me-2 fa-lg"></i> Trajet ajouté avec succès.
-            </div>
-        <% } else if ("desactive".equals(msg)) { %>
-            <div class="alert alert-warning msg-banner d-flex align-items-center mb-4" role="alert">
-                <i class="fas fa-ban me-2 fa-lg"></i> Trajet désactivé avec succès.
-            </div>
-        <% } else if ("supprime".equals(msg)) { %>
-            <div class="alert alert-warning msg-banner d-flex align-items-center mb-4" role="alert">
-                <i class="fas fa-trash me-2 fa-lg"></i> Trajet supprimé avec succès.
-            </div>
-        <% } else if ("sql".equals(err)) { %>
-            <div class="alert alert-danger msg-banner d-flex align-items-center mb-4" role="alert">
-                <i class="fas fa-exclamation-triangle me-2 fa-lg"></i> Une erreur est survenue. Veuillez réessayer.
-            </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-signpost-2 text-primary"></i> Liste des Trajets
+        <small class="fs-6 text-muted ms-2">(<%= totalItems %> résultat<%= totalItems > 1 ? "s" : "" %>)</small>
+    </h2>
+    <div class="d-flex gap-2">
+        <% if (isAdmin) { %>
+            <a href="?page=trajet/ajout-trajet" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> Nouveau Trajet
+            </a>
         <% } %>
+        <a href="?page=trajet/gestion-trajet" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold" style="color: #2c3e50;">
-                <i class="fas fa-route me-2 text-primary"></i>Liste des Trajets
-                <small class="fs-6 text-muted ms-2">(<%= totalItems %> résultat<%= totalItems > 1 ? "s" : "" %>)</small>
-            </h2>
-            <% if (isAdmin) { %>
-                <a href="?page=trajet/ajout-trajet" class="btn btn-premium"><i class="fas fa-plus me-2"></i>Nouveau Trajet</a>
-            <% } %>
-        </div>
+<% String msg = request.getParameter("msg"); String err = request.getParameter("error"); %>
+<% if ("success".equals(msg)) { %>
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-check-circle me-2"></i> Trajet ajouté avec succès.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } else if ("desactive".equals(msg)) { %>
+    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-ban me-2"></i> Trajet désactivé avec succès.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } else if ("supprime".equals(msg)) { %>
+    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-trash me-2"></i> Trajet supprimé avec succès.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } else if ("sql".equals(err)) { %>
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i> Une erreur est survenue. Veuillez réessayer.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
 
-        <%-- Formulaire de recherche --%>
-        <div class="search-container mb-4">
-            <form id="searchForm" action="model.jsp" method="GET">
-                <input type="hidden" name="page" value="trajet/liste-trajet">
-                <input type="hidden" name="sortField" value="<%= sortField %>">
-                <input type="hidden" name="sortOrder" value="<%= sortOrder %>">
-                <div class="row g-3 mb-3">
-                    <div class="col-md-3">
-                        <label class="form-label text-muted fw-semibold"><i class="fas fa-map-marker-alt me-1 text-danger"></i>Ville de départ</label>
-                        <select name="searchDepart" id="searchDepart" class="form-select premium-input" onchange="updateArriveeSearch()">
-                            <option value="">Toutes</option>
-                            <% for (Ville v : villes) {
-                                String sel = (searchDepart != null && searchDepart.equals(String.valueOf(v.getIdVille()))) ? "selected" : "";
-                            %>
-                                <option value="<%= v.getIdVille() %>" <%= sel %>><%= v.getNomVille() %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted fw-semibold"><i class="fas fa-flag-checkered me-1 text-success"></i>Ville d'arrivée</label>
-                        <select name="searchArrivee" id="searchArrivee" class="form-select premium-input">
-                            <option value="">Toutes</option>
-                            <% for (Ville v : villes) {
-                                String sel = (searchArrivee != null && searchArrivee.equals(String.valueOf(v.getIdVille()))) ? "selected" : "";
-                            %>
-                                <option value="<%= v.getIdVille() %>" <%= sel %>><%= v.getNomVille() %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label text-muted fw-semibold"><i class="fas fa-money-bill-wave me-1 text-success"></i>Tarif Max (Ar)</label>
-                        <input type="number" name="searchTarif" class="form-control premium-input"
-                               value="<%= searchTarif != null ? searchTarif : "" %>" placeholder="Ex: 50000">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label text-muted fw-semibold"><i class="fas fa-toggle-on me-1 text-info"></i>Statut</label>
-                        <select name="searchStatut" class="form-select premium-input">
-                            <option value="">Tous</option>
-                            <option value="true"  <%= "true".equals(searchStatut)  ? "selected" : "" %>>Actif</option>
-                            <option value="false" <%= "false".equals(searchStatut) ? "selected" : "" %>>Inactif</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-premium w-100">
-                            <i class="fas fa-search me-2"></i>Filtrer
-                        </button>
-                    </div>
-                </div>
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label text-muted fw-semibold"><i class="far fa-calendar-alt me-1 text-primary"></i>Date départ (min)</label>
-                        <input type="date" name="dateDebut" class="form-control premium-input"
-                               value="<%= dateDebut != null ? dateDebut : "" %>">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted fw-semibold"><i class="far fa-calendar-alt me-1 text-warning"></i>Date départ (max)</label>
-                        <input type="date" name="dateFin" class="form-control premium-input"
-                               value="<%= dateFin != null ? dateFin : "" %>">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <a href="?page=trajet/liste-trajet" class="btn btn-outline-secondary w-100">
-                            <i class="fas fa-times me-2"></i>Réinitialiser
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form id="searchForm" action="model.jsp" method="GET" class="row g-3 align-items-end">
+            <input type="hidden" name="page" value="trajet/liste-trajet">
+            <input type="hidden" name="sortField" value="<%= sortField %>">
+            <input type="hidden" name="sortOrder" value="<%= sortOrder %>">
 
-        <%-- Tri explicite --%>
-        <div class="mb-3 d-flex gap-2 align-items-center">
-            <span class="text-muted fw-bold small"><i class="fas fa-sort-alpha-down me-1"></i>Trier par Départ :</span>
-            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=ASC&page=1"
-               class="btn btn-sm <%= "depart_nom".equals(sortField) && "ASC".equals(sortOrder) ? "btn-primary" : "btn-outline-secondary" %>">A → Z</a>
-            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=DESC&page=1"
-               class="btn btn-sm <%= "depart_nom".equals(sortField) && "DESC".equals(sortOrder) ? "btn-primary" : "btn-outline-secondary" %>">Z → A</a>
-        </div>
-
-        <%-- Tableau --%>
-        <div class="table-responsive">
-            <table class="table premium-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>
-                            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=<%= "depart_nom".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
-                               class="sort-link">
-                                Départ
-                                <% if ("depart_nom".equals(sortField)) { %>
-                                    <i class="fas fa-sort-<%= "ASC".equals(sortOrder) ? "up" : "down" %> sort-icon"></i>
-                                <% } else { %>
-                                    <i class="fas fa-sort sort-icon opacity-50"></i>
-                                <% } %>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=arrivee_nom&sortOrder=<%= "arrivee_nom".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
-                               class="sort-link">
-                                Arrivée
-                                <% if ("arrivee_nom".equals(sortField)) { %>
-                                    <i class="fas fa-sort-<%= "ASC".equals(sortOrder) ? "up" : "down" %> sort-icon"></i>
-                                <% } else { %>
-                                    <i class="fas fa-sort sort-icon opacity-50"></i>
-                                <% } %>
-                            </a>
-                        </th>
-                        <th>Distance (km)</th>
-                        <th>Durée</th>
-                        <th>
-                            <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=tarif_base&sortOrder=<%= "tarif_base".equals(sortField) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>&page=1"
-                               class="sort-link">
-                                Tarif (Ar)
-                                <% if ("tarif_base".equals(sortField)) { %>
-                                    <i class="fas fa-sort-<%= "ASC".equals(sortOrder) ? "up" : "down" %> sort-icon"></i>
-                                <% } else { %>
-                                    <i class="fas fa-sort sort-icon opacity-50"></i>
-                                <% } %>
-                            </a>
-                        </th>
-                        <th>Statut</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (trajetsTrouves.isEmpty()) { %>
-                        <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="fas fa-inbox fa-3x mb-3 d-block opacity-30"></i>
-                                Aucun trajet trouvé.
-                            </td>
-                        </tr>
-                    <% } else { %>
-                        <% for (Trajet t : trajetsTrouves) { %>
-                        <tr>
-                            <td class="fw-bold text-muted">#<%= t.getIdTrajet() %></td>
-                            <td class="fw-bold"><i class="fas fa-map-marker-alt text-danger me-2"></i><%= t.getVilleDepart().getNomVille() %></td>
-                            <td class="fw-bold"><i class="fas fa-flag-checkered text-success me-2"></i><%= t.getVilleArrivee().getNomVille() %></td>
-                            <td><%= t.getDistanceKm() != null ? t.getDistanceKm() : "-" %></td>
-                            <td><i class="far fa-clock text-info me-1"></i><%= t.getDureeEstimee() != null ? t.getDureeEstimee() : "-" %></td>
-                            <td class="fw-bold text-primary"><%= t.getTarifBase() %> Ar</td>
-                            <td>
-                                <% if (t.isActif()) { %>
-                                    <span class="badge bg-success rounded-pill px-3 py-2">Actif</span>
-                                <% } else { %>
-                                    <span class="badge bg-secondary rounded-pill px-3 py-2">Inactif</span>
-                                <% } %>
-                            </td>
-                            <td class="text-end">
-                                <a href="?page=trajet/details-trajet&id=<%= t.getIdTrajet() %>"
-                                   class="btn btn-sm btn-outline-info rounded-circle me-1" title="Détails">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <% if (isAdmin) { %>
-                                    <a href="?page=trajet/modifier-trajet&id=<%= t.getIdTrajet() %>"
-                                       class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Modifier">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                     <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=desactiver"
-                                       class="btn btn-sm btn-outline-secondary rounded-circle me-1" title="Désactiver"
-                                     onclick="return confirm('Désactiver ce trajet ?');">
-                                      <i class="fas fa-ban"></i>
-                                     </a>
-                                       <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=supprimer"
-                                         class="btn btn-sm btn-outline-danger rounded-circle" title="Supprimer"
-                                         onclick="return confirm('Supprimer définitivement ?');">
-                                          <i class="fas fa-trash"></i>
-                                      </a>
-                                <% } %>
-                            </td>
-                        </tr>
-                        <% } %>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Ville de départ</label>
+                <select name="searchDepart" id="searchDepart" class="form-select form-select-sm" onchange="updateArriveeSearch()">
+                    <option value="">Toutes</option>
+                    <% for (Ville v : villes) {
+                        String sel = (searchDepart != null && searchDepart.equals(String.valueOf(v.getIdVille()))) ? "selected" : "";
+                    %>
+                        <option value="<%= v.getIdVille() %>" <%= sel %>><%= v.getNomVille() %></option>
                     <% } %>
-                </tbody>
-            </table>
-        </div>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Ville d'arrivée</label>
+                <select name="searchArrivee" id="searchArrivee" class="form-select form-select-sm">
+                    <option value="">Toutes</option>
+                    <% for (Ville v : villes) {
+                        String sel = (searchArrivee != null && searchArrivee.equals(String.valueOf(v.getIdVille()))) ? "selected" : "";
+                    %>
+                        <option value="<%= v.getIdVille() %>" <%= sel %>><%= v.getNomVille() %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Tarif Max (Ar)</label>
+                <input type="number" name="searchTarif" class="form-control form-control-sm"
+                       value="<%= searchTarif != null ? searchTarif : "" %>" placeholder="Ex: 50000">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Statut</label>
+                <select name="searchStatut" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <option value="true"  <%= "true".equals(searchStatut)  ? "selected" : "" %>>Actif</option>
+                    <option value="false" <%= "false".equals(searchStatut) ? "selected" : "" %>>Inactif</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="bi bi-search"></i> Filtrer
+                </button>
+            </div>
 
-        <%-- Pagination --%>
-        <% if (totalPages > 1) { %>
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <small class="text-muted">
-                Page <strong><%= currentPage %></strong> sur <strong><%= totalPages %></strong>
-                &mdash; <%= totalItems %> résultat<%= totalItems > 1 ? "s" : "" %>
-            </small>
-            <nav>
-                <ul class="pagination mb-0">
-                    <%-- Précédent --%>
-                    <li class="page-item <%= currentPage <= 1 ? "disabled" : "" %>">
-                        <a class="page-link" href="<%= baseQuery %>page=<%= currentPage - 1 %>">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                    </li>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date départ (min)</label>
+                <input type="date" name="dateDebut" class="form-control form-control-sm"
+                       value="<%= dateDebut != null ? dateDebut : "" %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date départ (max)</label>
+                <input type="date" name="dateFin" class="form-control form-control-sm"
+                       value="<%= dateFin != null ? dateFin : "" %>">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <a href="?page=trajet/liste-trajet" class="btn btn-outline-secondary btn-sm">
+                    Réinitialiser
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
-                    <%-- Numéros de pages --%>
-                    <% for (int p = 1; p <= totalPages; p++) {
-                        if (p == 1 || p == totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) { %>
-                            <li class="page-item <%= p == currentPage ? "active" : "" %>">
-                                <a class="page-link" href="<%= baseQuery %>page=<%= p %>"><%= p %></a>
-                            </li>
-                    <%      } else if (p == currentPage - 3 || p == currentPage + 3) { %>
-                            <li class="page-item disabled"><span class="page-link">…</span></li>
-                    <%      }
-                       } %>
+<div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <span class="text-muted small fw-semibold">Trier par Départ :</span>
+    <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=ASC&page=1"
+       class="btn btn-sm <%= "depart_nom".equals(sortField) && "ASC".equals(sortOrder) ? "btn-primary" : "btn-outline-secondary" %>">A → Z</a>
+    <a href="model.jsp?page=trajet/liste-trajet&searchDepart=<%= searchDepart != null ? searchDepart : "" %>&searchArrivee=<%= searchArrivee != null ? searchArrivee : "" %>&searchTarif=<%= searchTarif != null ? searchTarif : "" %>&searchStatut=<%= searchStatut != null ? searchStatut : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>&sortField=depart_nom&sortOrder=DESC&page=1"
+       class="btn btn-sm <%= "depart_nom".equals(sortField) && "DESC".equals(sortOrder) ? "btn-primary" : "btn-outline-secondary" %>">Z → A</a>
+</div>
 
-                    <%-- Suivant --%>
-                    <li class="page-item <%= currentPage >= totalPages ? "disabled" : "" %>">
-                        <a class="page-link" href="<%= baseQuery %>page=<%= currentPage + 1 %>">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <% } %>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Départ</th>
+                    <th>Arrivée</th>
+                    <th>Distance</th>
+                    <th>Durée</th>
+                    <th>Tarif (Ar)</th>
+                    <th>Statut</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (trajetsTrouves.isEmpty()) { %>
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox d-block fs-1 mb-2"></i>
+                            Aucun trajet trouvé.
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% for (Trajet t : trajetsTrouves) { %>
+                    <tr>
+                        <td class="fw-semibold text-muted">#<%= t.getIdTrajet() %></td>
+                        <td><span class="fw-semibold"><%= t.getVilleDepart().getNomVille() %></span></td>
+                        <td><span class="fw-semibold"><%= t.getVilleArrivee().getNomVille() %></span></td>
+                        <td><%= t.getDistanceKm() != null ? t.getDistanceKm() : "-" %></td>
+                        <td><%= t.getDureeEstimee() != null ? t.getDureeEstimee() : "-" %></td>
+                        <td class="fw-bold"><%= t.getTarifBase() %> Ar</td>
+                        <td>
+                            <% if (t.isActif()) { %>
+                                <span class="badge bg-success rounded-pill px-3 py-2">Actif</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">Inactif</span>
+                            <% } %>
+                        </td>
+                        <td class="text-end">
+                            <a href="?page=trajet/details-trajet&id=<%= t.getIdTrajet() %>"
+                               class="btn btn-sm btn-outline-info rounded-circle me-1" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <% if (isAdmin) { %>
+                                <a href="?page=trajet/modifier-trajet&id=<%= t.getIdTrajet() %>"
+                                   class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=desactiver"
+                                   class="btn btn-sm btn-outline-secondary rounded-circle me-1" title="Désactiver"
+                                   onclick="return confirm('Désactiver ce trajet ?');">
+                                    <i class="bi bi-ban"></i>
+                                </a>
+                                <a href="../traitement/trajet/supprimer-trajet.jsp?id=<%= t.getIdTrajet() %>&action=supprimer"
+                                   class="btn btn-sm btn-outline-danger rounded-circle" title="Supprimer"
+                                   onclick="return confirm('Supprimer définitivement ?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% } %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    </div><%-- /container --%>
+<% if (totalPages > 1) { %>
+<nav>
+    <ul class="pagination pagination-sm">
+        <% for (int p = 1; p <= totalPages; p++) {
+            if (p == 1 || p == totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) { %>
+                <li class="page-item <%= p == currentPage ? "active" : "" %>">
+                    <a class="page-link" href="<%= baseQuery %>page=<%= p %>"><%= p %></a>
+                </li>
+        <%      } else if (p == currentPage - 3 || p == currentPage + 3) { %>
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+        <%      }
+           } %>
+    </ul>
+</nav>
+<% } %>
 
-    <script>
-        function updateArriveeSearch() {
-            var departSel  = document.getElementById("searchDepart");
-            var arriveeSel = document.getElementById("searchArrivee");
-            var selectedDepart = departSel.value;
+<script>
+    function updateArriveeSearch() {
+        var departSel  = document.getElementById("searchDepart");
+        var arriveeSel = document.getElementById("searchArrivee");
+        var selectedDepart = departSel.value;
 
-            if (arriveeSel.value !== "" && arriveeSel.value === selectedDepart) {
-                arriveeSel.value = "";
-            }
-
-            for (var i = 0; i < arriveeSel.options.length; i++) {
-                var opt = arriveeSel.options[i];
-                if (opt.value === "") continue;
-
-                if (selectedDepart !== "" && opt.value === selectedDepart) {
-                    opt.disabled = true;
-                    opt.style.display = "none";
-                } else {
-                    opt.disabled = false;
-                    opt.style.display = "";
-                }
-            }
+        if (arriveeSel.value !== "" && arriveeSel.value === selectedDepart) {
+            arriveeSel.value = "";
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            updateArriveeSearch();
-        });
-    </script>
-</body>
-</html>
+        for (var i = 0; i < arriveeSel.options.length; i++) {
+            var opt = arriveeSel.options[i];
+            if (opt.value === "") continue;
+
+            if (selectedDepart !== "" && opt.value === selectedDepart) {
+                opt.disabled = true;
+                opt.style.display = "none";
+            } else {
+                opt.disabled = false;
+                opt.style.display = "";
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateArriveeSearch();
+    });
+</script>

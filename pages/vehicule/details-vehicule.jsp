@@ -43,7 +43,7 @@
 <body>
 
     <h2>Détails Importants du Véhicule</h2>
-    <p><a href="?page=liste-vehicule" class="btn btn-sm btn-secondary">← Retour à la liste du parc</a></p>
+    <p><a href="?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary">← Retour à la liste du parc</a></p>
 
     <div class="details-box">
         <div class="info-row">

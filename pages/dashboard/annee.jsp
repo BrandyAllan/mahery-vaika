@@ -36,9 +36,13 @@
     }
     destLabelsJson.append("]");
     destValuesJson.append("]");
+
+    String dashActive = "annee";
 %>
 
 <div class="dashboard-graph-page">
+    <%@ include file="dashboard-subnav.jsp" %>
+
     <div class="dashboard-header">
         <h1>Dashboard annuel</h1>
         <p>Statistiques annuelles.</p>

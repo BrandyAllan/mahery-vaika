@@ -40,7 +40,7 @@
 <body>
 <div class="container mt-4">
     <h2>Details de la reservation</h2>
-    <a href="liste-reservation.jsp" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
+    <a href="?page=reservation/liste-reservation" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a>
 
     <div class="card">
         <div class="card-header">
@@ -92,7 +92,7 @@
 
     <div class="mt-3">
         <% if (canModify && r.getStatut().equals("CONFIRMEE")) { %>
-            <a href="../traitement/modifier-reservation.jsp?id=<%= r.getId_reservation() %>" class="btn btn-warning">
+            <a href="?page=reservation/modifier-reservation&id=<%= r.getId_reservation() %>" class="btn btn-warning">
                 <i class="bi bi-pencil"></i> Modifier
             </a>
             <a href="../traitement/annuler-reservation.jsp?id=<%= r.getId_reservation() %>" 
@@ -101,7 +101,7 @@
                 <i class="bi bi-x-circle"></i> Annuler
             </a>
         <% } %>
-        <a href="liste-reservation.jsp" class="btn btn-secondary">Retour a la liste</a>
+        <a href="?page=reservation/liste-reservation" class="btn btn-secondary">Retour a la liste</a>
     </div>
 </div>
 <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>

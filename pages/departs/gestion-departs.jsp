@@ -12,47 +12,45 @@
     boolean isAdmin = !"Caissier".equalsIgnoreCase(userRole);
 %>
 
-<div class="container mt-5">
-        <div class="row mb-4">
-            <div class="col-12">
-                <h1 class="fw-bold" style="color: #2c3e50;">Gestion de départs</h1>
-                <p class="text-muted">Sélectionnez une action ci-dessous</p>
-            </div>
-        </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0" style="color: #2c3e50;">
+        <i class="bi bi-signpost-split text-primary me-2"></i> Gestion de départs
+    </h2>
+</div>
+<p class="text-muted mb-4">Sélectionnez une action ci-dessous</p>
 
-        <div class="row g-4">
-            <!-- Carte Liste des trajets -->
-            <div class="col-md-6">
-                <a href="?page=departs/liste-depart" class="text-decoration-none text-dark">
-                    <div class="card premium-card h-100">
-                        <div class="card-body text-center p-5">
-                            <div class="mb-3">
-                                <i class="fas fa-list-ul fa-4x text-primary"></i>
-                            </div>
-                            <h3 class="card-title fw-bold">Liste de départs</h3>
-                            <p class="card-text text-muted">Consultez, recherchez et gérez les départs existants dans le système.</p>
-                        </div>
+<div class="row g-4">
+    <!-- Carte Liste -->
+    <div class="col-md-6">
+        <a href="?page=departs/liste-depart" class="text-decoration-none text-dark">
+            <div class="card border-0 shadow-sm h-100" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.classList.add('shadow');" onmouseout="this.style.transform='translateY(0)'; this.classList.remove('shadow');">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3">
+                        <i class="bi bi-list-ul display-4 text-primary"></i>
                     </div>
-                </a>
+                    <h3 class="card-title fw-bold">Liste de départs</h3>
+                    <p class="card-text text-muted">Consultez, recherchez et gérez les départs existants dans le système.</p>
+                </div>
             </div>
-
-            <!-- Carte Ajouter un trajet -->
-            <div class="col-md-6">
-                <a href="?page=departs/ajout-depart" class="text-decoration-none text-dark <%= !isAdmin ? "disabled" : "" %>" <%= !isAdmin ? "onclick='return false;'" : "" %>>
-                    <div class="card premium-card h-100 <%= !isAdmin ? "card-disabled" : "" %>">
-                        <div class="card-body text-center p-5">
-                            <div class="mb-3">
-                                <i class="fas fa-plus-circle fa-4x text-success"></i>
-                            </div>
-                            <h3 class="card-title fw-bold">Ajouter un départ</h3>
-                            <p class="card-text text-muted">Créez un nouveau départ (Réservé aux administrateurs).</p>
-                            <% if (!isAdmin) { %>
-                                <span class="badge bg-danger mt-2"><i class="fas fa-lock me-1"></i> Accès restreint</span>
-                            <% } %>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
+        </a>
     </div>
+
+    <!-- Carte Ajouter -->
+    <div class="col-md-6">
+        <a href="?page=departs/ajout-depart" class="text-decoration-none text-dark <%= !isAdmin ? "disabled" : "" %>" <%= !isAdmin ? "onclick='return false;'" : "" %>>
+            <div class="card border-0 shadow-sm h-100" style="<%= !isAdmin ? "opacity: 0.6;" : "transition: transform 0.2s, box-shadow 0.2s;" %>" <%= isAdmin ? "onmouseover=\"this.style.transform='translateY(-5px)'; this.classList.add('shadow');\" onmouseout=\"this.style.transform='translateY(0)'; this.classList.remove('shadow');\"" : "" %>>
+                <div class="card-body text-center p-5">
+                    <div class="mb-3">
+                        <i class="bi bi-plus-circle display-4 text-success"></i>
+                    </div>
+                    <h3 class="card-title fw-bold">Ajouter un départ</h3>
+                    <p class="card-text text-muted">Créez un nouveau départ (Réservé aux administrateurs).</p>
+                    <% if (!isAdmin) { %>
+                        <span class="badge bg-danger mt-2"><i class="bi bi-lock me-1"></i> Accès restreint</span>
+                    <% } %>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
 

@@ -34,15 +34,15 @@
     <link rel="stylesheet" href="../assets/css/styles-premium.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
         <div class="container">
             <a class="navbar-brand fw-bold" href="?page=trajet/gestion-trajet"><i class="fas fa-arrow-left me-2"></i>Retour</a>
             <span class="navbar-text text-white fw-bold">
                 <i class="fas fa-bus-alt me-2"></i>Mahery Vaika
             </span>
         </div>
-    </nav>
-
+    </nav> -->
+<p><a href="?page=trajet/liste-trajet" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a></p>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">

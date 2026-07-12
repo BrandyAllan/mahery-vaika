@@ -11,52 +11,44 @@
     String userRole = userObj.voirsiadmin(); 
     boolean isAdmin = "Admin".equalsIgnoreCase(userRole);
 %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Véhicules</title>
-  
-</head>
-<body class="bg-light">
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0" style="color: #2c3e50;">
+        <i class="bi bi-car-front text-primary me-2"></i> Gestion des Véhicules
+    </h2>
+</div>
+<p class="text-muted mb-4">Sélectionnez une action ci-dessous</p>
 
-    <div class="container mt-5">
-        <h2 class="mb-4"><i class="bi bi-car-front"></i> Gestion des Véhicules</h2>
-        
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="bi bi-list-ul"></i> Liste des Véhicules</h4>
-                        <p class="card-text text-muted">Consulter, rechercher et voir les détails des véhicules disponibles.</p>
-                        <a href="?page=vehicule/liste-vehicule" class="btn btn-primary">Accéder à la liste</a>
+<div class="row g-4">
+    <!-- Carte Liste -->
+    <div class="col-md-6">
+        <a href="?page=vehicule/liste-vehicule" class="text-decoration-none text-dark">
+            <div class="card border-0 shadow-sm h-100" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.classList.add('shadow');" onmouseout="this.style.transform='translateY(0)'; this.classList.remove('shadow');">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3">
+                        <i class="bi bi-list-ul display-4 text-primary"></i>
                     </div>
+                    <h3 class="card-title fw-bold">Liste des véhicules</h3>
+                    <p class="card-text text-muted">Consulter, rechercher et voir les détails des véhicules disponibles.</p>
                 </div>
             </div>
-
-            <div class="col-md-6 mb-4">
-                <% if (isAdmin) { %>
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h4 class="card-title"><i class="bi bi-plus-circle"></i> Ajouter un Véhicule</h4>
-                            <p class="card-text text-muted">Enregistrer un nouveau véhicule dans la base de données.</p>
-                            <a href="?page=vehicule/ajout-vehicule" class="btn btn-success">Ajouter un véhicule</a>
-                        </div>
-                    </div>
-                <% } else { %>
-                    <div class="card h-100 shadow-sm bg-light text-muted" style="opacity: 0.6;">
-                        <div class="card-body">
-                            <h4 class="card-title"><i class="bi bi-plus-circle"></i> Ajouter un Véhicule</h4>
-                            <p class="card-text text-danger mb-3">(Réservé aux administrateurs)</p>
-                            <button class="btn btn-secondary" disabled>Ajouter un véhicule</button>
-                        </div>
-                    </div>
-                <% } %>
-            </div>
-        </div>
+        </a>
     </div>
 
-    <script src="${pageContext.request.contextPath}"></script>
-</body>
-</html>
+    <!-- Carte Ajouter -->
+    <div class="col-md-6">
+        <a href="?page=vehicule/ajout-vehicule" class="text-decoration-none text-dark <%= !isAdmin ? "disabled" : "" %>" <%= !isAdmin ? "onclick='return false;'" : "" %>>
+            <div class="card border-0 shadow-sm h-100" style="<%= !isAdmin ? "opacity: 0.6;" : "transition: transform 0.2s, box-shadow 0.2s;" %>" <%= isAdmin ? "onmouseover=\"this.style.transform='translateY(-5px)'; this.classList.add('shadow');\" onmouseout=\"this.style.transform='translateY(0)'; this.classList.remove('shadow');\"" : "" %>>
+                <div class="card-body text-center p-5">
+                    <div class="mb-3">
+                        <i class="bi bi-plus-circle display-4 text-success"></i>
+                    </div>
+                    <h3 class="card-title fw-bold">Ajouter un véhicule</h3>
+                    <p class="card-text text-muted">Enregistrer un nouveau véhicule dans la base de données.</p>
+                    <% if (!isAdmin) { %>
+                        <span class="badge bg-danger mt-2"><i class="bi bi-lock me-1"></i> Accès restreint</span>
+                    <% } %>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

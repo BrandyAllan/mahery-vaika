@@ -1,0 +1,115 @@
+.siege-btn {
+    width: 42px;
+    height: 42px;
+    margin: 3px;
+    padding: 0;
+    font-size: 0.85rem;
+}
+
+.siege-disponible {
+    background-color: #198754;
+    color: #fff;
+    border: none;
+}
+
+.siege-reserve {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+.siege-selectionne {
+    background-color: #0d6efd;
+    color: #fff;
+    border: none;
+}
+
+.bus-layout {
+    display: inline-block;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.bus-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.bus-aisle {
+    width: 26px;
+    margin: 0 4px;
+}
+
+.bus-front {
+    background-color: #666;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.siege-choisi-badge {
+    font-size: 0.9rem;
+}
+
+.wizard-steps {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.wizard-steps li {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    color: #adb5bd;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.wizard-steps li .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.wizard-steps li.active .num {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.wizard-steps li.done .num {
+    background: #198754;
+    color: #fff;
+}
+
+.wizard-steps li.active {
+    color: #0d6efd;
+}
+
+.wizard-steps li.done {
+    color: #198754;
+}
+
+.wizard-step-pane {
+    display: none;
+}
+
+.wizard-step-pane.active {
+    display: block;
+}

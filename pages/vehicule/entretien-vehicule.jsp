@@ -24,7 +24,7 @@
 %>
 
 <div class="container mt-4">
-    <p><a href="model.jsp?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-left"></i> Retour à la liste</a></p>
+    <p><a href="?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-left"></i> Retour à la liste</a></p>
     
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-dark text-white">
