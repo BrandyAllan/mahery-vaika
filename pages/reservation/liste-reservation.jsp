@@ -75,99 +75,106 @@
         + "&dateFin=" + (dateFin != null ? dateFin : "")
         + "&tri=" + tri;
 %>
+ 
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-calendar2-check text-primary"></i> Liste des Réservations
+        <small class="fs-6 text-muted ms-2">(<%= total %> résultat<%= total > 1 ? "s" : "" %>)</small>
+    </h2>
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Liste des réservations</h2>
-
-        <div class="d-flex gap-2">
-            <a href="model.jsp?page=reservation/ajout-reservation" class="btn btn-brand">
-                <i class="bi bi-plus-lg"></i> Nouvelle Réservation
-            </a>
-            <a href="model.jsp?page=reservation/gestion-reservation" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Retour
-            </a>
-        </div>
-    </div>
-
-    <form action="model.jsp" method="get" class="row g-3 mb-4 p-3 border rounded bg-light">
-        <input type="hidden" name="page" value="reservation/liste-reservation">
-
-        <div class="col-md-3">
-            <label class="form-label">Numéro réservation</label>
-            <input type="text" name="numero" class="form-control"
-                   value="<%= numero != null ? numero : "" %>" placeholder="RES...">
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label">Nom passager</label>
-            <input type="text" name="nomPassager" class="form-control"
-                   value="<%= nomPassager != null ? nomPassager : "" %>">
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label">Trajet</label>
-            <select name="trajet" class="form-select">
-                <option value="">Tous</option>
-                <% for (Reservation t : trajets) { %>
-                    <option value="<%= t.getId_trajet() %>"
-                        <%= selectedTrajet.equals(String.valueOf(t.getId_trajet())) ? "selected" : "" %>>
-                        <%= t.getVille_depart() %> → <%= t.getVille_arrivee() %>
-                    </option>
-                <% } %>
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label">Statut</label>
-            <select name="statut" class="form-select">
-                <option value="">Tous</option>
-                <option value="CONFIRMEE" <%= "CONFIRMEE".equals(statutParam) ? "selected" : "" %>>Confirmée</option>
-                <option value="ANNULEE" <%= "ANNULEE".equals(statutParam) ? "selected" : "" %>>Annulée</option>
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label">Date début</label>
-            <input type="date" name="dateDebut" class="form-control"
-                   value="<%= dateDebut != null ? dateDebut : "" %>">
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label">Date fin</label>
-            <input type="date" name="dateFin" class="form-control"
-                   value="<%= dateFin != null ? dateFin : "" %>">
-        </div>
-
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="bi bi-search"></i> Rechercher
-            </button>
-        </div>
-
-        <div class="col-md-3 d-flex align-items-end">
-            <a href="model.jsp?page=reservation/liste-reservation" class="btn btn-outline-secondary w-100">
-                Réinitialiser
-            </a>
-        </div>
-    </form>
-
-    <div class="mb-3">
-        <span>Trier par date : </span>
-
-        <a href="<%= baseUrl.replace("&tri=" + tri, "&tri=ASC") %>"
-           class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">
-            <i class="bi bi-arrow-up-short"></i> Plus ancien
+    <div class="d-flex gap-2">
+        <a href="model.jsp?page=reservation/ajout-reservation" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> Nouvelle Réservation
         </a>
-
-        <a href="<%= baseUrl.replace("&tri=" + tri, "&tri=DESC") %>"
-           class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">
-            <i class="bi bi-arrow-down-short"></i> Plus récent
+        <a href="model.jsp?page=reservation/gestion-reservation" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Retour
         </a>
     </div>
+</div>
 
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form action="model.jsp" method="get" class="row g-3 align-items-end">
+            <input type="hidden" name="page" value="reservation/liste-reservation">
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Numéro réservation</label>
+                <input type="text" name="numero" class="form-control form-control-sm"
+                       value="<%= numero != null ? numero : "" %>" placeholder="RES...">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Nom passager</label>
+                <input type="text" name="nomPassager" class="form-control form-control-sm"
+                       value="<%= nomPassager != null ? nomPassager : "" %>">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Trajet</label>
+                <select name="trajet" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <% for (Reservation t : trajets) { %>
+                        <option value="<%= t.getId_trajet() %>"
+                            <%= selectedTrajet.equals(String.valueOf(t.getId_trajet())) ? "selected" : "" %>>
+                            <%= t.getVille_depart() %> → <%= t.getVille_arrivee() %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Statut</label>
+                <select name="statut" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <option value="CONFIRMEE" <%= "CONFIRMEE".equals(statutParam) ? "selected" : "" %>>Confirmée</option>
+                    <option value="ANNULEE" <%= "ANNULEE".equals(statutParam) ? "selected" : "" %>>Annulée</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date début</label>
+                <input type="date" name="dateDebut" class="form-control form-control-sm"
+                       value="<%= dateDebut != null ? dateDebut : "" %>">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date fin</label>
+                <input type="date" name="dateFin" class="form-control form-control-sm"
+                       value="<%= dateFin != null ? dateFin : "" %>">
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="bi bi-search"></i> Rechercher
+                </button>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <a href="model.jsp?page=reservation/liste-reservation" class="btn btn-outline-secondary btn-sm">
+                    Réinitialiser
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <span class="text-muted small fw-semibold">Trier par date :</span>
+
+    <a href="<%= baseUrl.replace("&tri=" + tri, "&tri=ASC") %>"
+       class="btn btn-sm <%= tri.equals("ASC") ? "btn-primary" : "btn-outline-secondary" %>">
+        <i class="bi bi-arrow-up-short"></i> Plus ancien
+    </a>
+
+    <a href="<%= baseUrl.replace("&tri=" + tri, "&tri=DESC") %>"
+       class="btn btn-sm <%= tri.equals("DESC") ? "btn-primary" : "btn-outline-secondary" %>">
+        <i class="bi bi-arrow-down-short"></i> Plus récent
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
+        <table class="table table-hover table-striped align-middle mb-0">
             <thead class="table-light">
                 <tr>
                     <th>N° réservation</th>
@@ -178,19 +185,22 @@
                     <th>Siège</th>
                     <th>Statut</th>
                     <th>Caissier</th>
-                    <th>Actions</th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 <% if (liste.isEmpty()) { %>
                     <tr>
-                        <td colspan="9" class="text-center py-4">Aucune réservation trouvée.</td>
+                        <td colspan="9" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox d-block fs-1 mb-2"></i>
+                            Aucune réservation trouvée.
+                        </td>
                     </tr>
                 <% } else {
                     for (Reservation r : liste) { %>
                         <tr>
-                            <td><%= r.getNumero_reservation() %></td>
+                            <td class="fw-semibold text-muted"><%= r.getNumero_reservation() %></td>
 
                             <td>
                                 <strong><%= r.getNom_passager() %></strong><br>
@@ -200,39 +210,41 @@
                             </td>
 
                             <td>
-                                <%= r.getVille_depart() %> → <%= r.getVille_arrivee() %><br>
+                                <span class="fw-semibold"><%= r.getVille_depart() %></span>
+                                <i class="bi bi-arrow-right text-muted mx-1"></i>
+                                <span class="fw-semibold"><%= r.getVille_arrivee() %></span><br>
                                 <small class="text-muted">
-                                    <%= r.getDuree_estimee() != null ? r.getDuree_estimee() : "" %>
+                                    <i class="bi bi-clock me-1"></i><%= r.getDuree_estimee() != null ? r.getDuree_estimee() : "" %>
                                 </small>
                             </td>
 
                             <td><%= r.getDate_depart() %></td>
                             <td><%= r.getHeure_depart() %></td>
-                            <td><%= r.getNumero_siege() %></td>
+                            <td><span class="badge bg-light text-dark border">N° <%= r.getNumero_siege() %></span></td>
 
                             <td>
-                                <span class="badge <%= r.getStatut().equals("CONFIRMEE") ? "bg-success" : "bg-danger" %>">
+                                <span class="badge <%= r.getStatut().equals("CONFIRMEE") ? "bg-success" : "bg-danger" %> rounded-pill px-3 py-2">
                                     <%= r.getStatut() %>
                                 </span>
                             </td>
 
                             <td><%= r.getNom_caissier() %></td>
 
-                            <td>
+                            <td class="text-end">
                                 <a href="model.jsp?page=reservation/details-reservation&id=<%= r.getId_reservation() %>"
-                                   class="btn btn-sm btn-info" title="Détails">
+                                   class="btn btn-sm btn-outline-info rounded-circle me-1" title="Détails">
                                     <i class="bi bi-eye"></i>
                                 </a>
 
                                 <% if (isAdmin || r.getId_caissier() == user.getId_utilisateur()) { %>
                                     <% if (r.getStatut().equals("CONFIRMEE")) { %>
                                         <a href="model.jsp?page=reservation/modifier-reservation&id=<%= r.getId_reservation() %>"
-                                           class="btn btn-sm btn-warning" title="Modifier">
+                                           class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Modifier">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <a href="../traitement/reservation/annuler-reservation.jsp?id=<%= r.getId_reservation() %>"
-                                           class="btn btn-sm btn-danger"
+                                        <a href="traitement/annuler-reservation.jsp?id=<%= r.getId_reservation() %>"
+                                           class="btn btn-sm btn-outline-danger rounded-circle"
                                            title="Annuler"
                                            onclick="return confirm('Confirmer l\'annulation de la réservation <%= r.getNumero_reservation() %> ?')">
                                             <i class="bi bi-x-circle"></i>
@@ -245,18 +257,18 @@
             </tbody>
         </table>
     </div>
-
-    <% if (nbPages > 1) { %>
-        <nav>
-            <ul class="pagination">
-                <% for (int p = 1; p <= nbPages; p++) { %>
-                    <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                        <a class="page-link" href="<%= baseUrl %>&pageNum=<%= p %>">
-                            <%= p %>
-                        </a>
-                    </li>
-                <% } %>
-            </ul>
-        </nav>
-    <% } %>
 </div>
+
+<% if (nbPages > 1) { %>
+<nav>
+    <ul class="pagination pagination-sm">
+        <% for (int p = 1; p <= nbPages; p++) { %>
+            <li class="page-item <%= p == pageCourante ? "active" : "" %>">
+                <a class="page-link" href="<%= baseUrl %>&pageNum=<%= p %>">
+                    <%= p %>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+</nav>
+<% } %>

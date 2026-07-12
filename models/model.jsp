@@ -153,7 +153,7 @@
           </li>
           <% } %>
           <li>
-            <a href="?page=reservation/liste-reservation" class="nav-link-flat<%= "reservation".equals(activeSection) ? " active" : "" %>">
+            <a href="?page=reservation/gestion-reservation" class="nav-link-flat<%= "reservation".equals(activeSection) ? " active" : "" %>">
               <i class="bi bi-calendar2-check-fill"></i><span>Réservations</span>
             </a>
           </li>
@@ -184,7 +184,7 @@
             </a>
           </li>
           <li>
-            <a href="?page=utilisateur/liste-utilisateur" class="nav-link-flat<%= "utilisateur".equals(activeSection) ? " active" : "" %>">
+            <a href="?page=utilisateur/gestion-utilisateur" class="nav-link-flat<%= "utilisateur".equals(activeSection) ? " active" : "" %>">
               <i class="bi bi-people-fill"></i><span>Utilisateurs</span>
             </a>
           </li>
@@ -228,7 +228,7 @@
           </li>
           <% } %>
           <li>
-            <a href="?page=reservation/liste-reservation" class="nav-link-flat<%= "reservation".equals(activeSection) ? " active" : "" %>">
+            <a href="?page=reservation/gestion-reservation" class="nav-link-flat<%= "reservation".equals(activeSection) ? " active" : "" %>">
               <i class="bi bi-calendar2-check-fill"></i><span>Réservations</span>
             </a>
           </li>
@@ -259,7 +259,7 @@
             </a>
           </li>
           <li>
-            <a href="?page=utilisateur/liste-utilisateur" class="nav-link-flat<%= "utilisateur".equals(activeSection) ? " active" : "" %>">
+            <a href="?page=utilisateur/gestion-utilisateur" class="nav-link-flat<%= "utilisateur".equals(activeSection) ? " active" : "" %>">
               <i class="bi bi-people-fill"></i><span>Utilisateurs</span>
             </a>
           </li>

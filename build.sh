@@ -32,7 +32,7 @@ echo "✔ maheryvaika.war généré avec succès."
 # Déploiement automatique dans Tomcat
 echo "🚀 Déploiement du WAR dans Tomcat..."
 
-TOMCAT_PATH="/home/brandy-allan/Documents/BOSY/RaTa/S2/apache-tomcat-9.0.104/webapps"
+TOMCAT_PATH="/xampp/tomcat/webapps"
 
 cp maheryvaika.war "$TOMCAT_PATH"
 

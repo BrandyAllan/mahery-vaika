@@ -1,7 +1,6 @@
 <%@ page contentType="application/json; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="dashboard.DashboardSemaine" %>
 <%@ page import="backoffice.Utilisateur" %>
-<%@ page import="java.sql.Date" %>
 <%@ page import="java.util.Vector" %>
 <%!
     private String echapper(String valeur) {
@@ -17,37 +16,11 @@
         return;
     }
 
-    String paramDebut = request.getParameter("dateDebut");
-    String paramFin = request.getParameter("dateFin");
-
-    Date dateDebut;
-    Date dateFin;
-
-    try {
-        dateDebut = (paramDebut != null && !paramDebut.trim().isEmpty())
-                ? Date.valueOf(paramDebut.trim())
-                : Date.valueOf(java.time.LocalDate.now().minusDays(6));
-
-        dateFin = (paramFin != null && !paramFin.trim().isEmpty())
-                ? Date.valueOf(paramFin.trim())
-                : Date.valueOf(java.time.LocalDate.now());
-    } catch (IllegalArgumentException e) {
-        response.setStatus(400);
-        out.print("{\"erreur\":\"Format de date invalide\"}");
-        return;
-    }
-
-    if (dateFin.before(dateDebut)) {
-        response.setStatus(400);
-        out.print("{\"erreur\":\"La date de fin doit etre apres la date de debut\"}");
-        return;
-    }
-
-    Vector<String> labels = DashboardSemaine.getLabelsJours(dateDebut, dateFin);
-    Vector<Double> caSemaine = DashboardSemaine.getCASemaine(dateDebut, dateFin);
-    Vector<Double> beneficeSemaine = DashboardSemaine.getBeneficeSemaine(dateDebut, dateFin);
-    Vector<String> destLabels = DashboardSemaine.getDestinationsLabels(dateDebut, dateFin);
-    Vector<Double> destValues = DashboardSemaine.getDestinationsValues(dateDebut, dateFin);
+    Vector<String> labels = DashboardSemaine.getLabelsSemaines();
+    Vector<Double> caSemaine = DashboardSemaine.getCASemaines();
+    Vector<Double> beneficeSemaine = DashboardSemaine.getBeneficeSemaines();
+    Vector<String> destLabels = DashboardSemaine.getDestinationsLabels();
+    Vector<Double> destValues = DashboardSemaine.getDestinationsValues();
 
     StringBuilder json = new StringBuilder();
     json.append("{");

@@ -43,6 +43,7 @@
     <h2>Gestion des depenses</h2>
     <div class="d-flex flex-wrap gap-2 mb-3">
         <a href="?page=depense/ajout-depense" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nouvelle depense</a>
+        <a href="?page=dashboard/jour" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Retour</a>
     </div>
 
     <form method="get" class="row g-3 mb-4">

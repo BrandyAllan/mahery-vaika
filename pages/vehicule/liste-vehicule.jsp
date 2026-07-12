@@ -68,87 +68,42 @@
         + "&dateAssuranceFin=" + (dateFinStr != null ? dateFinStr : "");
 %>
 
-<style>
-    .filter-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
-        margin-bottom: 20px;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-
-    .data-table th,
-    .data-table td {
-        border: 1px solid #dee2e6;
-        padding: 10px;
-        text-align: left;
-    }
-
-    .data-table th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-action {
-        padding: 4px 8px;
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 0.9em;
-        color: white;
-    }
-
-    .btn-modifier {
-        background-color: #ffc107;
-        color: #212529;
-    }
-
-    .data-table tbody tr {
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-    }
-
-    .data-table tbody tr:hover {
-        background-color: #f1f3f5;
-    }
-</style>
-
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Liste des véhicules</h2>
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-car-front text-primary"></i> Liste des Véhicules
+        <small class="fs-6 text-muted ms-2">(<%= totalVehicules %> résultat<%= totalVehicules > 1 ? "s" : "" %>)</small>
+    </h2>
 
-    <a href="model.jsp?page=vehicule/gestion-vehicule" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Retour
-    </a>
+    <div class="d-flex gap-2">
+        <a href="model.jsp?page=vehicule/gestion-vehicule" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
 </div>
 
-<div class="filter-container">
-    <form method="get" action="model.jsp">
-        <input type="hidden" name="page" value="vehicule/liste-vehicule">
-        <input type="hidden" name="pageNum" value="1">
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" action="model.jsp" class="row g-3 align-items-end">
+            <input type="hidden" name="page" value="vehicule/liste-vehicule">
+            <input type="hidden" name="pageNum" value="1">
 
-        <div class="row g-3 align-items-end">
             <div class="col-md-5">
-                <label class="form-label">
+                <label class="form-label fw-semibold">
                     Recherche globale
                 </label>
                 <input type="text"
                        name="rechercheGlobale"
-                       class="form-control"
+                       class="form-control form-control-sm"
                        placeholder="Ex: Toyota, ACTIF, 1234 TAB..."
                        value="<%= rechercheGlobale != null ? rechercheGlobale : "" %>">
             </div>
 
             <div class="col-md-5">
-                <label class="form-label">
+                <label class="form-label fw-semibold">
                     Intervalle date assurance
                 </label>
 
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text">Du</span>
                     <input type="date"
                            name="dateAssuranceDebut"
@@ -163,75 +118,79 @@
                 </div>
             </div>
 
-            <div class="col-md-2 d-grid">
-                <button type="submit" class="btn btn-primary">
+            <div class="col-md-2 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary btn-sm w-100">
                     <i class="bi bi-search"></i> Filtrer
                 </button>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
-<div class="table-responsive">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Immatriculation</th>
-                <th>Marque</th>
-                <th>Modèle</th>
-                <th>Capacité</th>
-                <th>Kilométrage</th>
-                <th>État</th>
-                <th>Date assurance</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <% if (listeVehicules == null || listeVehicules.isEmpty()) { %>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="table-light">
                 <tr>
-                    <td colspan="8" class="text-center text-muted">
-                        Aucun véhicule trouvé.
-                    </td>
+                    <th>Immatriculation</th>
+                    <th>Marque</th>
+                    <th>Modèle</th>
+                    <th>Capacité</th>
+                    <th>Kilométrage</th>
+                    <th>État</th>
+                    <th>Date assurance</th>
+                    <% if (isAdmin) { %><th class="text-end">Actions</th><% } %>
                 </tr>
-            <% } else {
-                for (Vehicule v : listeVehicules) { %>
-                    <tr class="vehicule-row"
-                        data-href="?page=vehicule/details-vehicule&id=<%= v.getIdVehicule() %>">
-                        <td><%= v.getImmatriculation() %></td>
-                        <td><%= v.getMarque() %></td>
-                        <td><%= v.getModele() %></td>
-                        <td><%= v.getCapacite() %> places</td>
-                        <td><%= v.getKilometrageActuel() %> km</td>
+            </thead>
 
-                        <td>
-                            <span class="badge <%= "ACTIF".equals(v.getEtat()) ? "bg-success" : "bg-danger" %>">
-                                <%= v.getEtat() %>
-                            </span>
-                        </td>
-
-                        <td>
-                            <%= v.getDateExpirationAssurance() != null ? v.getDateExpirationAssurance() : "N/A" %>
-                        </td>
-
-                        <td>
-                            <% if (isAdmin) { %>
-                                <a href="model.jsp?page=vehicule/modifier-vehicule&id=<%= v.getIdVehicule() %>"
-                                   class="btn-action btn-modifier"
-                                   onclick="event.stopPropagation();">
-                                    Modifier
-                                </a>
-                            <% } %>
+            <tbody>
+                <% if (listeVehicules == null || listeVehicules.isEmpty()) { %>
+                    <tr>
+                        <td colspan="<%= isAdmin ? 8 : 7 %>" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox d-block fs-1 mb-2"></i>
+                            Aucun véhicule trouvé.
                         </td>
                     </tr>
-            <% }} %>
-        </tbody>
-    </table>
+                <% } else {
+                    for (Vehicule v : listeVehicules) { %>
+                        <tr class="vehicule-row" style="cursor:pointer;"
+                            data-href="?page=vehicule/details-vehicule&id=<%= v.getIdVehicule() %>">
+                            <td>
+                                <span class="badge bg-light text-dark border"><%= v.getImmatriculation() %></span>
+                            </td>
+                            <td class="fw-semibold"><%= v.getMarque() %></td>
+                            <td><%= v.getModele() %></td>
+                            <td><%= v.getCapacite() %> places</td>
+                            <td><%= v.getKilometrageActuel() %> km</td>
+
+                            <td>
+                                <span class="badge <%= "ACTIF".equals(v.getEtat()) ? "bg-success" : "bg-danger" %> rounded-pill px-3 py-2">
+                                    <%= v.getEtat() %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <%= v.getDateExpirationAssurance() != null ? v.getDateExpirationAssurance() : "N/A" %>
+                            </td>
+
+                            <% if (isAdmin) { %>
+                            <td class="text-end" onclick="event.stopPropagation();">
+                                <a href="model.jsp?page=vehicule/modifier-vehicule&id=<%= v.getIdVehicule() %>"
+                                   class="btn btn-sm btn-outline-warning rounded-circle" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                            <% } %>
+                        </tr>
+                <% }} %>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <% if (nbPages > 1) { %>
-    <nav class="mt-3">
-        <ul class="pagination flex-wrap">
+    <nav>
+        <ul class="pagination pagination-sm">
             <% for (int p = 1; p <= nbPages; p++) { %>
                 <li class="page-item <%= p == pageActuelle ? "active" : "" %>">
                     <a class="page-link" href="<%= baseUrl %>&pageNum=<%= p %>">

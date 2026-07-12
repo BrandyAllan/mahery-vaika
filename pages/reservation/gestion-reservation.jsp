@@ -1,4 +1,5 @@
 <%@ page import="backoffice.Utilisateur" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
     if (user == null) {
@@ -6,40 +7,43 @@
         return;
     }
     boolean isAdmin = user.voirsiadmin().equals("Admin");
-%>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des reservations</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/bootstrap/icons/bootstrap-icons.min.css">
-</head>
-<body>
-<div class="container mt-5">
-    <h2 class="mb-4"><i class="bi bi-ticket-perforated"></i> Gestion des reservations</h2>
-    <div class="row g-3">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-list-ul"></i> Liste des reservations</h5>
-                    <p class="card-text">Consulter et rechercher les reservations.</p>
-                    <a href="liste-reservation.jsp" class="btn btn-primary">Voir la liste</a>
+%> 
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0" style="color: #2c3e50;">
+        <i class="bi bi-ticket-perforated text-primary me-2"></i> Gestion des réservations
+    </h2>
+</div>
+<p class="text-muted mb-4">Sélectionnez une action ci-dessous</p>
+
+<div class="row g-4">
+    <!-- Carte Liste -->
+    <div class="col-md-6">
+        <a href="?page=reservation/liste-reservation" class="text-decoration-none text-dark">
+            <div class="card border-0 shadow-sm h-100" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.classList.add('shadow');" onmouseout="this.style.transform='translateY(0)'; this.classList.remove('shadow');">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3">
+                        <i class="bi bi-list-ul display-4 text-primary"></i>
+                    </div>
+                    <h3 class="card-title fw-bold">Liste des réservations</h3>
+                    <p class="card-text text-muted">Consulter et rechercher les réservations existantes.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-plus-circle"></i> Nouvelle reservation</h5>
-                    <p class="card-text">Creer une reservation pour un passager.</p>
-                    <a href="ajout-reservation.jsp" class="btn btn-success">Ajouter</a>
+        </a>
+    </div>
+
+    <!-- Carte Ajouter -->
+    <div class="col-md-6">
+        <a href="?page=reservation/ajout-reservation" class="text-decoration-none text-dark">
+            <div class="card border-0 shadow-sm h-100" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.classList.add('shadow');" onmouseout="this.style.transform='translateY(0)'; this.classList.remove('shadow');">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3">
+                        <i class="bi bi-plus-circle display-4 text-success"></i>
+                    </div>
+                    <h3 class="card-title fw-bold">Nouvelle réservation</h3>
+                    <p class="card-text text-muted">Créer une réservation pour un passager.</p>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 </div>
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

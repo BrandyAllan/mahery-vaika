@@ -37,7 +37,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <p><a href="?page=vehicule/gestion-vehicule" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a></p>
+                <p><a href="?page=vehicule/liste-vehicule" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Retour</a></p>
                 
                 <div class="card shadow-sm">
                     <div class="card-header bg-success text-white">
