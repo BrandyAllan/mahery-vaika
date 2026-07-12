@@ -10,67 +10,120 @@ import tools.Database;
 
 public class DashboardSemaine {
 
-    public static Vector<String> getLabelsJours(Date dateDebut, Date dateFin) throws Exception {
+    private static final int NB_SEMAINES = 5;
+
+    /**
+     * Retourne les labels des 5 dernières semaines (ex: "29/06 - 05/07")
+     */
+    public static Vector<String> getLabelsSemaines() throws Exception {
         Vector<String> labels = new Vector<>();
-        String[] jours = {"Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"};
-        
         Calendar cal = Calendar.getInstance();
-        cal.setTime(dateDebut);
         
-        for (int i = 0; i < 7; i++) {
-            labels.add(jours[cal.get(Calendar.DAY_OF_WEEK) - 1]);
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            if (cal.getTime().after(dateFin)) break;
+        // Reculer de 5 semaines
+        for (int i = NB_SEMAINES - 1; i >= 0; i--) {
+            Calendar semaineCal = (Calendar) cal.clone();
+            semaineCal.add(Calendar.WEEK_OF_YEAR, -i);
+            
+            // Trouver le lundi de cette semaine
+            semaineCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            semaineCal.set(Calendar.HOUR_OF_DAY, 0);
+            semaineCal.set(Calendar.MINUTE, 0);
+            semaineCal.set(Calendar.SECOND, 0);
+            
+            Date debutSemaine = new Date(semaineCal.getTimeInMillis());
+            
+            // Trouver le dimanche
+            semaineCal.add(Calendar.DAY_OF_MONTH, 6);
+            Date finSemaine = new Date(semaineCal.getTimeInMillis());
+            
+            String label = formatDate(debutSemaine) + " - " + formatDate(finSemaine);
+            labels.add(label);
         }
         
         return labels;
     }
 
-    public static Vector<Double> getCASemaine(Date dateDebut, Date dateFin) throws Exception {
+    /**
+     * Retourne le CA total pour chacune des 5 dernières semaines
+     */
+    public static Vector<Double> getCASemaines() throws Exception {
         Vector<Double> ca = new Vector<>();
-        
         Calendar cal = Calendar.getInstance();
-        cal.setTime(dateDebut);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
         
-        while (!cal.getTime().after(dateFin)) {
-            Date jourDebut = new Date(cal.getTimeInMillis());
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            Date jourFin = new Date(cal.getTimeInMillis());
+        for (int i = NB_SEMAINES - 1; i >= 0; i--) {
+            Calendar semaineCal = (Calendar) cal.clone();
+            semaineCal.add(Calendar.WEEK_OF_YEAR, -i);
             
-            double total = getChiffreAffaires(jourDebut, jourFin);
+            // Lundi
+            semaineCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            semaineCal.set(Calendar.HOUR_OF_DAY, 0);
+            semaineCal.set(Calendar.MINUTE, 0);
+            semaineCal.set(Calendar.SECOND, 0);
+            Date debutSemaine = new Date(semaineCal.getTimeInMillis());
+            
+            // Dimanche (inclure toute la journée)
+            semaineCal.add(Calendar.DAY_OF_MONTH, 7);
+            Date finSemaine = new Date(semaineCal.getTimeInMillis());
+            
+            double total = getChiffreAffaires(debutSemaine, finSemaine);
             ca.add(total);
         }
         
         return ca;
     }
 
-    public static Vector<Double> getBeneficeSemaine(Date dateDebut, Date dateFin) throws Exception {
+    /**
+     * Retourne le bénéfice total pour chacune des 5 dernières semaines
+     */
+    public static Vector<Double> getBeneficeSemaines() throws Exception {
         Vector<Double> benefice = new Vector<>();
-        
         Calendar cal = Calendar.getInstance();
-        cal.setTime(dateDebut);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
         
-        while (!cal.getTime().after(dateFin)) {
-            Date jourDebut = new Date(cal.getTimeInMillis());
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            Date jourFin = new Date(cal.getTimeInMillis());
+        for (int i = NB_SEMAINES - 1; i >= 0; i--) {
+            Calendar semaineCal = (Calendar) cal.clone();
+            semaineCal.add(Calendar.WEEK_OF_YEAR, -i);
             
-            double ca = getChiffreAffaires(jourDebut, jourFin);
-            double depenses = getDepenses(jourDebut, jourFin);
+            // Lundi
+            semaineCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            semaineCal.set(Calendar.HOUR_OF_DAY, 0);
+            semaineCal.set(Calendar.MINUTE, 0);
+            semaineCal.set(Calendar.SECOND, 0);
+            Date debutSemaine = new Date(semaineCal.getTimeInMillis());
+            
+            // Dimanche
+            semaineCal.add(Calendar.DAY_OF_MONTH, 7);
+            Date finSemaine = new Date(semaineCal.getTimeInMillis());
+            
+            double ca = getChiffreAffaires(debutSemaine, finSemaine);
+            double depenses = getDepenses(debutSemaine, finSemaine);
             benefice.add(ca - depenses);
         }
         
         return benefice;
     }
 
-    public static Vector<String> getDestinationsLabels(Date dateDebut, Date dateFin) throws Exception {
+    /**
+     * Retourne les labels des destinations pour les 5 dernières semaines
+     */
+    public static Vector<String> getDestinationsLabels() throws Exception {
         Vector<String> labels = new Vector<>();
+        
+        // Calculer la date de début (5 semaines en arrière)
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.WEEK_OF_YEAR, -(NB_SEMAINES - 1));
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        Date dateDebut = new Date(cal.getTimeInMillis());
+        
+        // Date de fin (semaine actuelle, dimanche)
+        cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        Date dateFin = new Date(cal.getTimeInMillis());
         
         String sql = 
             "SELECT va.nom_ville " + 
@@ -97,12 +150,32 @@ public class DashboardSemaine {
         return labels;
     }
 
-    public static Vector<Double> getDestinationsValues(Date dateDebut, Date dateFin) throws Exception {
+    /**
+     * Retourne les pourcentages des destinations pour les 5 dernières semaines
+     */
+    public static Vector<Double> getDestinationsValues() throws Exception {
         Vector<Double> values = new Vector<>();
         
+        // Calculer la date de début (5 semaines en arrière)
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.WEEK_OF_YEAR, -(NB_SEMAINES - 1));
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        Date dateDebut = new Date(cal.getTimeInMillis());
+        
+        // Date de fin (semaine actuelle, dimanche)
+        cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        Date dateFin = new Date(cal.getTimeInMillis());
+        
         String sql = 
-            "SELECT COUNT(*) as nombre" +
-            "FROM reservation r" +
+            "SELECT COUNT(*) as nombre " +
+            "FROM reservation r " +
             "JOIN depart d ON r.id_depart = d.id_depart " +
             "JOIN trajet t ON d.id_trajet = t.id_trajet " +
             "JOIN ville va ON t.id_ville_arrivee = va.id_ville " +
@@ -110,7 +183,7 @@ public class DashboardSemaine {
             "AND r.statut != 'ANNULEE' " +
             "GROUP BY va.nom_ville " +
             "ORDER BY nombre DESC " +
-            "LIMIT 5 " ;
+            "LIMIT 5 ";
         
         Vector<Integer> nombres = new Vector<>();
         int total = 0;
@@ -135,14 +208,19 @@ public class DashboardSemaine {
         return values;
     }
 
+    private static String formatDate(Date date) {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM");
+        return sdf.format(date);
+    }
+
     private static double getChiffreAffaires(Date debut, Date fin) throws Exception {
         String sql = 
-            "SELECT COALESCE(SUM(p.montant), 0)" +
+            "SELECT COALESCE(SUM(p.montant), 0) " +
             "FROM paiement p " +
             "JOIN reservation r ON p.id_reservation = r.id_reservation " +
             "JOIN depart d ON r.id_depart = d.id_depart " +
             "WHERE d.date_depart >= ? AND d.date_depart < ? " +
-            "AND p.statut = 'PAYE' " ;
+            "AND p.statut = 'PAYE' ";
         
         try (Connection c = Database.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
