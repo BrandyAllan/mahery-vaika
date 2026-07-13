@@ -267,16 +267,12 @@ function chargerSieges(departId) {
 function selectionnerSiege(numero, btn) {
     var boutons = document.querySelectorAll('.siege-selectionne');
     for (var i = 0; i < boutons.length; i++) {
-        if (parseInt(boutons[i].dataset.siege) !== siegeActuel) {
-            boutons[i].classList.remove('siege-selectionne');
-            boutons[i].classList.add('siege-disponible');
-        }
+        boutons[i].classList.remove('siege-selectionne');
+        boutons[i].classList.add('siege-disponible');
     }
-    
-    if (numero !== siegeActuel) {
-        btn.classList.remove('siege-disponible');
-        btn.classList.add('siege-selectionne');
-    }
+
+    btn.classList.remove('siege-disponible');
+    btn.classList.add('siege-selectionne');
     siegeSelectionne = numero;
     document.getElementById('numeroSiege').value = numero;
 }
