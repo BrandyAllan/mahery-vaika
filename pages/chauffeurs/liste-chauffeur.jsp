@@ -172,10 +172,10 @@
                         </td>
                         <% if (isAdmin) { %>
                         <td class="text-end" onclick="event.stopPropagation();">
-                            <a href="modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>" class="btn btn-sm btn-outline-primary rounded-circle me-1" title="Modifier">
+                            <a href="?page=chauffeurs/modifier-chauffeur&id=<%= ch.getIdChauffeur() %>" class="btn btn-sm btn-outline-primary rounded-circle me-1" title="Modifier">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <a href="../../traitement/chauffeurs/modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>&actif=<%= !ch.isActif() %>"
+                            <a href="../traitement/chauffeurs/modifier-chauffeur.jsp?id=<%= ch.getIdChauffeur() %>&actif=<%= !ch.isActif() %>"
                                class="btn btn-sm <%= ch.isActif() ? "btn-outline-danger" : "btn-outline-success" %> rounded-circle"
                                onclick="return confirm('Confirmer la <%= ch.isActif() ? "désactivation" : "réactivation" %> ?')"
                                title="<%= ch.isActif() ? "Désactiver" : "Réactiver" %>">

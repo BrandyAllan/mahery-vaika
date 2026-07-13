@@ -15,8 +15,8 @@
     String vehiculeStr  = request.getParameter("idVehiculeHabituel");
 
     if (nom == null || nom.trim().isEmpty() || numeroPermis == null || numeroPermis.trim().isEmpty()) {
-        session.setAttribute("erreur", "Le nom et le numero de permis sont obligatoires.");
-        response.sendRedirect("../ajout-chauffeur.jsp");
+        session.setAttribute("erreur", "Le nom et le numéro de permis sont obligatoires.");
+        response.sendRedirect("../../models/model.jsp?page=chauffeurs/ajout-chauffeur");
         return;
     }
 
@@ -31,10 +31,10 @@
         c.setActif(true);
 
         Chauffeur.ajouter(c);
-        session.setAttribute("succes", "Chauffeur ajoute avec succes.");
-        response.sendRedirect("../liste-chauffeur.jsp");
+        session.setAttribute("succes", "Chauffeur ajouté avec succès.");
+        response.sendRedirect("../../models/model.jsp?page=chauffeurs/liste-chauffeur");
     } catch (Exception e) {
         session.setAttribute("erreur", "Erreur lors de l'ajout : " + e.getMessage());
-        response.sendRedirect("../ajout-chauffeur.jsp");
+        response.sendRedirect("../../models/model.jsp?page=chauffeurs/ajout-chauffeur");
     }
 %>
