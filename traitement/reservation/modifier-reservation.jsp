@@ -20,14 +20,12 @@
         return;
     }
 
-    // Verifier les droits : admin ou proprietaire de la reservation
     boolean isAdmin = user.voirsiadmin().equals("Admin");
     if (!isAdmin && r.getId_caissier() != user.getId_utilisateur()) {
         response.sendRedirect("../pages/liste-reservation.jsp?error=droits");
         return;
     }
 
-    // Verifier que la reservation est toujours confirmee
     if (!"CONFIRMEE".equals(r.getStatut())) {
         response.sendRedirect("../pages/details-reservation.jsp?id=" + id + "&error=statut");
         return;
@@ -54,22 +52,18 @@
         return;
     }
 
-    // Verifier que le siege n'est pas deja reserve par une autre reservation
     Vector<Integer> siegesReserves = Reservation.getSiegesReserves(idDepart);
-    // Enlever le siege actuel de la liste des reserves (car c'est la meme reservation)
     siegesReserves.removeElement(r.getNumero_siege());
     if (siegesReserves.contains(numeroSiege)) {
         response.sendRedirect("../pages/details-reservation.jsp?id=" + id + "&erreur=siege");
         return;
     }
 
-    // Formater le telephone
     String telComplet = null;
     if (telephonePassager != null && !telephonePassager.trim().isEmpty()) {
         telComplet = "+261" + telephonePassager.trim();
     }
 
-    // Mettre a jour la reservation
     r.setNom_passager(nomPassager);
     r.setPrenom_passager(prenomPassager);
     r.setTelephone_passager(telComplet);

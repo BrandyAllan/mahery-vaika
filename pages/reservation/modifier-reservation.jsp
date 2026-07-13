@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.*, backoffice.Reservation, backoffice.Utilisateur" %>
 <%
     Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
@@ -21,13 +22,11 @@
         return;
     }
 
-    // Verifier les droits
     if (!isAdmin && r.getId_caissier() != user.getId_utilisateur()) {
         response.sendRedirect("model.jsp?page=reservation/liste-reservation&error=droits");
         return;
     }
 
-    // Verifier que la reservation est confirmee
     if (!r.getStatut().equals("CONFIRMEE")) {
         response.sendRedirect("model.jsp?page=reservation/details-reservation&id=" + id + "&error=statut");
         return;
@@ -146,7 +145,6 @@
         </div>
     </div>
 
-            <!-- Selection du siege -->
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-body p-5">
                     <h5 class="card-title text-primary fw-bold mb-4"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Modifier le siège</h5>
@@ -154,11 +152,6 @@
             <input type="hidden" name="numeroSiege" id="numeroSiege" value="<%= siegeActuel %>">
             <div id="siegesContainer" class="text-center p-4 bg-light rounded-4 mb-4">
                 <p class="text-muted">Chargement des sièges...</p>
-            </div>
-            <div class="d-flex justify-content-center gap-3 mb-4">
-                <span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-check-circle me-1"></i> Disponible</span>
-                <span class="badge bg-danger px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i> Réservé</span>
-                <span class="badge bg-primary px-3 py-2 rounded-pill"><i class="bi bi-check2-square me-1"></i> Sélectionné</span>
             </div>
         </div>
     </div>
@@ -176,7 +169,6 @@
 </div>
 
 <script>
-// Variables initialisees via les attributs data de la page
 var siegeActuel = parseInt(document.getElementById('numeroSiege').value);
 var siegeSelectionne = siegeActuel;
 
@@ -200,7 +192,7 @@ document.getElementById('idDepart').addEventListener('change', function() {
 });
 
 function chargerSieges(departId) {
-    fetch('../traitement/ajouter-reservation.jsp?action=sieges&idDepart=' + departId)
+    fetch('../traitement/reservation/ajouter-reservation.jsp?action=sieges&idDepart=' + departId)
         .then(function(response) { return response.json(); })
         .then(function(data) {
             var capaciteMax = data.capacite;
