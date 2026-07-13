@@ -106,16 +106,16 @@
     </div>
 
     <nav>
-        <ul class="pagination flex-wrap">
-            <% for (int p = 1; p <= nbPages; p++) { %>
-                <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                    <a class="page-link" href="?pageNum=<%= p %>&recherche=<%= recherche != null ? recherche : "" %>&tri=<%= tri %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>">
-                        <%= p %>
-                    </a>
-                </li>
-            <% } %>
-        </ul>
-    </nav>
+    <ul class="pagination flex-wrap">
+        <% for (int p = 1; p <= nbPages; p++) { %>
+            <li class="page-item <%= p == pageCourante ? "active" : "" %>">
+                <a class="page-link" href="?page=depense/depense&pageNum=<%= p %>&recherche=<%= recherche != null ? recherche : "" %>&tri=<%= tri %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>">
+                    <%= p %>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+</nav>
 </div>
 <script src="../../assets/js/bootstrap.bundle.min.js"></script>
 </body>
