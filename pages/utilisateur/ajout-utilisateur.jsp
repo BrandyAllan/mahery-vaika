@@ -20,8 +20,8 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <a href="?page=utilisateur/liste-utilisateur" class="btn btn-sm btn-light text-muted border-0 shadow-sm mb-2 hover-shadow">
-            <i class="bi bi-arrow-left"></i> Retour à la liste
+        <a href="?page=utilisateur/gestion-utilisateur" class="btn btn-sm btn-light text-muted border-0 shadow-sm mb-2 hover-shadow">
+            <i class="bi bi-arrow-left"></i> Retour 
         </a>
         <h2 class="fw-bold mb-0" style="color: #2c3e50;">
             <i class="bi bi-person-plus-fill text-primary me-2"></i> Ajouter un utilisateur
