@@ -126,7 +126,7 @@ function rendreSiege(r, c, nbSiegesParRang, capaciteMax, siegesReserves) {
     const classe = estReserve ? 'siege-reserve' : 'siege-disponible';
 
     return '<button type="button" class="btn ' + classe + ' siege-btn" ' +
-        'data-siege="' + siegeNum + '" ' + (estReserve ? 'disabled' : '') +
+        'data-siege="' + siegeNum + '" ' +
         ' onclick="toggleSiege(' + siegeNum + ', this)">' +
         siegeNum + '</button>';
 }
