@@ -89,7 +89,7 @@
 
 <div class="row justify-content-center">
     <div class="col-md-10">
-        <form action="../../traitement/reservation/modifier-reservation.jsp" method="post" id="formModif" novalidate>
+        <form action="../traitement/reservation/modifier-reservation.jsp" method="post" id="formModif" novalidate>
             <input type="hidden" name="id" value="<%= reservationId %>">
 
             <!-- Selection du depart -->
