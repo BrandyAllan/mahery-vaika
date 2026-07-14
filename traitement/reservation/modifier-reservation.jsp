@@ -10,24 +10,24 @@
     try {
         id = Integer.parseInt(request.getParameter("id"));
     } catch (Exception e) {
-        response.sendRedirect("../../pages/reservation/liste-reservation.jsp?error=invalid");
+        response.sendRedirect("../../models/model.jsp?page=reservation/liste-reservation&error=invalid");
         return;
     }
 
     Reservation r = Reservation.getById(id);
     if (r == null) {
-        response.sendRedirect("../../pages/reservation/liste-reservation.jsp?error=notfound");
+        response.sendRedirect("../../models/model.jsp?page=reservation/liste-reservation&error=notfound");
         return;
     }
 
     boolean isAdmin = user.voirsiadmin().equals("Admin");
     if (!isAdmin && r.getId_caissier() != user.getId_utilisateur()) {
-        response.sendRedirect("../../pages/reservation/liste-reservation.jsp?error=droits");
+        response.sendRedirect("../../models/model.jsp?page=reservation/liste-reservation&error=droits");
         return;
     }
 
     if (!"CONFIRMEE".equals(r.getStatut())) {
-        response.sendRedirect("../../pages/reservation/details-reservation.jsp?id=" + id + "&error=statut");
+        response.sendRedirect("../../models/model.jsp?page=reservation/details-reservation&id=" + id + "&error=statut");
         return;
     }
 
@@ -38,7 +38,7 @@
     String idDepartStr = request.getParameter("idDepart");
 
     if (nomPassager == null || nomPassager.trim().isEmpty()) {
-        response.sendRedirect("../../pages/reservation/details-reservation.jsp?id=" + id + "&erreur=nom");
+        response.sendRedirect("../../models/model.jsp?page=reservation/details-reservation&id=" + id + "&erreur=nom");
         return;
     }
 
@@ -48,14 +48,14 @@
         numeroSiege = Integer.parseInt(numeroSiegeStr);
         idDepart = Integer.parseInt(idDepartStr);
     } catch (Exception e) {
-        response.sendRedirect("../../pages/reservation/details-reservation.jsp?id=" + id + "&erreur=params");
+        response.sendRedirect("../../models/model.jsp?page=reservation/details-reservation&id=" + id + "&erreur=params");
         return;
     }
 
     Vector<Integer> siegesReserves = Reservation.getSiegesReserves(idDepart);
     siegesReserves.removeElement(r.getNumero_siege());
     if (siegesReserves.contains(numeroSiege)) {
-        response.sendRedirect("../../pages/reservation/details-reservation.jsp?id=" + id + "&erreur=siege");
+        response.sendRedirect("../../models/model.jsp?page=reservation/details-reservation&id=" + id + "&erreur=siege");
         return;
     }
 
@@ -72,9 +72,9 @@
 
     try {
         Reservation.mettreAjour(r);
-        response.sendRedirect("../../pages/reservation/details-reservation.jsp?id=" + id + "&success=modif");
+        response.sendRedirect("../../models/model.jsp?page=reservation/details-reservation&id=" + id + "&success=modif");
     } catch (Exception e) {
         e.printStackTrace();
-        response.sendRedirect("../../pages/reservation/details-reservation.jsp?id=" + id + "&erreur=db");
+        response.sendRedirect("../../models/model.jsp?page=reservation/details-reservation&id=" + id + "&erreur=db");
     }
 %>
