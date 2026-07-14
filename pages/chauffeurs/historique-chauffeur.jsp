@@ -92,16 +92,30 @@
     </div>
 
     <% if (nbPages > 1) { %>
-    <nav class="mt-3">
-        <ul class="pagination justify-content-center">
-            <% for (int p = 1; p <= nbPages; p++) { %>
-            <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                <a class="page-link" href="?page=chauffeurs/historique-chauffeur&id=<%= id %>&pageNum=<%= p %>"><%= p %></a>
-            </li>
-            <% } %>
-        </ul>
-    </nav>
-    <% } %>
+<nav class="mt-3 d-flex justify-content-center">
+    <div class="join">
+        <% java.util.TreeSet<Integer> pagesToShow = new java.util.TreeSet<>();
+           pagesToShow.add(1);
+           pagesToShow.add(2);
+           pagesToShow.add(nbPages - 1);
+           pagesToShow.add(nbPages);
+           pagesToShow.add(pageCourante - 1);
+           pagesToShow.add(pageCourante);
+           pagesToShow.add(pageCourante + 1);
+           pagesToShow.removeIf(p -> p < 1 || p > nbPages);
+           int previousPage = 0;
+           for (int p : pagesToShow) {
+               if (previousPage != 0 && p - previousPage > 1) { %>
+                    <button class="join-item btn btn-disabled">...</button>
+        <%     }
+               previousPage = p;
+        %>
+            <a class="join-item btn <%= p == pageCourante ? "btn-active" : "" %>"
+               href="?page=chauffeurs/historique-chauffeur&id=<%= id %>&pageNum=<%= p %>"><%= p %></a>
+        <%     } %>
+    </div>
+</nav>
+<% } %>
 
 </div>
 <script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -250,14 +250,30 @@
 
 <% if (nbPages > 1) { %>
     <nav>
-        <ul class="pagination pagination-sm">
-            <% for (int p = 1; p <= nbPages; p++) { %>
-                <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                    <a class="page-link" href="<%= baseUrl %>&pageNum=<%= p %>">
-                        <%= p %>
-                    </a>
-                </li>
-            <% } %>
-        </ul>
+        <div class="join">
+            <% java.util.TreeSet<Integer> pagesToShow = new java.util.TreeSet<>();
+               pagesToShow.add(1);
+               pagesToShow.add(2);
+               pagesToShow.add(nbPages - 1);
+               pagesToShow.add(nbPages);
+               pagesToShow.add(pageCourante - 1);
+               pagesToShow.add(pageCourante);
+               pagesToShow.add(pageCourante + 1);
+               java.util.Iterator<Integer> pagesIterator = pagesToShow.iterator();
+                while (pagesIterator.hasNext()) {
+                    int pIter = pagesIterator.next();
+                    if (pIter < 1 || pIter > nbPages) pagesIterator.remove();
+                }
+                int previousPage = 0;
+                for (int p : pagesToShow) {
+                   if (previousPage != 0 && p - previousPage > 1) { %>
+                        <button class="join-item btn btn-disabled">...</button>
+            <%     }
+                   previousPage = p;
+            %>
+                <a class="join-item btn <%= p == pageCourante ? "btn-active" : "" %>"
+                   href="<%= baseUrl %>&pageNum=<%= p %>"><%= p %></a>
+            <%     } %>
+        </div>
     </nav>
 <% } %>

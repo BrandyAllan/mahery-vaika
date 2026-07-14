@@ -25,7 +25,7 @@
 
     // ---- Paramètre de page ----
     int currentPage = 1;
-    String pageParam = request.getParameter("page");
+    String pageParam = request.getParameter("pageNum");
     if (pageParam != null && !pageParam.isEmpty()) {
         try { currentPage = Integer.parseInt(pageParam); } catch (NumberFormatException e) { currentPage = 1; }
     }
@@ -242,17 +242,31 @@
 
 <% if (totalPages > 1) { %>
 <nav>
-    <ul class="pagination pagination-sm">
-        <% for (int p = 1; p <= totalPages; p++) {
-            if (p == 1 || p == totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) { %>
-                <li class="page-item <%= p == currentPage ? "active" : "" %>">
-                    <a class="page-link" href="<%= baseQuery %>page=<%= p %>"><%= p %></a>
-                </li>
-        <%      } else if (p == currentPage - 3 || p == currentPage + 3) { %>
-                <li class="page-item disabled"><span class="page-link">…</span></li>
-        <%      }
-           } %>
-    </ul>
+    <div class="join">
+        <% java.util.TreeSet<Integer> pagesToShow = new java.util.TreeSet<>();
+           pagesToShow.add(1);
+           pagesToShow.add(2);
+           pagesToShow.add(totalPages - 1);
+           pagesToShow.add(totalPages);
+           pagesToShow.add(currentPage - 1);
+           pagesToShow.add(currentPage);
+           pagesToShow.add(currentPage + 1);
+           java.util.Iterator<Integer> pagesIterator = pagesToShow.iterator();
+            while (pagesIterator.hasNext()) {
+                int pIter = pagesIterator.next();
+                if (pIter < 1 || pIter > totalPages) pagesIterator.remove();
+            }
+            int previousPage = 0;
+            for (int p : pagesToShow) {
+               if (previousPage != 0 && p - previousPage > 1) { %>
+                    <button class="join-item btn btn-disabled">...</button>
+        <%     }
+               previousPage = p;
+        %>
+            <a class="join-item btn <%= p == currentPage ? "btn-active" : "" %>"
+               href="<%= baseQuery %>pageNum=<%= p %>"><%= p %></a>
+        <%     } %>
+    </div>
 </nav>
 <% } %>
 
