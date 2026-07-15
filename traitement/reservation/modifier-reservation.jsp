@@ -10,7 +10,7 @@
     try {
         id = Integer.parseInt(request.getParameter("id"));
     } catch (Exception e) {
-        response.sendRedirect("../pages/liste-reservation.jsp?error=invalid");
+        response.sendRedirect("../../models/model.jsp?page=reservation/liste-reservation&error=invalid");
         return;
     }
 
