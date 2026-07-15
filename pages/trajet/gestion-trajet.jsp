@@ -7,7 +7,7 @@
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
+    boolean isAdmin = !"Caissier".equalsIgnoreCase(userObj.voirsiadmin());
     String nomUtilisateur = userObj.getNom() + " " + userObj.getPrenom();
     String userRole = userObj.voirsiadmin();
 %>

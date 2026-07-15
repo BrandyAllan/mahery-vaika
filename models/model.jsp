@@ -15,7 +15,7 @@
         response.sendRedirect("../index.jsp");
         return;
     }
-    boolean isAdmin = user.voirsiadmin().equals("Admin");
+    boolean isAdmin = user.voirsiadmin().equals("Admin") || user.voirsiadmin().equals("Superviseur");
 
     // Détermine la section active du menu selon la page affichée
     String activeSection = pageContent.contains("/") ? pageContent.substring(0, pageContent.indexOf("/")) : pageContent;

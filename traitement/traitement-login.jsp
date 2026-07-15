@@ -12,7 +12,11 @@
 
     if (utilisateur != null) {
         session.setAttribute("utilisateur", utilisateur);
-        response.sendRedirect("../models/model.jsp");
+        if(utilisateur.voirsiadmin().equals("Admin")) {
+            response.sendRedirect("../models/model.jsp");
+        } else {
+            response.sendRedirect("../models/model.jsp?page=reservation/liste-reservation");
+        }
     } else {
         response.sendRedirect("../index.jsp?erreur=1");
     }

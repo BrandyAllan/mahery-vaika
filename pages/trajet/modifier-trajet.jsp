@@ -8,7 +8,7 @@
         return;
     }
 
-    boolean isAdmin = "Admin".equalsIgnoreCase(userObj.voirsiadmin());
+    boolean isAdmin = !"Caissier".equalsIgnoreCase(userObj.voirsiadmin());
 
     if (!isAdmin) {
 %>
