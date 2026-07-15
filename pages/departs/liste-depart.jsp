@@ -84,7 +84,12 @@
     Trajet trajetGestion = new Trajet();
     List<Trajet> tousLesTrajets = trajetGestion.getTrajetsActifs();
     List<Vehicule> tousLesVehicules = Vehicule.getVehiculesActifs();
-    List<Chauffeur> tousLesChauffeurs = (List<Chauffeur>) Chauffeur.getTousActifs();
+    List<Chauffeur> tousLesChauffeurs;
+    try {
+        tousLesChauffeurs = (List<Chauffeur>) Chauffeur.getTousActifs();
+    } catch (Exception e) {
+        tousLesChauffeurs = new java.util.ArrayList<>();
+    }
 
     String msg = request.getParameter("msg");
 %>
@@ -357,23 +362,38 @@
     </div>
 </div>
 
-<% if (nbPages > 1) { %>
+<% if (nbPages > 1) {
+    String paginationBaseUrl = "?page=departs/liste-depart&tri=" + tri
+            + "&id_trajet=" + (trajetParam != null ? trajetParam : "")
+            + "&id_vehicule=" + (vehiculeParam != null ? vehiculeParam : "")
+            + "&id_chauffeur=" + (chauffeurParam != null ? chauffeurParam : "")
+            + "&statut=" + (statutParam != null ? statutParam : "")
+            + "&dateDebut=" + (dateDebut != null ? dateDebut : "")
+            + "&dateFin=" + (dateFin != null ? dateFin : "");
+%>
 
     <nav>
-        <ul class="pagination pagination-sm">
-
-            <% for (int p = 1; p <= nbPages; p++) { %>
-
-                <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                    <a class="page-link"
-                       href="?page=departs/liste-depart&pageNum=<%= p %>&tri=<%= tri %>&id_trajet=<%= trajetParam != null ? trajetParam : "" %>&id_vehicule=<%= vehiculeParam != null ? vehiculeParam : "" %>&id_chauffeur=<%= chauffeurParam != null ? chauffeurParam : "" %>&statut=<%= statutParam != null ? statutParam : "" %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>">
-                        <%= p %>
-                    </a>
-                </li>
-
-            <% } %>
-
-        </ul>
+        <div class="join">
+            <% java.util.TreeSet<Integer> pagesToShow = new java.util.TreeSet<>();
+               pagesToShow.add(1);
+               pagesToShow.add(2);
+               pagesToShow.add(nbPages - 1);
+               pagesToShow.add(nbPages);
+               pagesToShow.add(pageCourante - 1);
+               pagesToShow.add(pageCourante);
+               pagesToShow.add(pageCourante + 1);
+               pagesToShow.removeIf(p -> p < 1 || p > nbPages);
+               int previousPage = 0;
+               for (int p : pagesToShow) {
+                   if (previousPage != 0 && p - previousPage > 1) { %>
+                        <button class="join-item btn btn-disabled">...</button>
+            <%     }
+                   previousPage = p;
+            %>
+                <a class="join-item btn <%= p == pageCourante ? "btn-active" : "" %>"
+                   href="<%= paginationBaseUrl %>&pageNum=<%= p %>"><%= p %></a>
+            <%     } %>
+        </div>
     </nav>
 
 <% } %>

@@ -105,17 +105,36 @@
         </table>
     </div>
 
+    <% if (nbPages > 1) {
+        String paginationBaseUrl = "?page=depense/depense&recherche=" + (recherche != null ? recherche : "")
+                + "&tri=" + tri
+                + "&dateDebut=" + (dateDebut != null ? dateDebut : "")
+                + "&dateFin=" + (dateFin != null ? dateFin : "");
+    %>
     <nav>
-    <ul class="pagination flex-wrap">
-        <% for (int p = 1; p <= nbPages; p++) { %>
-            <li class="page-item <%= p == pageCourante ? "active" : "" %>">
-                <a class="page-link" href="?page=depense/depense&pageNum=<%= p %>&recherche=<%= recherche != null ? recherche : "" %>&tri=<%= tri %>&dateDebut=<%= dateDebut != null ? dateDebut : "" %>&dateFin=<%= dateFin != null ? dateFin : "" %>">
-                    <%= p %>
-                </a>
-            </li>
-        <% } %>
-    </ul>
-</nav>
+        <div class="join flex-wrap">
+            <% java.util.TreeSet<Integer> pagesToShow = new java.util.TreeSet<>();
+               pagesToShow.add(1);
+               pagesToShow.add(2);
+               pagesToShow.add(nbPages - 1);
+               pagesToShow.add(nbPages);
+               pagesToShow.add(pageCourante - 1);
+               pagesToShow.add(pageCourante);
+               pagesToShow.add(pageCourante + 1);
+               pagesToShow.removeIf(p -> p < 1 || p > nbPages);
+               int previousPage = 0;
+               for (int p : pagesToShow) {
+                   if (previousPage != 0 && p - previousPage > 1) { %>
+                        <button class="join-item btn btn-disabled">...</button>
+            <%     }
+                   previousPage = p;
+            %>
+                <a class="join-item btn <%= p == pageCourante ? "btn-active" : "" %>"
+                   href="<%= paginationBaseUrl %>&pageNum=<%= p %>"><%= p %></a>
+            <%     } %>
+        </div>
+    </nav>
+    <% } %>
 </div>
 <script src="../../assets/js/bootstrap.bundle.min.js"></script>
 </body>

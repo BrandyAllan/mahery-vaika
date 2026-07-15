@@ -42,6 +42,7 @@
     <link href="../assets/icons/bootstrap-icons.min.css" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
     <link href="../assets/css/sidebars.css" rel="stylesheet" />
+    <link href="../assets/css/pagination.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/dashboard-graph.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
